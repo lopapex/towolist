@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/listFragment">
+
+    <fragment
+        android:id="@+id/listFragment"
+        android:name="com.example.towolist.ui.list.ListFragment"
+        tools:layout="@layout/fragment_list"
+        android:label="ListFragment" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/toWatchFragment"
+        android:name="com.example.towolist.ui.to_watch.ToWatchFragment"
+        tools:layout="@layout/fragment_to_watch"
+        android:label="ToWatchFragment" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/watchedFragment"
+        android:name="com.example.towolist.ui.watched.WatchedFragment"
+        tools:layout="@layout/fragment_watched"
+        android:label="WatchedFragment" >
+    </fragment>
+
+
+</navigation>
