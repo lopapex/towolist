@@ -1,11 +1,12 @@
 package com.example.towolist.ui.list
 
+
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.towolist.R
+import com.bumptech.glide.Glide
 import com.example.towolist.databinding.FragmentListBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,17 +23,9 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.timeButton.setOnClickListener {
-            binding.timeTextView.text = giveMeTime(binding.timeTextView.text.toString())
-        }
-    }
+        Glide.with(view.context)
+            .load("https://image.tmdb.org/t/p/w300_and_h450_bestv2/74xTEgt7R36Fpooo50r9T25onhq.jpg")
+            .into(binding.imageView)
 
-    private fun giveMeTime(previousText: String): String {
-        val df = SimpleDateFormat("dd.mm.YYYY")
-
-        val timeLong = System.currentTimeMillis()
-        val date = Date(timeLong)
-
-        return "$previousText ${df.format(date)},"
     }
 }
