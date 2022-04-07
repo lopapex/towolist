@@ -1,6 +1,6 @@
-package com.example.towolist.ui.repository
+package com.example.towolist.repository
 
-import com.example.towolist.ui.data.MovieItem
+import com.example.towolist.data.MovieItem
 
 class MovieRepository {
 

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.towolist.databinding.ItemListBinding
-import com.example.towolist.ui.data.MovieItem
+import com.example.towolist.data.MovieItem
 
 class MovieAdapter(
     private val onItemClick: (MovieItem) -> Unit

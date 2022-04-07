@@ -2,14 +2,16 @@ package com.example.towolist.ui.list
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.towolist.ui.detail.DetailMovieFragment
 import com.example.towolist.databinding.FragmentListBinding
-import com.example.towolist.ui.repository.MovieRepository
+import com.example.towolist.repository.MovieRepository
+
 
 class ListFragment : Fragment() {
 
@@ -27,8 +29,11 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = MovieAdapter(onItemClick = {
+        val context = view.context
 
+        val adapter = MovieAdapter(onItemClick = {
+            val bottomSheetFragment = DetailMovieFragment()
+            bottomSheetFragment.show((context as AppCompatActivity).supportFragmentManager, bottomSheetFragment.getTag())
         })
 
         binding.recyclerView.apply {

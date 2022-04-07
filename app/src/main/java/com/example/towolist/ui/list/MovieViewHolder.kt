@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.towolist.R
 import com.example.towolist.databinding.ItemListBinding
-import com.example.towolist.ui.data.MovieItem
+import com.example.towolist.data.MovieItem
 
 class MovieViewHolder(private val binding: ItemListBinding, private val view: View)
     : RecyclerView.ViewHolder(binding.root) {

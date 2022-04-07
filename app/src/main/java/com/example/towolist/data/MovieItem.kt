@@ -1,4 +1,4 @@
-package com.example.towolist.ui.data
+package com.example.towolist.data
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
