@@ -7,6 +7,4 @@
     <string name="main_navigation_list">List</string>
     <string name="main_navigation_to_watch">To watch</string>
     <string name="main_navigation_watched">Watched</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
