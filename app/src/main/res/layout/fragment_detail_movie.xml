@@ -13,8 +13,6 @@
             android:id="@+id/card_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_marginTop="4dp"
             android:background="@android:drawable/dialog_holo_light_frame"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -23,8 +21,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="5dp">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/poster"
@@ -71,7 +68,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/card_header"
-            tools:text="Watch Now" />
+            android:text="@string/detail_watch_now"/>
+
+        <ListView
+            android:id="@+id/watch_now_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/watch_now"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
