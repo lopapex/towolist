@@ -15,9 +15,9 @@
             android:layout_height="wrap_content"
             android:background="@android:drawable/dialog_holo_light_frame"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_margin="5sp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -30,7 +30,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_margin="5sp"
-                    tools:srcCompat="@tools:sample/avatars" />
+                    tools:srcCompat="@tools:sample/avatars"
+                    android:contentDescription="@string/content_description_poster" />
 
                 <TextView
                     android:id="@+id/media_name"
@@ -38,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="14dp"
-                    android:textSize="42sp"
+                    android:textSize="28sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/poster"
@@ -66,10 +67,14 @@
             android:layout_height="wrap_content"
             android:background="@color/secondaryLight"
             android:textSize="24sp"
+            android:layout_marginTop="5sp"
+            android:paddingVertical="5sp"
+            android:paddingStart="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/card_header"
-            android:text="@string/detail_watch_now"/>
+            android:text="@string/detail_watch_now"
+            tools:ignore="RtlSymmetry" />
 
         <ListView
             android:id="@+id/watch_now_list"
@@ -79,10 +84,40 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:clickable="true"
-            android:divider="@color/white"
-            android:dividerHeight="1dp"
-            android:headerDividersEnabled="true"
             android:focusable="true" />
+
+        <TextView
+            android:id="@+id/rent_buy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/secondaryLight"
+            android:textSize="24sp"
+            android:paddingVertical="5sp"
+            android:paddingStart="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/watch_now_list"
+            android:text="@string/detail_rent_buy"
+            tools:ignore="RtlSymmetry" />
+
+        <ListView
+            android:id="@+id/rent_buy_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rent_buy"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <View
+            android:id="@+id/footer"
+            android:layout_width="0dp"
+            android:layout_height="20sp"
+            android:background="@color/secondaryLight"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rent_buy_list" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

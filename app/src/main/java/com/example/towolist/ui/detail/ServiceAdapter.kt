@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.towolist.R
 import com.example.towolist.data.ServiceItem
 import com.example.towolist.databinding.ServiceListBinding
+import com.example.towolist.databinding.ServiceListBinding.*
 
 
 class ServiceAdapter(context: Activity, private val items: List<ServiceItem>)
@@ -18,8 +19,9 @@ class ServiceAdapter(context: Activity, private val items: List<ServiceItem>)
 
     private lateinit var binding: ServiceListBinding
 
+    @SuppressLint("ViewHolder")
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
-        binding = ServiceListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = inflate(LayoutInflater.from(parent.context), parent, false)
 
 
         binding.serviceName.text = items[position].name

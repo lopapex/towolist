@@ -32,8 +32,10 @@ class DetailMovieFragment(private val item: MovieItem) : BottomSheetDialogFragme
             .fallback(R.drawable.empty_image)
             .into(binding.poster)
 
-        val myListAdapter = ServiceAdapter(context as Activity, item.flatRate)
+        val watchNowListAdapter = ServiceAdapter(context as Activity, item.watchNow)
+        binding.watchNowList.adapter = watchNowListAdapter
 
-        binding.watchNowList.adapter = myListAdapter
+        val rentBuyListAdapter = ServiceAdapter(context as Activity, item.buyRent)
+        binding.rentBuyList.adapter = rentBuyListAdapter
     }
 }

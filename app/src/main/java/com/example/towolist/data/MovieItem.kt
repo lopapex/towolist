@@ -8,5 +8,6 @@ data class MovieItem(
     val id: Long,
     val imageSource: String,
     val name: String,
-    val flatRate: List<ServiceItem>
+    val watchNow: List<ServiceItem>,
+    val buyRent: List<ServiceItem>
 ): Parcelable

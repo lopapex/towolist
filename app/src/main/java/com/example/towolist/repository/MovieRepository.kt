@@ -1,6 +1,5 @@
 package com.example.towolist.repository
 
-import com.example.towolist.R
 import com.example.towolist.data.MovieItem
 import com.example.towolist.data.ServiceItem
 
@@ -14,12 +13,22 @@ class MovieRepository {
                     id = it.toLong(),
                     name = "The Batman $it",
                     imageSource = "${rootApiImg}/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-                    flatRate = mutableListOf<ServiceItem>().apply {
+                    watchNow = mutableListOf<ServiceItem>().apply {
                         repeat(3) {
                             val item = ServiceItem(
                                 id = it.toLong() * count,
                                 name = "Netflix $it",
                                 iconSource = "${rootApiImg}/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg",
+                            )
+                            add(item)
+                        }
+                    },
+                    buyRent = mutableListOf<ServiceItem>().apply {
+                        repeat(2) {
+                            val item = ServiceItem(
+                                id = it.toLong() * count,
+                                name = "Google Play Movies $it",
+                                iconSource = "${rootApiImg}/peURlLlr8jggOwK53fJ5wdQl05y.jpg",
                             )
                             add(item)
                         }
