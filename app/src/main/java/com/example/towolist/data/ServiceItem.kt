@@ -4,9 +4,8 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class MovieItem(
+data class ServiceItem(
     val id: Long,
-    val imageSource: String,
-    val name: String,
-    val flatRate: List<ServiceItem>
+    val iconSource: String,
+    val name: String
 ): Parcelable

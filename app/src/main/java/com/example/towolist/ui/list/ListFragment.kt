@@ -32,7 +32,7 @@ class ListFragment : Fragment() {
         val context = view.context
 
         val adapter = MovieAdapter(onItemClick = {
-            val bottomSheetFragment = DetailMovieFragment()
+            val bottomSheetFragment = DetailMovieFragment(it)
             bottomSheetFragment.show((context as AppCompatActivity).supportFragmentManager, bottomSheetFragment.getTag())
         })
 
