@@ -7,11 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.example.towolist.R
-import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentDetailMovieBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class DetailMovieFragment(private val item: MovieItem) : BottomSheetDialogFragment() {
+class DetailMovieFragment() : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentDetailMovieBinding
 
@@ -22,6 +21,8 @@ class DetailMovieFragment(private val item: MovieItem) : BottomSheetDialogFragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val item = DetailMovieFragmentArgs.fromBundle(requireArguments()).item
 
         binding.mediaName.text = item.name
 

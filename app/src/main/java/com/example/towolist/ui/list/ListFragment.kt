@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.towolist.ui.detail.DetailMovieFragment
 import com.example.towolist.databinding.FragmentListBinding
@@ -29,11 +30,9 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val context = view.context
-
         val adapter = MovieAdapter(onItemClick = {
-            val bottomSheetFragment = DetailMovieFragment(it)
-            bottomSheetFragment.show((context as AppCompatActivity).supportFragmentManager, bottomSheetFragment.getTag())
+            findNavController()
+                .navigate(ListFragmentDirections.actionListFragmentToDetailMovieFragment(it))
         })
 
         binding.recyclerView.apply {

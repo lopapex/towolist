@@ -9,6 +9,9 @@
         android:name="com.example.towolist.ui.list.ListFragment"
         tools:layout="@layout/fragment_list"
         android:label="ListFragment" >
+        <action
+            android:id="@+id/action_listFragment_to_detailMovieFragment"
+            app:destination="@id/detailMovieFragment" />
     </fragment>
 
     <fragment
@@ -22,8 +25,16 @@
         android:id="@+id/watchedFragment"
         android:name="com.example.towolist.ui.watched.WatchedFragment"
         tools:layout="@layout/fragment_watched"
-        android:label="WatchedFragment" >
-    </fragment>
+        android:label="WatchedFragment" />
+
+    <dialog
+        android:id="@+id/detailMovieFragment"
+        android:name="com.example.towolist.ui.detail.DetailMovieFragment"
+        android:label="DetailMovieFragment">
+        <argument
+            android:name="item"
+            app:argType="com.example.towolist.data.MovieItem" />
+    </dialog>
 
 
 </navigation>

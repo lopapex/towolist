@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.annotation.StringRes
 import com.bumptech.glide.Glide
 import com.example.towolist.R
 import com.example.towolist.data.ServiceItem
@@ -33,8 +34,6 @@ class ServiceAdapter(context: Activity, private val items: List<ServiceItem>)
             .error(R.drawable.empty_image)
             .fallback(R.drawable.empty_image)
             .into(binding.serviceIcon)
-
-        Bundle().putString("key", "testuju")
 
         return binding.root
     }
