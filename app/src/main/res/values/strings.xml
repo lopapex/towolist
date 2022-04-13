@@ -11,6 +11,8 @@
     <string name="detail_watch_options">Watch Options</string>
     <string name="detail_watch_now">WATCH NOW</string>
     <string name="detail_rent_buy">RENT/ BUY</string>
+
     <string name="content_description_poster">Poster</string>
+    <string name="content_description_icon">Icon</string>
 
 </resources>
