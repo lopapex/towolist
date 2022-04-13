@@ -27,6 +27,16 @@
         tools:layout="@layout/fragment_watched"
         android:label="WatchedFragment" />
 
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.towolist.ui.search.SearchFragment"
+        tools:layout="@layout/fragment_search"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_detailSearchFragment"
+            app:destination="@id/detailSearchFragment" />
+    </fragment>
+
     <dialog
         android:id="@+id/detailMovieFragment"
         android:name="com.example.towolist.ui.detail.DetailMovieFragment"
@@ -35,6 +45,10 @@
             android:name="item"
             app:argType="com.example.towolist.data.MovieItem" />
     </dialog>
+    <dialog
+        android:id="@+id/detailSearchFragment"
+        android:name="com.example.towolist.ui.detail.DetailSearchFragment"
+        android:label="DetailSearchFragment" />
 
 
 </navigation>
