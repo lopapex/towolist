@@ -1,8 +1,6 @@
 package com.example.towolist
 
 import android.os.Bundle
-import android.util.Log
-import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
@@ -17,7 +15,6 @@ import com.mancj.materialsearchbar.MaterialSearchBar
 
 class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListener {
 
-    private lateinit var lastSearches: List<String>
     private lateinit var searchBar: MaterialSearchBar
 
     private val binding: ActivityMainBinding by lazy {
