@@ -35,10 +35,10 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         val spinner = initFilterMovieTypes()
         spinner.onItemSelectedListener = SpinnerActivity()
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
         searchBar = findViewById(R.id.search_bar)
         searchBar.setOnSearchActionListener(this)
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 
     private fun initFilterMovieTypes(): Spinner {
