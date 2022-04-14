@@ -2,12 +2,14 @@ package com.example.towolist
 
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.towolist.databinding.ActivityMainBinding
-import com.example.towolist.ui.spinner.SpinnerActivity
+import com.example.towolist.ui.filter.spinner.SpinnerActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,10 +26,15 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         binding.bottomNavigation.setupWithNavController(navController)
 
-        binding.searchIcon.setOnClickListener {
-            navController.navigate(R.id.detailSearchFragment)
-        }
+        initFilterBottomFragment(navController)
 
+        val spinner = initFilterMovieTypes()
+        spinner.onItemSelectedListener = SpinnerActivity()
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+    }
+
+    private fun initFilterMovieTypes(): Spinner {
         val spinner = binding.spinner
         ArrayAdapter.createFromResource(
             this,
@@ -38,9 +45,12 @@ class MainActivity : AppCompatActivity() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
         }
+        return spinner
+    }
 
-        spinner.onItemSelectedListener = SpinnerActivity()
-
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+    private fun initFilterBottomFragment(navController: NavController) {
+        binding.searchIcon.setOnClickListener {
+            navController.navigate(R.id.filterFragment)
+        }
     }
 }

@@ -35,10 +35,11 @@
             android:name="item"
             app:argType="com.example.towolist.data.MovieItem" />
     </dialog>
+
     <dialog
-        android:id="@+id/detailSearchFragment"
-        android:name="com.example.towolist.ui.detail.DetailSearchFragment"
-        android:label="DetailSearchFragment" />
+        android:id="@+id/filterFragment"
+        android:name="com.example.towolist.ui.filter.FilterFragment"
+        android:label="FilterFragment" />
 
 
 </navigation>

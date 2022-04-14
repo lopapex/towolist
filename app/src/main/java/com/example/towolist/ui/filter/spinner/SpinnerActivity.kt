@@ -1,4 +1,4 @@
-package com.example.towolist.ui.spinner
+package com.example.towolist.ui.filter.spinner
 
 import android.app.Activity
 import android.view.View
