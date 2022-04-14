@@ -1,17 +1,23 @@
 package com.example.towolist
 
 import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.towolist.databinding.ActivityMainBinding
 import com.example.towolist.ui.filter.spinner.SpinnerActivity
+import com.mancj.materialsearchbar.MaterialSearchBar
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListener {
+
+    private lateinit var lastSearches: List<String>
+    private lateinit var searchBar: MaterialSearchBar
 
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -26,12 +32,15 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         binding.bottomNavigation.setupWithNavController(navController)
 
-        initFilterBottomFragment(navController)
-
+//        initFilterBottomFragment(navController)
+//
         val spinner = initFilterMovieTypes()
         spinner.onItemSelectedListener = SpinnerActivity()
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+        searchBar = findViewById(R.id.search_bar)
+        searchBar.setOnSearchActionListener(this)
     }
 
     private fun initFilterMovieTypes(): Spinner {
@@ -48,9 +57,23 @@ class MainActivity : AppCompatActivity() {
         return spinner
     }
 
-    private fun initFilterBottomFragment(navController: NavController) {
-        binding.searchIcon.setOnClickListener {
-            navController.navigate(R.id.filterFragment)
-        }
+    override fun onSearchStateChanged(enabled: Boolean) {
+        val s = if (enabled) "enabled" else "disabled"
+        Toast.makeText(this@MainActivity, "Search $s", Toast.LENGTH_SHORT).show()
     }
+
+    override fun onSearchConfirmed(text: CharSequence) {
+        Toast.makeText(this@MainActivity, "Search ", Toast.LENGTH_SHORT).show()
+        searchBar.closeSearch()
+    }
+
+    override fun onButtonClicked(buttonCode: Int) {
+        Toast.makeText(this@MainActivity, "Search ", Toast.LENGTH_SHORT).show()
+    }
+//
+//    private fun initFilterBottomFragment(navController: NavController) {
+//        binding.searchIcon.setOnClickListener {
+//            navController.navigate(R.id.filterFragment)
+//        }
+//    }
 }
