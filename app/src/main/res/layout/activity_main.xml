@@ -12,7 +12,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/top_text"
+            android:id="@+id/top_text_view"
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:text="Current TAB text"
@@ -30,16 +30,16 @@
             android:src="@drawable/ic_list_icon"
             android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/top_text"
-            app:layout_constraintTop_toTopOf="@id/top_text"
+            app:layout_constraintStart_toEndOf="@+id/top_text_view"
+            app:layout_constraintTop_toTopOf="@id/top_text_view"
             tools:layout_editor_absoluteY="0dp" />
 
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/top_text"
-            app:layout_constraintStart_toStartOf="@id/top_text"
+            app:layout_constraintTop_toBottomOf="@id/top_text_view"
+            app:layout_constraintStart_toStartOf="@id/top_text_view"
             android:spinnerMode="dropdown"/>
 
 
