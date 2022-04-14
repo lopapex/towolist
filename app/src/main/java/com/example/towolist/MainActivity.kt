@@ -8,6 +8,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.towolist.databinding.ActivityMainBinding
@@ -32,8 +33,8 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         val navController = navHostFragment.navController
         binding.bottomNavigation.setupWithNavController(navController)
 
-//        initFilterBottomFragment(navController)
-//
+        initFilterBottomFragment(navController)
+
         val spinner = initFilterMovieTypes()
         spinner.onItemSelectedListener = SpinnerActivity()
 
@@ -70,10 +71,10 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
     override fun onButtonClicked(buttonCode: Int) {
         Toast.makeText(this@MainActivity, "Search ", Toast.LENGTH_SHORT).show()
     }
-//
-//    private fun initFilterBottomFragment(navController: NavController) {
-//        binding.searchIcon.setOnClickListener {
-//            navController.navigate(R.id.filterFragment)
-//        }
-//    }
+
+    private fun initFilterBottomFragment(navController: NavController) {
+        binding.filterButton.setOnClickListener {
+            navController.navigate(R.id.filterFragment)
+        }
+    }
 }

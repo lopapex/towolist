@@ -9,7 +9,7 @@
         style="@style/MaterialSearchBarLight"
         app:mt_hint="Search"
         app:mt_placeholder="Your current tab"
-        app:mt_maxSuggestionsCount="10"
+        app:mt_maxSuggestionsCount="0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
@@ -26,6 +26,16 @@
         android:layout_marginStart="10sp"
         android:spinnerMode="dropdown"/>
 
+    <Button
+        android:id="@+id/filter_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/primary"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar"
+        app:layout_constraintBottom_toBottomOf="@+id/spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/filter_button"  />
 
 
     <androidx.fragment.app.FragmentContainerView
