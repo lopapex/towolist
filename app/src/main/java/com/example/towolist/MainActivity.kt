@@ -2,10 +2,12 @@ package com.example.towolist
 
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -14,8 +16,6 @@ import com.example.towolist.ui.filter.spinner.SpinnerActivity
 import com.mancj.materialsearchbar.MaterialSearchBar
 
 class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListener {
-
-    private lateinit var searchBar: MaterialSearchBar
 
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -36,8 +36,10 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         val spinner = initFilterMovieTypes()
         spinner.onItemSelectedListener = SpinnerActivity()
 
-        searchBar = findViewById(R.id.search_bar)
-        searchBar.setOnSearchActionListener(this)
+        binding.searchBar.setOnSearchActionListener(this)
+
+        layoutButtonListener(binding.gridButton, binding.listButton)
+        layoutButtonListener(binding.listButton, binding.gridButton)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
@@ -63,7 +65,7 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
 
     override fun onSearchConfirmed(text: CharSequence) {
         Toast.makeText(this@MainActivity, text, Toast.LENGTH_SHORT).show()
-        searchBar.closeSearch()
+        binding.searchBar.closeSearch()
     }
 
     override fun onButtonClicked(buttonCode: Int) {
@@ -81,6 +83,19 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
             navController.navigate(it.itemId)
             binding.searchBar.setPlaceHolder(it.title)
             true
+        }
+    }
+
+    private fun layoutButtonListener(clicked: ImageButton, disabled: ImageButton) {
+        clicked.setOnClickListener {
+            clicked.isEnabled = false
+            clicked.imageTintList =
+                ContextCompat.getColorStateList(applicationContext, R.color.secondaryLight)
+
+            disabled.isEnabled = true
+            disabled.imageTintList =
+                ContextCompat.getColorStateList(applicationContext, R.color.secondary)
+
         }
     }
 }
