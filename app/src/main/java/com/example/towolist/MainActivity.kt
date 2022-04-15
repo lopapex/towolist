@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
     }
 
     override fun onSearchConfirmed(text: CharSequence) {
-        Toast.makeText(this@MainActivity, "Search ", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@MainActivity, text, Toast.LENGTH_SHORT).show()
         searchBar.closeSearch()
     }
 
