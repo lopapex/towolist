@@ -4,47 +4,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/filter_row"
+    <com.mancj.materialsearchbar.MaterialSearchBar
+        android:id="@+id/search_bar"
+        style="@style/MaterialSearchBarLight"
+        app:mt_hint="Search"
+        app:mt_placeholder="@string/main_navigation_list"
+        app:mt_maxSuggestionsCount="0"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar"
+        app:layout_constraintStart_toStartOf="@+id/search_bar"
+        android:layout_marginStart="5sp"
+        android:spinnerMode="dropdown"/>
 
-        <com.mancj.materialsearchbar.MaterialSearchBar
-            android:id="@+id/search_bar"
-            style="@style/MaterialSearchBarLight"
-            app:mt_hint="Search"
-            app:mt_placeholder="@string/main_navigation_list"
-            app:mt_maxSuggestionsCount="0"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/search_bar"
-            app:layout_constraintStart_toStartOf="@+id/search_bar"
-            android:layout_marginStart="10sp"
-            android:spinnerMode="dropdown"/>
-
-        <Button
-            android:id="@+id/filter_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/primary"
-            android:background="@android:color/transparent"
-            app:layout_constraintTop_toBottomOf="@+id/search_bar"
-            app:layout_constraintBottom_toBottomOf="@+id/spinner"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/filter_button"  />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <Button
+        android:id="@+id/filter_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/primary"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar"
+        app:layout_constraintBottom_toBottomOf="@+id/spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/filter_button"  />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
@@ -55,7 +45,7 @@
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filter_row"
+        app:layout_constraintTop_toBottomOf="@+id/filter_button"
         app:navGraph="@navigation/nav_graph" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
