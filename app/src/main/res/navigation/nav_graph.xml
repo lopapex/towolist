@@ -36,5 +36,10 @@
             app:argType="com.example.towolist.data.MovieItem" />
     </dialog>
 
+    <dialog
+        android:id="@+id/filterFragment"
+        android:name="com.example.towolist.ui.filter.FilterFragment"
+        android:label="FilterFragment" />
+
 
 </navigation>
