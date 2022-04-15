@@ -15,8 +15,6 @@ import com.mancj.materialsearchbar.MaterialSearchBar
 
 class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListener {
 
-    private lateinit var searchBar: MaterialSearchBar
-
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
@@ -36,8 +34,7 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         val spinner = initFilterMovieTypes()
         spinner.onItemSelectedListener = SpinnerActivity()
 
-        searchBar = findViewById(R.id.search_bar)
-        searchBar.setOnSearchActionListener(this)
+        binding.searchBar.setOnSearchActionListener(this)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
@@ -63,7 +60,7 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
 
     override fun onSearchConfirmed(text: CharSequence) {
         Toast.makeText(this@MainActivity, text, Toast.LENGTH_SHORT).show()
-        searchBar.closeSearch()
+        binding.searchBar.closeSearch()
     }
 
     override fun onButtonClicked(buttonCode: Int) {
