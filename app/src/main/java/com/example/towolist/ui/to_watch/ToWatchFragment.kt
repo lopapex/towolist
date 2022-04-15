@@ -5,14 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.towolist.R
-import com.example.towolist.databinding.FragmentListBinding
+import com.example.towolist.MainActivity
 import com.example.towolist.databinding.FragmentToWatchBinding
-import com.example.towolist.databinding.FragmentWatchedBinding
-import java.text.SimpleDateFormat
-import java.util.*
+import com.example.towolist.repository.MovieRepository
 
 class ToWatchFragment : Fragment() {
+
+    private val movieRepository: MovieRepository by lazy {
+        MovieRepository()
+    }
 
     private lateinit var binding: FragmentToWatchBinding
 
@@ -24,17 +25,10 @@ class ToWatchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.timeButton.setOnClickListener {
-            binding.timeTextView.text = giveMeTime(binding.timeTextView.text.toString())
-        }
-    }
+        val mainActivity : MainActivity = (activity as MainActivity)
+        val getItems = { movieRepository.getMockedData(10) }
 
-    private fun giveMeTime(previousText: String): String {
-        val df = SimpleDateFormat("dd.mm.YYYY")
-
-        val timeLong = System.currentTimeMillis()
-        val date = Date(timeLong)
-
-        return "$previousText ${df.format(date)},"
+        mainActivity.updateLayout(this, binding.recyclerView, getItems)
+        mainActivity.registerLayoutListener(this, binding.recyclerView, getItems)
     }
 }

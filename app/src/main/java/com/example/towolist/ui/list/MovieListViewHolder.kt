@@ -4,10 +4,10 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.towolist.R
-import com.example.towolist.databinding.ItemListBinding
 import com.example.towolist.data.MovieItem
+import com.example.towolist.databinding.ListItemMovieBinding
 
-class MovieViewHolder(private val binding: ItemListBinding, private val view: View)
+class MovieListViewHolder(private val binding: ListItemMovieBinding, private val view: View)
     : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(movieItem: MovieItem, onItemClick: (MovieItem) -> Unit) {
