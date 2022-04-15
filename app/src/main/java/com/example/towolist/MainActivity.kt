@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         binding.bottomNavigation.setupWithNavController(navController)
 
         initFilterBottomFragment(navController)
-        initializeBottomSheetDialogListener()
+        initializeBottomNavigationListener()
 
         val spinner = initFilterMovieTypes()
         spinner.onItemSelectedListener = SpinnerActivity()
@@ -76,9 +76,9 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         }
     }
 
-    private fun initializeBottomSheetDialogListener() {
+    private fun initializeBottomNavigationListener() {
         binding.bottomNavigation.setOnItemSelectedListener {
-            binding.topTextView.text = it.title
+            binding.searchBar.setPlaceHolder(it.title)
             true
         }
     }

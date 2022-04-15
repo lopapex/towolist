@@ -14,7 +14,7 @@
             android:id="@+id/search_bar"
             style="@style/MaterialSearchBarLight"
             app:mt_hint="Search"
-            app:mt_placeholder="Your current tab"
+            app:mt_placeholder="@string/main_navigation_list"
             app:mt_maxSuggestionsCount="0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
