@@ -5,11 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.example.towolist.MainActivity
+import com.example.towolist.data.MovieItem
 import java.text.SimpleDateFormat
 import java.util.*
 import com.example.towolist.databinding.FragmentWatchedBinding
+import com.example.towolist.repository.MovieRepository
 
 class WatchedFragment : Fragment() {
+
+    private val movieRepository: MovieRepository by lazy {
+        MovieRepository()
+    }
 
     private lateinit var binding: FragmentWatchedBinding
 
@@ -21,17 +29,14 @@ class WatchedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.timeButton.setOnClickListener {
-            binding.timeTextView.text = giveMeTime(binding.timeTextView.text.toString())
+        val mainActivity : MainActivity = (activity as MainActivity)
+        val getItems = { movieRepository.getMockedData(1) }
+        val onClick =  { it: MovieItem ->
+            findNavController()
+                .navigate(WatchedFragmentDirections.actionWatchedFragmentToDetailMovieFragment(it))
         }
-    }
 
-    private fun giveMeTime(previousText: String): String {
-        val df = SimpleDateFormat("dd.mm.YYYY")
-
-        val timeLong = System.currentTimeMillis()
-        val date = Date(timeLong)
-
-        return "$previousText ${df.format(date)},"
+        mainActivity.updateLayout(onClick, binding.recyclerView, getItems)
+        mainActivity.registerLayoutListener(onClick, binding.recyclerView, getItems)
     }
 }

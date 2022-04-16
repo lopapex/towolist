@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +22,7 @@ import com.mancj.materialsearchbar.MaterialSearchBar
 
 class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListener {
 
-    private var fragmentListeners : MutableList<Triple<Fragment, RecyclerView, () -> List<MovieItem>>> = ArrayList()
+    private var fragmentListeners : MutableList<Triple<(MovieItem) -> Unit, RecyclerView, () -> List<MovieItem>>> = ArrayList()
 
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -111,16 +110,13 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         }
     }
 
-    fun registerLayoutListener(fragment: Fragment, recyclerView: RecyclerView, getItems: () -> List<MovieItem>) {
-        fragmentListeners.add(Triple(fragment, recyclerView, getItems))
+    fun registerLayoutListener(onClick: (MovieItem) -> Unit, recyclerView: RecyclerView, getItems: () -> List<MovieItem>) {
+        fragmentListeners.add(Triple(onClick, recyclerView, getItems))
     }
 
-    fun updateLayout(fragment: Fragment, recyclerView: RecyclerView, getItems: () -> List<MovieItem>) {
+    fun updateLayout(onClick: (MovieItem) -> Unit, recyclerView: RecyclerView, getItems: () -> List<MovieItem>) {
         if (!binding.gridButton.isEnabled) {
-            val adapter = MovieGridAdapter(onItemClick = {
-                fragment.findNavController()
-                    .navigate(ListFragmentDirections.actionListFragmentToDetailMovieFragment(it))
-            })
+            val adapter = MovieGridAdapter(onItemClick = onClick)
 
             recyclerView.apply {
                 layoutManager = GridLayoutManager(context, 3)
@@ -128,10 +124,7 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
             recyclerView.adapter = adapter
             adapter.submitList(getItems())
         } else {
-            val adapter = MovieListAdapter(onItemClick = {
-                fragment.findNavController()
-                    .navigate(ListFragmentDirections.actionListFragmentToDetailMovieFragment(it))
-            })
+            val adapter = MovieListAdapter(onItemClick = onClick)
 
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(context)

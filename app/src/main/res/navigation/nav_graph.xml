@@ -19,13 +19,20 @@
         android:name="com.example.towolist.ui.to_watch.ToWatchFragment"
         tools:layout="@layout/fragment_to_watch"
         android:label="ToWatchFragment" >
+        <action
+            android:id="@+id/action_toWatchFragment_to_detailMovieFragment"
+            app:destination="@id/detailMovieFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/watchedFragment"
         android:name="com.example.towolist.ui.watched.WatchedFragment"
         tools:layout="@layout/fragment_watched"
-        android:label="WatchedFragment" />
+        android:label="WatchedFragment" >
+        <action
+            android:id="@+id/action_watchedFragment_to_detailMovieFragment"
+            app:destination="@id/detailMovieFragment" />
+    </fragment>
 
     <dialog
         android:id="@+id/detailMovieFragment"

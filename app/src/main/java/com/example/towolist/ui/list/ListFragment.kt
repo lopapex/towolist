@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.towolist.MainActivity
+import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
 
@@ -29,8 +31,12 @@ class ListFragment : Fragment() {
 
         val mainActivity :MainActivity = (activity as MainActivity)
         val getItems = { movieRepository.getMockedData(100) }
+        val onClick =  { it: MovieItem ->
+            findNavController()
+                .navigate(ListFragmentDirections.actionListFragmentToDetailMovieFragment(it))
+        }
 
-        mainActivity.updateLayout(this, binding.recyclerView, getItems)
-        mainActivity.registerLayoutListener(this, binding.recyclerView, getItems)
+        mainActivity.updateLayout(onClick, binding.recyclerView, getItems)
+        mainActivity.registerLayoutListener(onClick, binding.recyclerView, getItems)
     }
 }
