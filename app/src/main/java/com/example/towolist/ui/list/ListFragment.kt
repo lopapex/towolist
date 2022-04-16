@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.towolist.MainActivity
-import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.ui.`interface`.IUpdateLayoutFragment
@@ -34,31 +33,19 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
         super.onViewCreated(view, savedInstanceState)
 
         val mainActivity : MainActivity = (activity as MainActivity)
-        updateLayout(mainActivity.isGridLayout())
+        updateLayout(mainActivity.isListLayout())
     }
 
     override fun updateLayout(isList: Boolean) {
-        val getItems = { movieRepository.getMockedData(100) }
-        val onClick =  { it: MovieItem ->
+        val adapter = MovieAdapter(onItemClick = {
             findNavController()
                 .navigate(ListFragmentDirections.actionListFragmentToDetailMovieFragment(it))
-        }
-        if (isList) {
-            val adapter = MovieListAdapter(onItemClick = onClick)
+        }, isList)
+        binding.recyclerView.adapter = adapter
+        adapter.submitList(movieRepository.getMockedData(100))
 
-            binding.recyclerView.apply {
-                layoutManager = LinearLayoutManager(context)
-            }
-            binding.recyclerView.adapter = adapter
-            adapter.submitList(getItems())
-        } else {
-            val adapter = MovieGridAdapter(onItemClick = onClick)
-
-            binding.recyclerView.apply {
-                layoutManager = GridLayoutManager(context, 3)
-            }
-            binding.recyclerView.adapter = adapter
-            adapter.submitList(getItems())
+        binding.recyclerView.apply {
+            layoutManager = if (isList) LinearLayoutManager(context) else GridLayoutManager(context, 3)
         }
     }
 }

@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         }
     }
 
-    fun isGridLayout(): Boolean {
+    fun isListLayout(): Boolean {
         return binding.gridButton.isEnabled
     }
 }
