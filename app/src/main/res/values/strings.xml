@@ -15,6 +15,8 @@
     <string name="filter_button">Filter</string>
 
     <string name="content_description_poster">Poster</string>
+    <string name="content_description_grid">Grid</string>
+    <string name="content_description_list">List</string>
     <string name="content_description_icon">Icon</string>
 
 </resources>

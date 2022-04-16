@@ -5,22 +5,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.Fragment;
+
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.towolist.ui.detail.DetailMovieFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.towolist.MainActivity
 import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
+import com.example.towolist.ui.`interface`.IUpdateLayoutFragment
 
 
-class ListFragment : Fragment() {
-
-    private lateinit var binding: FragmentListBinding
+class ListFragment : Fragment(), IUpdateLayoutFragment {
 
     private val movieRepository: MovieRepository by lazy {
         MovieRepository()
     }
+
+    private lateinit var binding: FragmentListBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentListBinding.inflate(layoutInflater, container, false)
@@ -30,16 +32,20 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val mainActivity : MainActivity = (activity as MainActivity)
+        updateLayout(mainActivity.isListLayout())
+    }
+
+    override fun updateLayout(isList: Boolean) {
         val adapter = MovieAdapter(onItemClick = {
             findNavController()
                 .navigate(ListFragmentDirections.actionListFragmentToDetailMovieFragment(it))
-        })
+        }, isList)
+        binding.recyclerView.adapter = adapter
+        adapter.submitList(movieRepository.getMockedData(100))
 
         binding.recyclerView.apply {
-            layoutManager = GridLayoutManager(view.context, 3)
+            layoutManager = if (isList) LinearLayoutManager(context) else GridLayoutManager(context, 3)
         }
-        binding.recyclerView.adapter = adapter
-
-        adapter.submitList(movieRepository.getMockedData(100))
     }
 }

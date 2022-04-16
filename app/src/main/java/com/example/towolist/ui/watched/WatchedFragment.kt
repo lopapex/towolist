@@ -1,15 +1,24 @@
 package com.example.towolist.ui.watched
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import java.text.SimpleDateFormat
-import java.util.*
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.towolist.MainActivity
 import com.example.towolist.databinding.FragmentWatchedBinding
+import com.example.towolist.repository.MovieRepository
+import com.example.towolist.ui.`interface`.IUpdateLayoutFragment
+import com.example.towolist.ui.list.MovieAdapter
 
-class WatchedFragment : Fragment() {
+class WatchedFragment : Fragment(), IUpdateLayoutFragment {
+
+    private val movieRepository: MovieRepository by lazy {
+        MovieRepository()
+    }
 
     private lateinit var binding: FragmentWatchedBinding
 
@@ -21,17 +30,20 @@ class WatchedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.timeButton.setOnClickListener {
-            binding.timeTextView.text = giveMeTime(binding.timeTextView.text.toString())
-        }
+        val mainActivity : MainActivity = (activity as MainActivity)
+        updateLayout(mainActivity.isListLayout())
     }
 
-    private fun giveMeTime(previousText: String): String {
-        val df = SimpleDateFormat("dd.mm.YYYY")
+    override fun updateLayout(isList: Boolean) {
+        val adapter = MovieAdapter(onItemClick = {
+            findNavController()
+                .navigate(WatchedFragmentDirections.actionWatchedFragmentToDetailMovieFragment(it))
+        }, isList)
+        binding.recyclerView.adapter = adapter
+        adapter.submitList(movieRepository.getMockedData(1))
 
-        val timeLong = System.currentTimeMillis()
-        val date = Date(timeLong)
-
-        return "$previousText ${df.format(date)},"
+        binding.recyclerView.apply {
+            layoutManager = if (isList) LinearLayoutManager(context) else GridLayoutManager(context, 3)
+        }
     }
 }

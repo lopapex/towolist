@@ -1,15 +1,15 @@
 package com.example.towolist
 
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.towolist.databinding.ActivityMainBinding
+import com.example.towolist.ui.`interface`.IUpdateLayoutFragment
 import com.example.towolist.ui.filter.spinner.SpinnerActivity
 import com.mancj.materialsearchbar.MaterialSearchBar
 
@@ -35,6 +35,10 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         spinner.onItemSelectedListener = SpinnerActivity()
 
         binding.searchBar.setOnSearchActionListener(this)
+
+        binding.gridButton.isEnabled = false
+        layoutButtonListener(binding.gridButton, binding.listButton)
+        layoutButtonListener(binding.listButton, binding.gridButton)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
@@ -79,5 +83,33 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
             binding.searchBar.setPlaceHolder(it.title)
             true
         }
+    }
+
+    private fun layoutButtonListener(clicked: ImageButton, disabled: ImageButton) {
+        clicked.setOnClickListener {
+            clicked.isEnabled = false
+            clicked.imageTintList =
+                ContextCompat.getColorStateList(applicationContext, R.color.secondaryLight)
+
+            disabled.isEnabled = true
+            disabled.imageTintList =
+                ContextCompat.getColorStateList(applicationContext, R.color.secondary)
+
+            updateCurrentLayout()
+        }
+    }
+
+    private fun updateCurrentLayout() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val fragments =
+            navHostFragment.childFragmentManager.fragments as List<IUpdateLayoutFragment>
+        fragments.forEach { fragment ->
+            fragment.updateLayout(binding.gridButton.isEnabled)
+        }
+    }
+
+    fun isListLayout(): Boolean {
+        return binding.gridButton.isEnabled
     }
 }
