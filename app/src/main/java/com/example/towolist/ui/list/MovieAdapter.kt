@@ -19,10 +19,10 @@ class MovieAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (isListLayout) {
             val binding = ListItemMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return MovieListViewHolder(binding, parent)
+            MovieListViewHolder(binding, parent)
         } else {
             val binding = GridItemMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return MovieGridViewHolder(binding, parent)
+            MovieGridViewHolder(binding, parent)
         }
     }
 
