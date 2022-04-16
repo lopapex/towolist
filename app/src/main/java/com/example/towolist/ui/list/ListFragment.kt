@@ -5,15 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.Fragment;
+
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.towolist.MainActivity
 import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
+import com.example.towolist.ui.`interface`.IUpdateLayoutFragment
 
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), IUpdateLayoutFragment {
 
     private val movieRepository: MovieRepository by lazy {
         MovieRepository()
@@ -29,14 +33,32 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val mainActivity :MainActivity = (activity as MainActivity)
+        val mainActivity : MainActivity = (activity as MainActivity)
+        updateLayout(mainActivity.isGridLayout())
+    }
+
+    override fun updateLayout(isList: Boolean) {
         val getItems = { movieRepository.getMockedData(100) }
         val onClick =  { it: MovieItem ->
             findNavController()
                 .navigate(ListFragmentDirections.actionListFragmentToDetailMovieFragment(it))
         }
+        if (isList) {
+            val adapter = MovieListAdapter(onItemClick = onClick)
 
-        mainActivity.updateLayout(onClick, binding.recyclerView, getItems)
-        mainActivity.registerLayoutListener(onClick, binding.recyclerView, getItems)
+            binding.recyclerView.apply {
+                layoutManager = LinearLayoutManager(context)
+            }
+            binding.recyclerView.adapter = adapter
+            adapter.submitList(getItems())
+        } else {
+            val adapter = MovieGridAdapter(onItemClick = onClick)
+
+            binding.recyclerView.apply {
+                layoutManager = GridLayoutManager(context, 3)
+            }
+            binding.recyclerView.adapter = adapter
+            adapter.submitList(getItems())
+        }
     }
 }

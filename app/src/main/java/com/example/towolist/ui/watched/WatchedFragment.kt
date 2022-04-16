@@ -1,19 +1,23 @@
 package com.example.towolist.ui.watched
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.towolist.MainActivity
 import com.example.towolist.data.MovieItem
-import java.text.SimpleDateFormat
-import java.util.*
 import com.example.towolist.databinding.FragmentWatchedBinding
 import com.example.towolist.repository.MovieRepository
+import com.example.towolist.ui.`interface`.IUpdateLayoutFragment
+import com.example.towolist.ui.list.MovieGridAdapter
+import com.example.towolist.ui.list.MovieListAdapter
+import java.util.*
 
-class WatchedFragment : Fragment() {
+class WatchedFragment : Fragment(), IUpdateLayoutFragment {
 
     private val movieRepository: MovieRepository by lazy {
         MovieRepository()
@@ -30,13 +34,31 @@ class WatchedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val mainActivity : MainActivity = (activity as MainActivity)
+        updateLayout(mainActivity.isGridLayout())
+    }
+
+    override fun updateLayout(isList: Boolean) {
         val getItems = { movieRepository.getMockedData(1) }
         val onClick =  { it: MovieItem ->
             findNavController()
                 .navigate(WatchedFragmentDirections.actionWatchedFragmentToDetailMovieFragment(it))
         }
+        if (isList) {
+            val adapter = MovieListAdapter(onItemClick = onClick)
 
-        mainActivity.updateLayout(onClick, binding.recyclerView, getItems)
-        mainActivity.registerLayoutListener(onClick, binding.recyclerView, getItems)
+            binding.recyclerView.apply {
+                layoutManager = LinearLayoutManager(context)
+            }
+            binding.recyclerView.adapter = adapter
+            adapter.submitList(getItems())
+        } else {
+            val adapter = MovieGridAdapter(onItemClick = onClick)
+
+            binding.recyclerView.apply {
+                layoutManager = GridLayoutManager(context, 3)
+            }
+            binding.recyclerView.adapter = adapter
+            adapter.submitList(getItems())
+        }
     }
 }
