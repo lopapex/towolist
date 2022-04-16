@@ -12,9 +12,9 @@ class MovieAdapter(
     private val isListLayout: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var movieItems: MutableList<MovieItem> = mutableListOf()
+    private var movies: MutableList<MovieItem> = mutableListOf()
 
-    override fun getItemCount(): Int = movieItems.size
+    override fun getItemCount(): Int = movies.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (isListLayout) {
@@ -28,14 +28,14 @@ class MovieAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (isListLayout){
-            (holder as MovieListViewHolder).bind(movieItems[position], onItemClick)
+            (holder as MovieListViewHolder).bind(movies[position], onItemClick)
         } else{
-            (holder as MovieGridViewHolder).bind(movieItems[position], onItemClick)
+            (holder as MovieGridViewHolder).bind(movies[position], onItemClick)
         }
     }
 
     fun submitList(newMovieItems: List<MovieItem>) {
-        movieItems = newMovieItems.toMutableList()
+        movies = newMovieItems.toMutableList()
         notifyDataSetChanged()
     }
 }

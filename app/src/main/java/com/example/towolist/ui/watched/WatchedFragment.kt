@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.towolist.MainActivity
+import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentWatchedBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.ui.`interface`.IUpdateLayoutFragment
@@ -21,6 +22,7 @@ class WatchedFragment : Fragment(), IUpdateLayoutFragment {
     }
 
     private lateinit var binding: FragmentWatchedBinding
+    private lateinit var movies: List<MovieItem>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentWatchedBinding.inflate(layoutInflater, container, false)
@@ -29,6 +31,7 @@ class WatchedFragment : Fragment(), IUpdateLayoutFragment {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        movies = movieRepository.getMockedData(1)
 
         val mainActivity : MainActivity = (activity as MainActivity)
         updateLayout(mainActivity.isListLayout())
@@ -40,7 +43,7 @@ class WatchedFragment : Fragment(), IUpdateLayoutFragment {
                 .navigate(WatchedFragmentDirections.actionWatchedFragmentToDetailMovieFragment(it))
         }, isList)
         binding.recyclerView.adapter = adapter
-        adapter.submitList(movieRepository.getMockedData(1))
+        adapter.submitList(movies)
 
         binding.recyclerView.apply {
             layoutManager = if (isList) LinearLayoutManager(context) else GridLayoutManager(context, 3)
