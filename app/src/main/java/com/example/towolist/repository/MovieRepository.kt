@@ -1,10 +1,44 @@
 package com.example.towolist.repository
 
+import android.content.Context
 import com.example.towolist.data.MovieItem
 import com.example.towolist.data.ServiceItem
+import com.example.towolist.webservice.RetrofitUtil
+import com.example.towolist.webservice.ToWoListApi
+import com.example.towolist.webservice.response.ListResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class MovieRepository {
+class MovieRepository(
+    context: Context,
+    private val toWoListApi: ToWoListApi = RetrofitUtil.createAqiWebService()
+) {
     private val rootApiImg = "https://image.tmdb.org/t/p/original"
+
+    private val apiKey = "7d983af93fb311150ed909fbc0873210"
+    private val language = "en-US"
+
+    fun getLatest(onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
+        toWoListApi.getPopularMovies(apiKey, language, 1)
+            .enqueue(object : Callback<ListResponse> {
+
+                override fun onResponse(call: Call<ListResponse>, response: Response<ListResponse>) {
+                    val responseBody = response.body()
+                    if (response.isSuccessful && responseBody != null) {
+                        onSuccess(responseBody.results.map { movieListItem ->
+                            movieListItem.toMovieItem()
+                        })
+                    } else {
+                        onFailure(IllegalStateException("Response was not successful"))
+                    }
+                }
+
+                override fun onFailure(call: Call<ListResponse>, t: Throwable) {
+                    onFailure(t)
+                }
+            })
+    }
 
     fun getMockedData(count: Int = 10): List<MovieItem> =
         mutableListOf<MovieItem>().apply {
