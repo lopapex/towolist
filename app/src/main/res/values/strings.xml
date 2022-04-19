@@ -19,4 +19,8 @@
     <string name="content_description_list">List</string>
     <string name="content_description_icon">Icon</string>
 
+
+    <string name="pg">PG</string>
+    <string name="r">R</string>
+
 </resources>
