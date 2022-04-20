@@ -35,6 +35,7 @@ class MovieListViewHolder(private val binding: ListItemMovieBinding, private val
                 .error(R.drawable.empty_image)
                 .fallback(R.drawable.empty_image)
                 .into(binding.icon)
+            binding.theater.text = ""
         } else {
             binding.icon.setImageResource(R.drawable.ic_calendar)
             binding.theater.text = "${view.context.getString(R.string.theater)} ${movieItem.release_date.getFormattedDateString()}"
