@@ -17,7 +17,7 @@ class MovieRepository {
                     release_date = "2005-06-10",
                     imageSource = "${rootApiImg}/74xTEgt7R36Fpooo50r9T25onhq.jpg",
                     rating = if (it % 2 == 0) R.string.r else R.string.pg,
-                    watchNow = mutableListOf<ServiceItem>().apply {
+                    watchNow = if (it % 8 == 0) mutableListOf<ServiceItem>().apply {
                         repeat(3) {
                             val item = ServiceItem(
                                 id = it.toLong() * count,
@@ -26,8 +26,8 @@ class MovieRepository {
                             )
                             add(item)
                         }
-                    },
-                    buyRent = mutableListOf<ServiceItem>().apply {
+                    } else mutableListOf<ServiceItem>(),
+                    buyRent = if (it % 4 == 0) mutableListOf<ServiceItem>().apply {
                         repeat(2) {
                             val item = ServiceItem(
                                 id = it.toLong() * count,
@@ -36,7 +36,7 @@ class MovieRepository {
                             )
                             add(item)
                         }
-                    }
+                    } else mutableListOf<ServiceItem>()
                 )
                 add(item)
             }

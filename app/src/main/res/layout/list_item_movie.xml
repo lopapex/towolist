@@ -60,6 +60,17 @@
             android:contentDescription="@string/content_description_icon"
             app:shapeAppearanceOverlay="@style/roundedCorners" />
 
+        <TextView
+            android:id="@+id/theater"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="In theaters"
+            android:textSize="16sp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@+id/icon"
+            app:layout_constraintTop_toTopOf="@+id/icon"
+            app:layout_constraintBottom_toBottomOf="@+id/icon"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
