@@ -111,6 +111,49 @@
             android:clickable="true"
             android:focusable="true" />
 
+        <TextView
+            android:id="@+id/theater"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/secondaryLight"
+            android:paddingVertical="5sp"
+            android:paddingStart="15sp"
+            android:text="@string/detail_theater"
+            android:textSize="24sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rent_buy_list"
+            tools:ignore="RtlSymmetry" />
+
+        <TextView
+            android:id="@+id/theater_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/calendar_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/calendar_icon"
+            tools:text="On Hulu.com and the app" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/calendar_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/content_description_icon"
+            android:padding="5dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/theater_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/theater"
+            app:layout_constraintVertical_bias="0.0"
+            app:shapeAppearanceOverlay="@style/roundedCorners"
+            app:srcCompat="@drawable/ic_calendar" />
+
         <View
             android:id="@+id/footer"
             android:layout_width="0dp"
@@ -118,7 +161,7 @@
             android:background="@color/secondaryLight"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rent_buy_list" />
+            app:layout_constraintTop_toBottomOf="@+id/calendar_icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
