@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/service_name"
         tools:text="On Hulu.com and the app" />
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/service_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -38,7 +38,8 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars"
         android:padding="5sp"
-        android:contentDescription="@string/content_description_icon" />
+        android:contentDescription="@string/content_description_icon"
+        app:shapeAppearanceOverlay="@style/roundedCorners" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

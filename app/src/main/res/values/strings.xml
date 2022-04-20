@@ -11,6 +11,7 @@
     <string name="detail_watch_options">Watch Options</string>
     <string name="detail_watch_now">WATCH NOW</string>
     <string name="detail_rent_buy">RENT/ BUY</string>
+    <string name="detail_theater">IN THEATERS</string>
 
     <string name="filter_button">Filter</string>
 
@@ -18,5 +19,10 @@
     <string name="content_description_grid">Grid</string>
     <string name="content_description_list">List</string>
     <string name="content_description_icon">Icon</string>
+
+
+    <string name="pg">PG</string>
+    <string name="r">R</string>
+    <string name="theater">In theaters</string>
 
 </resources>
