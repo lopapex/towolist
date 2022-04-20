@@ -11,7 +11,7 @@ class MovieListViewHolder(private val binding: ListItemMovieBinding, private val
     : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(movieItem: MovieItem, onItemClick: (MovieItem) -> Unit) {
-        binding.mediaName.text = movieItem.name + " list"
+        binding.mediaName.text = movieItem.name
         Glide.with(view.context)
             .load(movieItem.imageSource)
             .placeholder(R.drawable.empty_image)
