@@ -13,7 +13,6 @@ class MovieRepository {
                 val item = MovieItem(
                     id = it.toLong(),
                     name = "The Batman $it",
-                    overview = "While Batman deals with a deformed man calling himself the Penguin, an employee of a corrupt businessman transforms into the Catwoman.",
                     release_date = "2005-06-10",
                     imageSource = "${rootApiImg}/74xTEgt7R36Fpooo50r9T25onhq.jpg",
                     rating = if (it % 2 == 0) R.string.r else R.string.pg,
