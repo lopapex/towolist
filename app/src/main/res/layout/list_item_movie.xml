@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="5dp">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/poster"
             android:layout_width="75dp"
             android:layout_height="0dp"
@@ -21,7 +21,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars"
-            android:contentDescription="@string/content_description_poster"/>
+            android:contentDescription="@string/content_description_poster"
+            app:shapeAppearanceOverlay="@style/roundedCorners" />
 
         <TextView
             android:id="@+id/media_name"
@@ -46,6 +47,18 @@
             android:textColor="@color/secondaryLight"
             app:layout_constraintStart_toEndOf="@+id/poster"
             app:layout_constraintTop_toBottomOf="@+id/media_name" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/icon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@+id/poster"
+            app:layout_constraintTop_toBottomOf="@+id/info"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:srcCompat="@tools:sample/avatars"
+            android:contentDescription="@string/content_description_icon"
+            app:shapeAppearanceOverlay="@style/roundedCorners" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

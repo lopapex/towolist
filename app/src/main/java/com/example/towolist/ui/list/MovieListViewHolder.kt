@@ -22,7 +22,15 @@ class MovieListViewHolder(private val binding: ListItemMovieBinding, private val
 
         binding.mediaName.text = movieItem.name + " list"
 
-        binding.info.text = "${movieItem.release_date} ${view.context.getString(movieItem.rating)}"
+        binding.info.text = "${movieItem.release_date.substringBefore("-")} ${view.context.getString(movieItem.rating)}"
+
+
+        Glide.with(view.context)
+            .load(movieItem.watchNow.first().iconSource)
+            .placeholder(R.drawable.empty_image)
+            .error(R.drawable.empty_image)
+            .fallback(R.drawable.empty_image)
+            .into(binding.icon)
 
         binding.cardContainer.setOnClickListener {
             onItemClick(movieItem)
