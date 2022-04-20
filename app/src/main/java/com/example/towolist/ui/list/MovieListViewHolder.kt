@@ -22,7 +22,7 @@ class MovieListViewHolder(private val binding: ListItemMovieBinding, private val
             .fallback(R.drawable.empty_image)
             .into(binding.poster)
 
-        binding.mediaName.text = movieItem.name + " list"
+        binding.mediaName.text = movieItem.name
 
         binding.info.text = "${movieItem.release_date.substringBefore("-")} ${view.context.getString(movieItem.rating)}"
 
