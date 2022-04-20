@@ -1,5 +1,6 @@
 package com.example.towolist.repository
 
+import com.example.towolist.R
 import com.example.towolist.data.MovieItem
 import com.example.towolist.data.ServiceItem
 
@@ -12,8 +13,11 @@ class MovieRepository {
                 val item = MovieItem(
                     id = it.toLong(),
                     name = "The Batman $it",
+                    overview = "While Batman deals with a deformed man calling himself the Penguin, an employee of a corrupt businessman transforms into the Catwoman.",
+                    release_date = "2005-06-10",
                     imageSource = "${rootApiImg}/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-                    watchNow = mutableListOf<ServiceItem>().apply {
+                    rating = if (it % 2 == 0) R.string.r else R.string.pg,
+                    watchNow = if (it % 8 == 0) mutableListOf<ServiceItem>().apply {
                         repeat(3) {
                             val item = ServiceItem(
                                 id = it.toLong() * count,
@@ -22,8 +26,8 @@ class MovieRepository {
                             )
                             add(item)
                         }
-                    },
-                    buyRent = mutableListOf<ServiceItem>().apply {
+                    } else mutableListOf<ServiceItem>(),
+                    buyRent = if (it % 4 == 0) mutableListOf<ServiceItem>().apply {
                         repeat(2) {
                             val item = ServiceItem(
                                 id = it.toLong() * count,
@@ -32,7 +36,7 @@ class MovieRepository {
                             )
                             add(item)
                         }
-                    }
+                    } else mutableListOf<ServiceItem>()
                 )
                 add(item)
             }
