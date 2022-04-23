@@ -98,6 +98,20 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
 
             movieRepository.getPopularTvShows(
                 onSuccess = { items ->
+                    items.forEach {
+                        movieRepository.getWatchProvidersByTvId(it.id,
+                            onSuccess = { providerByState ->
+                                if (providerByState != null) {
+                                    if (providerByState.flatrate != null)
+                                        it.watchNow = providerByState.flatrate.take(3).map {provider -> provider.toServiceItem()}.toMutableList()
+                                    if (providerByState.buy != null)
+                                        it.buyRent = providerByState.buy.take(2).map {provider -> provider.toServiceItem() }.toMutableList()
+                                }
+                            },
+                            onFailure = {
+                                context?.toast("Something happened!")
+                            })
+                    }
 
                     adapter.appendToList(items)
                     adapter.sortByPopularity()
@@ -133,6 +147,20 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
 
             movieRepository.getTopRatedTvShows(
                 onSuccess = { items ->
+                    items.forEach {
+                        movieRepository.getWatchProvidersByTvId(it.id,
+                            onSuccess = { providerByState ->
+                                if (providerByState != null) {
+                                    if (providerByState.flatrate != null)
+                                        it.watchNow = providerByState.flatrate.take(3).map {provider -> provider.toServiceItem()}.toMutableList()
+                                    if (providerByState.buy != null)
+                                        it.buyRent = providerByState.buy.take(2).map {provider -> provider.toServiceItem() }.toMutableList()
+                                }
+                            },
+                            onFailure = {
+                                context?.toast("Something happened!")
+                            })
+                    }
 
                     adapter.appendToList(items)
                     adapter.sortByVoteAverage()

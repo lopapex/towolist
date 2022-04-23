@@ -121,6 +121,25 @@ class MovieRepository(
             })
     }
 
+    fun getWatchProvidersByTvId(tvId: Long, onSuccess: (WatchProviderByStateResponse?) -> Unit, onFailure: (Throwable) -> Unit) {
+        toWoListApi.getWatchProvidersByTvShowId(tvId, apiKey)
+            .enqueue(object : Callback<WatchProviderListResponse> {
+
+                override fun onResponse(call: Call<WatchProviderListResponse>, response: Response<WatchProviderListResponse>) {
+                    val responseBody = response.body()
+                    if (response.isSuccessful && responseBody != null) {
+                        onSuccess(responseBody.results.CZ)
+                    } else {
+                        onFailure(IllegalStateException("Response was not successful"))
+                    }
+                }
+
+                override fun onFailure(call: Call<WatchProviderListResponse>, t: Throwable) {
+                    onFailure(t)
+                }
+            })
+    }
+
     fun getMockedData(count: Int = 10): List<MovieItem> =
         mutableListOf<MovieItem>().apply {
             repeat(count) { it ->

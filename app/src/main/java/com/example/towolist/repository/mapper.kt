@@ -30,26 +30,8 @@ fun TvShowListItem.toMovieItem(): MovieItem =
         releaseDate = this.firstAirDate,
         popularity = this.popularity,
         voteAverage = this.voteAverage,
-        watchNow = mutableListOf<ServiceItem>().apply {
-            repeat(3) {
-                val item = ServiceItem(
-                    id = it.toLong() * 10,
-                    name = "Netflix $it",
-                    iconSource = "${rootApiImg}/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg",
-                )
-                add(item)
-            }
-        },
-        buyRent = mutableListOf<ServiceItem>().apply {
-            repeat(2) {
-                val item = ServiceItem(
-                    id = it.toLong() * 10,
-                    name = "Google Play Movies $it",
-                    iconSource = "${rootApiImg}/peURlLlr8jggOwK53fJ5wdQl05y.jpg",
-                )
-                add(item)
-            }
-        },
+        watchNow = mutableListOf(),
+        buyRent = mutableListOf(),
         isToWatch = true,
         isWatched = false
     )
