@@ -49,4 +49,20 @@ interface ToWoListApi {
         @Path("tv_id") tvId: Long,
         @Query("api_key") apiKey: String
     ): Call<WatchProviderListResponse>
+
+    @GET("search/movie")
+    fun searchMovies(
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String,
+        @Query("query") query: String,
+        @Query("page") page: Int
+    ): Call<MovieListResponse>
+
+    @GET("search/tv")
+    fun searchTvShows(
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String,
+        @Query("query") query: String,
+        @Query("page") page: Int
+    ): Call<TvShowListResponse>
 }

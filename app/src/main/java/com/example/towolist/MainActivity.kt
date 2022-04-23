@@ -12,7 +12,7 @@ import com.example.towolist.databinding.ActivityMainBinding
 import com.example.towolist.ui.`interface`.IUpdateLayoutFragment
 import com.mancj.materialsearchbar.MaterialSearchBar
 
-class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListener {
+class MainActivity : AppCompatActivity() {
 
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -29,11 +29,6 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
 
         initFilterBottomFragment(navController)
         initializeBottomNavigationListener(navController)
-
-        //val spinner = initFilterMovieTypes()
-        //spinner.onItemSelectedListener = SpinnerActivity()
-
-        binding.searchBar.setOnSearchActionListener(this)
 
         binding.gridButton.isEnabled = false
         layoutButtonListener(binding.gridButton, binding.listButton)
@@ -54,20 +49,6 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
             spinner.adapter = adapter
         }
         return spinner
-    }
-
-    override fun onSearchStateChanged(enabled: Boolean) {
-        val s = if (enabled) "enabled" else "disabled"
-        Toast.makeText(this@MainActivity, "Search $s", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onSearchConfirmed(text: CharSequence) {
-        Toast.makeText(this@MainActivity, text, Toast.LENGTH_SHORT).show()
-        binding.searchBar.closeSearch()
-    }
-
-    override fun onButtonClicked(buttonCode: Int) {
-        Toast.makeText(this@MainActivity, "Search ", Toast.LENGTH_SHORT).show()
     }
 
     private fun initFilterBottomFragment(navController: NavController) {
@@ -114,5 +95,9 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
 
     fun isPopularSpinnerOption(): Boolean {
         return binding.spinner.selectedItem.toString() == resources.getStringArray(R.array.spinner_options)[0]
+    }
+
+    fun getSearchBar(): MaterialSearchBar {
+        return binding.searchBar
     }
 }

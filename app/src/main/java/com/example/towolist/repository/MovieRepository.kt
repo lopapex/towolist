@@ -141,6 +141,48 @@ class MovieRepository(
             })
     }
 
+    fun searchMovies(query: String, onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
+        toWoListApi.searchMovies(apiKey, language, query, 1)
+            .enqueue(object : Callback<MovieListResponse> {
+
+                override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
+                    val responseBody = response.body()
+                    if (response.isSuccessful && responseBody != null) {
+                        onSuccess(responseBody.results.map { movieListItem ->
+                            movieListItem.toMovieItem()
+                        })
+                    } else {
+                        onFailure(IllegalStateException(R.string.response_error.toString()))
+                    }
+                }
+
+                override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
+                    onFailure(t)
+                }
+            })
+    }
+
+    fun searchTvShows(query: String, onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
+        toWoListApi.searchTvShows(apiKey, language, query,1)
+            .enqueue(object : Callback<TvShowListResponse> {
+
+                override fun onResponse(call: Call<TvShowListResponse>, response: Response<TvShowListResponse>) {
+                    val responseBody = response.body()
+                    if (response.isSuccessful && responseBody != null) {
+                        onSuccess(responseBody.results.map { tvShowListItem ->
+                            tvShowListItem.toMovieItem()
+                        })
+                    } else {
+                        onFailure(IllegalStateException(R.string.response_error.toString()))
+                    }
+                }
+
+                override fun onFailure(call: Call<TvShowListResponse>, t: Throwable) {
+                    onFailure(t)
+                }
+            })
+    }
+
     fun getMockedData(count: Int = 10): List<MovieItem> =
         mutableListOf<MovieItem>().apply {
             repeat(count) { it ->

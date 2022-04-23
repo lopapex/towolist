@@ -3,7 +3,6 @@ package com.example.towolist.ui.list
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.towolist.MainActivity
 import com.example.towolist.databinding.GridItemMovieBinding
 import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.ListItemMovieBinding

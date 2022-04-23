@@ -1,6 +1,5 @@
 package com.example.towolist.ui.list
 
-
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,14 +14,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.towolist.MainActivity
 import com.example.towolist.R
-import com.example.towolist.data.ServiceItem
 import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.repository.toServiceItem
 import com.example.towolist.ui.`interface`.IUpdateLayoutFragment
+import com.mancj.materialsearchbar.MaterialSearchBar
 
 
-class ListFragment : Fragment(), IUpdateLayoutFragment {
+class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSearchActionListener {
 
     fun Context.toast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
@@ -58,6 +57,9 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
                 updateLayout(mainActivity.isListLayout())
             }
         }
+
+        val searchBar = mainActivity.getSearchBar()
+        searchBar.setOnSearchActionListener(this)
 
         updateLayout(mainActivity.isListLayout())
     }
@@ -175,5 +177,76 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
         binding.recyclerView.apply {
             layoutManager = if (isList) LinearLayoutManager(context) else GridLayoutManager(context, 3)
         }
+    }
+
+    override fun onSearchStateChanged(enabled: Boolean) {
+    }
+
+    override fun onSearchConfirmed(text: CharSequence) {
+        val mainActivity : MainActivity = (activity as MainActivity)
+
+        val adapter = MovieAdapter(onItemClick = {
+            findNavController()
+                .navigate(ListFragmentDirections.actionListFragmentToDetailMovieFragment(it))
+        }, mainActivity.isListLayout())
+
+        binding.recyclerView.adapter = adapter
+
+        movieRepository.searchMovies(
+            query = text.toString(),
+            onSuccess = { items ->
+                items.forEach {
+                    movieRepository.getWatchProvidersByMovieId(it.id,
+                        onSuccess = { providerByState ->
+                            if (providerByState != null) {
+                                if (providerByState.flatrate != null)
+                                    it.watchNow = providerByState.flatrate.take(3).map {provider -> provider.toServiceItem()}.toMutableList()
+                                if (providerByState.buy != null)
+                                    it.buyRent = providerByState.buy.take(2).map {provider -> provider.toServiceItem() }.toMutableList()
+                            }
+                        },
+                        onFailure = {
+                            context?.toast(R.string.general_error.toString())
+                        })
+                }
+
+                adapter.submitList(items)
+            },
+            onFailure = {
+                context?.toast(R.string.general_error.toString())
+            }
+        )
+
+        movieRepository.searchTvShows(
+            query = text.toString(),
+            onSuccess = { items ->
+                items.forEach {
+                    movieRepository.getWatchProvidersByTvId(it.id,
+                        onSuccess = { providerByState ->
+                            if (providerByState != null) {
+                                if (providerByState.flatrate != null)
+                                    it.watchNow = providerByState.flatrate.take(3).map {provider -> provider.toServiceItem()}.toMutableList()
+                                if (providerByState.buy != null)
+                                    it.buyRent = providerByState.buy.take(2).map {provider -> provider.toServiceItem() }.toMutableList()
+                            }
+                        },
+                        onFailure = {
+                            context?.toast(R.string.general_error.toString())
+                        })
+                }
+
+                adapter.appendToList(items)
+            },
+            onFailure = {
+                context?.toast(R.string.general_error.toString())
+            }
+        )
+
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+        mainActivity.getSearchBar().closeSearch()
+    }
+
+    override fun onButtonClicked(buttonCode: Int) {
+        Toast.makeText(context, "Search ", Toast.LENGTH_SHORT).show()
     }
 }
