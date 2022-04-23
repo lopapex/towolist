@@ -12,7 +12,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MovieRepository(
-    context: Context,
     private val toWoListApi: ToWoListApi = RetrofitUtil.createAqiWebService()
 ) {
     private val rootApiImg = "https://image.tmdb.org/t/p/original"

@@ -14,10 +14,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.towolist.MainActivity
 import com.example.towolist.R
+import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.repository.toServiceItem
 import com.example.towolist.ui.`interface`.IUpdateLayoutFragment
+import com.example.towolist.webservice.response.WatchProviderInfoResponse
 import com.mancj.materialsearchbar.MaterialSearchBar
 
 
@@ -28,10 +30,11 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     }
 
     private val movieRepository: MovieRepository by lazy {
-        MovieRepository(requireContext())
+        MovieRepository()
     }
 
     private lateinit var binding: FragmentListBinding
+    private var adapter: MovieAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentListBinding.inflate(layoutInflater, container, false)
@@ -54,7 +57,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                 position: Int,
                 id: Long
             ) {
-                updateLayout(mainActivity.isListLayout())
+                loadItems(mainActivity.isPopularSpinnerOption())
             }
         }
 
@@ -62,19 +65,29 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
         searchBar.setOnSearchActionListener(this)
 
         updateLayout(mainActivity.isListLayout())
+        loadItems(mainActivity.isPopularSpinnerOption())
     }
 
     override fun updateLayout(isList: Boolean) {
-        val adapter = MovieAdapter(onItemClick = {
+        var items = listOf<MovieItem>()
+        if (adapter != null) {
+            items = adapter?.getMovies()!!
+        }
+        adapter = MovieAdapter(onItemClick = {
             findNavController()
                 .navigate(ListFragmentDirections.actionListFragmentToDetailMovieFragment(it))
         }, isList)
 
+        adapter?.submitList(items)
         binding.recyclerView.adapter = adapter
 
-        val mainActivity : MainActivity = (activity as MainActivity)
+        binding.recyclerView.apply {
+            layoutManager = if (isList) LinearLayoutManager(context) else GridLayoutManager(context, 3)
+        }
+    }
 
-        if (mainActivity.isPopularSpinnerOption()) {
+    private fun loadItems(isPopular : Boolean) {
+        if (isPopular) {
             movieRepository.getPopularMovies(
                 onSuccess = { items ->
                     items.forEach {
@@ -82,9 +95,13 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                             onSuccess = { providerByState ->
                                 if (providerByState != null) {
                                     if (providerByState.flatrate != null)
-                                        it.watchNow = providerByState.flatrate.take(3).map {provider -> provider.toServiceItem()}.toMutableList()
+                                        it.watchNow = providerByState.flatrate.take(3)
+                                            .map { provider -> provider.toServiceItem() }
+                                            .toMutableList()
                                     if (providerByState.buy != null)
-                                        it.buyRent = providerByState.buy.take(2).map {provider -> provider.toServiceItem() }.toMutableList()
+                                        it.buyRent =
+                                            providerByState.buy.take(2).map { provider -> provider.toServiceItem() }
+                                                .toMutableList()
                                 }
                             },
                             onFailure = {
@@ -92,7 +109,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                             })
                     }
 
-                    adapter.submitList(items)
+                    adapter?.submitList(items)
                 },
                 onFailure = {
                     context?.toast(R.string.general_error.toString())
@@ -106,9 +123,13 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                             onSuccess = { providerByState ->
                                 if (providerByState != null) {
                                     if (providerByState.flatrate != null)
-                                        it.watchNow = providerByState.flatrate.take(3).map {provider -> provider.toServiceItem()}.toMutableList()
+                                        it.watchNow = providerByState.flatrate.take(3)
+                                            .map { provider -> provider.toServiceItem() }
+                                            .toMutableList()
                                     if (providerByState.buy != null)
-                                        it.buyRent = providerByState.buy.take(2).map {provider -> provider.toServiceItem() }.toMutableList()
+                                        it.buyRent =
+                                            providerByState.buy.take(2).map { provider -> provider.toServiceItem() }
+                                                .toMutableList()
                                 }
                             },
                             onFailure = {
@@ -116,8 +137,8 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                             })
                     }
 
-                    adapter.appendToList(items)
-                    adapter.sortByPopularity()
+                    adapter?.appendToList(items)
+                    adapter?.sortByPopularity()
                 },
                 onFailure = {
                     context?.toast(R.string.general_error.toString())
@@ -131,9 +152,13 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                             onSuccess = { providerByState ->
                                 if (providerByState != null) {
                                     if (providerByState.flatrate != null)
-                                        it.watchNow = providerByState.flatrate.take(3).map {provider -> provider.toServiceItem()}.toMutableList()
+                                        it.watchNow = providerByState.flatrate.take(3)
+                                            .map { provider -> provider.toServiceItem() }
+                                            .toMutableList()
                                     if (providerByState.buy != null)
-                                        it.buyRent = providerByState.buy.take(2).map {provider -> provider.toServiceItem() }.toMutableList()
+                                        it.buyRent =
+                                            providerByState.buy.take(2).map { provider -> provider.toServiceItem() }
+                                                .toMutableList()
                                 }
                             },
                             onFailure = {
@@ -141,7 +166,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                             })
                     }
 
-                    adapter.submitList(items)
+                    adapter?.submitList(items)
                 },
                 onFailure = {
                     context?.toast(R.string.general_error.toString())
@@ -155,9 +180,13 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                             onSuccess = { providerByState ->
                                 if (providerByState != null) {
                                     if (providerByState.flatrate != null)
-                                        it.watchNow = providerByState.flatrate.take(3).map {provider -> provider.toServiceItem()}.toMutableList()
+                                        it.watchNow = providerByState.flatrate.take(3)
+                                            .map { provider -> provider.toServiceItem() }
+                                            .toMutableList()
                                     if (providerByState.buy != null)
-                                        it.buyRent = providerByState.buy.take(2).map {provider -> provider.toServiceItem() }.toMutableList()
+                                        it.buyRent =
+                                            providerByState.buy.take(2).map { provider -> provider.toServiceItem() }
+                                                .toMutableList()
                                 }
                             },
                             onFailure = {
@@ -165,17 +194,13 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                             })
                     }
 
-                    adapter.appendToList(items)
-                    adapter.sortByVoteAverage()
+                    adapter?.appendToList(items)
+                    adapter?.sortByVoteAverage()
                 },
                 onFailure = {
                     context?.toast(R.string.general_error.toString())
                 }
             )
-        }
-
-        binding.recyclerView.apply {
-            layoutManager = if (isList) LinearLayoutManager(context) else GridLayoutManager(context, 3)
         }
     }
 

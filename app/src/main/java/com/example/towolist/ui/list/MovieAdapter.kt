@@ -53,4 +53,8 @@ class MovieAdapter(
         movies.sortByDescending { movie -> movie.voteAverage }
         notifyDataSetChanged()
     }
+
+    fun getMovies(): List<MovieItem> {
+        return movies;
+    }
 }
