@@ -15,7 +15,7 @@ import com.example.towolist.databinding.ServiceListBinding
 import com.example.towolist.databinding.ServiceListBinding.*
 
 
-class ServiceAdapter(context: Activity, private val items: List<ServiceItem>)
+class ServiceAdapter(context: Activity, val items: List<ServiceItem>)
     : ArrayAdapter<ServiceItem>(context, R.layout.service_list, items) {
 
     private lateinit var binding: ServiceListBinding

@@ -20,7 +20,7 @@ class MovieRepository {
                         repeat(3) {
                             val item = ServiceItem(
                                 id = it.toLong() * count,
-                                name = "Netflix $it",
+                                name = "Netflix",
                                 iconSource = "${rootApiImg}/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg",
                             )
                             add(item)
@@ -30,7 +30,7 @@ class MovieRepository {
                         repeat(2) {
                             val item = ServiceItem(
                                 id = it.toLong() * count,
-                                name = "Google Play Movies $it",
+                                name = "Google Play Movies",
                                 iconSource = "${rootApiImg}/peURlLlr8jggOwK53fJ5wdQl05y.jpg",
                             )
                             add(item)

@@ -10,10 +10,13 @@ import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageButton
 import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import com.bumptech.glide.Glide
 import com.example.towolist.R
 import com.example.towolist.data.MovieItem
+import com.example.towolist.data.ServiceInfo
 import com.example.towolist.databinding.FragmentDetailMovieBinding
+import com.example.towolist.databinding.ServiceListBinding
 import com.example.towolist.utils.getFormattedDateString
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -21,6 +24,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class DetailMovieFragment() : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentDetailMovieBinding
+    private var services : Map<String, ServiceInfo> = mapOf(
+        "Netflix" to ServiceInfo.Netflix,
+        "HBO MAX" to ServiceInfo.HBO
+    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentDetailMovieBinding.inflate(layoutInflater, container, false)
@@ -43,16 +50,6 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
 
         updateImageButtonColor(binding.watchedIcon, item.isWatched, view)
         updateImageButtonColor(binding.toWatchIcon, item.isToWatch, view)
-        binding.watchNowList.onItemClickListener = OnItemClickListener { parent, v, position, id ->
-            try {
-                val intent = v.context.packageManager.getLaunchIntentForPackage("com.hbo.hbonow")
-                startActivity(intent)
-            } catch (e: Exception) {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse("http://www.netflix.com/watch")
-                startActivity(intent)
-            }
-        }
 
         updateBasedOnServices(item)
     }
@@ -65,6 +62,21 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
     private fun updateBasedOnServices(item: MovieItem) {
         if (item.watchNow.isNotEmpty()) {
             val watchNowListAdapter = ServiceAdapter(context as Activity, item.watchNow)
+            binding.watchNowList.onItemClickListener = OnItemClickListener { parent, v, position, id ->
+                val service = services[watchNowListAdapter.items[position].name]
+                try {
+                    val intent = service?.packageName?.let {
+                        v.context.packageManager.getLaunchIntentForPackage(
+                            it
+                        )
+                    }
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse(service?.url)
+                    startActivity(intent)
+                }
+            }
             binding.watchNowList.adapter = watchNowListAdapter
         } else {
             binding.watchNow.visibility = View.GONE
