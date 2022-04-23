@@ -3,6 +3,7 @@
     <string name="title_activity_main">ToWoList</string>
 
     <string name="general_error">Something went wrong :(</string>
+    <string name="response_error">Response was not successful</string>
 
     <string name="main_navigation_list">List</string>
     <string name="main_navigation_to_watch">To watch</string>

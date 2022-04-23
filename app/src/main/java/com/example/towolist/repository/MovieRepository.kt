@@ -1,6 +1,7 @@
 package com.example.towolist.repository
 
 import android.content.Context
+import com.example.towolist.R
 import com.example.towolist.data.MovieItem
 import com.example.towolist.data.ServiceItem
 import com.example.towolist.webservice.RetrofitUtil
@@ -29,7 +30,7 @@ class MovieRepository(
                             movieListItem.toMovieItem()
                         })
                     } else {
-                        onFailure(IllegalStateException("Response was not successful"))
+                        onFailure(IllegalStateException(R.string.response_error.toString()))
                     }
                 }
 
@@ -50,7 +51,7 @@ class MovieRepository(
                             tvShowListItem.toMovieItem()
                         })
                     } else {
-                        onFailure(IllegalStateException("Response was not successful"))
+                        onFailure(IllegalStateException(R.string.response_error.toString()))
                     }
                 }
 
@@ -71,7 +72,7 @@ class MovieRepository(
                             movieListItem.toMovieItem()
                         })
                     } else {
-                        onFailure(IllegalStateException("Response was not successful"))
+                        onFailure(IllegalStateException(R.string.response_error.toString()))
                     }
                 }
 
@@ -92,7 +93,7 @@ class MovieRepository(
                             tvShowListItem.toMovieItem()
                         })
                     } else {
-                        onFailure(IllegalStateException("Response was not successful"))
+                        onFailure(IllegalStateException(R.string.response_error.toString()))
                     }
                 }
 
@@ -111,7 +112,7 @@ class MovieRepository(
                     if (response.isSuccessful && responseBody != null) {
                             onSuccess(responseBody.results.CZ)
                     } else {
-                        onFailure(IllegalStateException("Response was not successful"))
+                        onFailure(IllegalStateException(R.string.response_error.toString()))
                     }
                 }
 
@@ -130,7 +131,7 @@ class MovieRepository(
                     if (response.isSuccessful && responseBody != null) {
                         onSuccess(responseBody.results.CZ)
                     } else {
-                        onFailure(IllegalStateException("Response was not successful"))
+                        onFailure(IllegalStateException(R.string.response_error.toString()))
                     }
                 }
 

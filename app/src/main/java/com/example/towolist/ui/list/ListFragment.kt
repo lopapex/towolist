@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.towolist.MainActivity
+import com.example.towolist.R
 import com.example.towolist.data.ServiceItem
 import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
@@ -85,14 +86,14 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
                                 }
                             },
                             onFailure = {
-                                context?.toast("Something happened!")
+                                context?.toast(R.string.general_error.toString())
                             })
                     }
 
                     adapter.submitList(items)
                 },
                 onFailure = {
-                    context?.toast("Something happened!")
+                    context?.toast(R.string.general_error.toString())
                 }
             )
 
@@ -109,7 +110,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
                                 }
                             },
                             onFailure = {
-                                context?.toast("Something happened!")
+                                context?.toast(R.string.general_error.toString())
                             })
                     }
 
@@ -117,7 +118,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
                     adapter.sortByPopularity()
                 },
                 onFailure = {
-                    context?.toast("Something happened!")
+                    context?.toast(R.string.general_error.toString())
                 }
             )
         } else {
@@ -134,14 +135,14 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
                                 }
                             },
                             onFailure = {
-                                context?.toast("Something happened!")
+                                context?.toast(R.string.general_error.toString())
                             })
                     }
 
                     adapter.submitList(items)
                 },
                 onFailure = {
-                    context?.toast("Something happened!")
+                    context?.toast(R.string.general_error.toString())
                 }
             )
 
@@ -158,7 +159,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
                                 }
                             },
                             onFailure = {
-                                context?.toast("Something happened!")
+                                context?.toast(R.string.general_error.toString())
                             })
                     }
 
@@ -166,7 +167,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
                     adapter.sortByVoteAverage()
                 },
                 onFailure = {
-                    context?.toast("Something happened!")
+                    context?.toast(R.string.general_error.toString())
                 }
             )
         }
