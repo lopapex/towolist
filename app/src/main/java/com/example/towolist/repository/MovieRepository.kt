@@ -5,7 +5,8 @@ import com.example.towolist.data.MovieItem
 import com.example.towolist.data.ServiceItem
 import com.example.towolist.webservice.RetrofitUtil
 import com.example.towolist.webservice.ToWoListApi
-import com.example.towolist.webservice.response.ListResponse
+import com.example.towolist.webservice.response.MovieListResponse
+import com.example.towolist.webservice.response.TvShowListResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,11 +20,11 @@ class MovieRepository(
     private val apiKey = "7d983af93fb311150ed909fbc0873210"
     private val language = "en-US"
 
-    fun getLatest(onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
+    fun getPopularMovies(onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
         toWoListApi.getPopularMovies(apiKey, language, 1)
-            .enqueue(object : Callback<ListResponse> {
+            .enqueue(object : Callback<MovieListResponse> {
 
-                override fun onResponse(call: Call<ListResponse>, response: Response<ListResponse>) {
+                override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
                     val responseBody = response.body()
                     if (response.isSuccessful && responseBody != null) {
                         onSuccess(responseBody.results.map { movieListItem ->
@@ -34,7 +35,28 @@ class MovieRepository(
                     }
                 }
 
-                override fun onFailure(call: Call<ListResponse>, t: Throwable) {
+                override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
+                    onFailure(t)
+                }
+            })
+    }
+
+    fun getPopularTvShows(onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
+        toWoListApi.getPopularTvShows(apiKey, language, 1)
+            .enqueue(object : Callback<TvShowListResponse> {
+
+                override fun onResponse(call: Call<TvShowListResponse>, response: Response<TvShowListResponse>) {
+                    val responseBody = response.body()
+                    if (response.isSuccessful && responseBody != null) {
+                        onSuccess(responseBody.results.map { tvShowListItem ->
+                            tvShowListItem.toMovieItem()
+                        })
+                    } else {
+                        onFailure(IllegalStateException("Response was not successful"))
+                    }
+                }
+
+                override fun onFailure(call: Call<TvShowListResponse>, t: Throwable) {
                     onFailure(t)
                 }
             })

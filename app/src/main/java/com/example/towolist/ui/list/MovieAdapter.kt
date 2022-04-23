@@ -38,4 +38,9 @@ class MovieAdapter(
         movies = newMovieItems.toMutableList()
         notifyDataSetChanged()
     }
+
+    fun appendToList(movieItems: List<MovieItem>) {
+        movies.addAll(movieItems.toMutableList())
+        notifyDataSetChanged()
+    }
 }

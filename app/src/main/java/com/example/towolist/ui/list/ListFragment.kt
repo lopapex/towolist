@@ -30,7 +30,6 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
     }
 
     private lateinit var binding: FragmentListBinding
-    private lateinit var movies: List<MovieItem>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentListBinding.inflate(layoutInflater, container, false)
@@ -51,9 +50,18 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
         }, isList)
         binding.recyclerView.adapter = adapter
 
-        movieRepository.getLatest(
+        movieRepository.getPopularMovies(
             onSuccess = { items ->
                 adapter.submitList((items))
+            },
+            onFailure = {
+                context?.toast("Something happened!")
+            }
+        )
+
+        movieRepository.getPopularTvShows(
+            onSuccess = { items ->
+                adapter.appendToList((items))
             },
             onFailure = {
                 context?.toast("Something happened!")

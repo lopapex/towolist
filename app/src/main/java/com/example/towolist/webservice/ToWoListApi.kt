@@ -1,6 +1,7 @@
 package com.example.towolist.webservice
 
-import com.example.towolist.webservice.response.ListResponse
+import com.example.towolist.webservice.response.MovieListResponse
+import com.example.towolist.webservice.response.TvShowListResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -12,11 +13,12 @@ interface ToWoListApi {
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
         @Query("page") page: Int
-    ): Call<ListResponse>
+    ): Call<MovieListResponse>
 
-    @GET("tv/latest")
-    fun getLatTvShows(
+    @GET("tv/popular")
+    fun getPopularTvShows(
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
-    ): Call<ListResponse>
+        @Query("page") page: Int
+    ): Call<TvShowListResponse>
 }
