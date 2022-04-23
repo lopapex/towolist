@@ -9,12 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageButton
+import android.widget.ListView
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import com.bumptech.glide.Glide
 import com.example.towolist.R
 import com.example.towolist.data.MovieItem
 import com.example.towolist.data.ServiceInfo
+import com.example.towolist.data.ServiceItem
 import com.example.towolist.databinding.FragmentDetailMovieBinding
 import com.example.towolist.databinding.ServiceListBinding
 import com.example.towolist.utils.getFormattedDateString
@@ -26,7 +28,11 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentDetailMovieBinding
     private var services : Map<String, ServiceInfo> = mapOf(
         "Netflix" to ServiceInfo.Netflix,
-        "HBO MAX" to ServiceInfo.HBO
+        "HBO Max" to ServiceInfo.HBO,
+        "Apple iTunes" to ServiceInfo.Apple,
+        "Google Play Movies" to ServiceInfo.Google,
+        "Amazon Prime Video" to ServiceInfo.Amazon,
+
     )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -62,21 +68,7 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
     private fun updateBasedOnServices(item: MovieItem) {
         if (item.watchNow.isNotEmpty()) {
             val watchNowListAdapter = ServiceAdapter(context as Activity, item.watchNow)
-            binding.watchNowList.onItemClickListener = OnItemClickListener { parent, v, position, id ->
-                val service = services[watchNowListAdapter.items[position].name]
-                try {
-                    val intent = service?.packageName?.let {
-                        v.context.packageManager.getLaunchIntentForPackage(
-                            it
-                        )
-                    }
-                    startActivity(intent)
-                } catch (e: Exception) {
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse(service?.url)
-                    startActivity(intent)
-                }
-            }
+            onClickOpen(watchNowListAdapter.items, binding.watchNowList)
             binding.watchNowList.adapter = watchNowListAdapter
         } else {
             binding.watchNow.visibility = View.GONE
@@ -84,6 +76,7 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
 
         if (item.buyRent.isNotEmpty()) {
             val rentBuyListAdapter = ServiceAdapter(context as Activity, item.buyRent)
+            onClickOpen(rentBuyListAdapter.items, binding.rentBuyList)
             binding.rentBuyList.adapter = rentBuyListAdapter
         } else {
             binding.rentBuy.visibility = View.GONE
@@ -95,6 +88,23 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
             binding.theaterText.visibility = View.VISIBLE
 
             binding.calendarIcon.visibility = View.VISIBLE
+        }
+    }
+
+    private fun onClickOpen(items: List<ServiceItem>, list: ListView) {
+        list.onItemClickListener = OnItemClickListener { parent, v, position, id ->
+            val service = services[items[position].name]
+            if (service != null) {
+                try {
+                    val intent =
+                        v.context.packageManager.getLaunchIntentForPackage(service.packageName)
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse(service.url)
+                    startActivity(intent)
+                }
+            }
         }
     }
 }

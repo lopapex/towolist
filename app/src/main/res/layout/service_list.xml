@@ -15,20 +15,9 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/service_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/service_icon"
         tools:text="Hulu" />
-
-    <TextView
-        android:id="@+id/options"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/secondaryLight"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/service_name"
-        app:layout_constraintTop_toBottomOf="@+id/service_name"
-        tools:text="On Hulu.com and the app" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/service_icon"

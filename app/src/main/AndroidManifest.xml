@@ -7,6 +7,8 @@
     <queries>
         <package android:name="com.netflix.mediaclient" />
         <package android:name="com.hbo.hbonow" />
+        <package android:name="com.android.vending" />
+        <package android:name="com.amazon.avod.thirdpartyclient" />
     </queries>
 
     <application

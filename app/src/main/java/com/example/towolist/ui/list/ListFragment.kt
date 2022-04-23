@@ -247,6 +247,5 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     }
 
     override fun onButtonClicked(buttonCode: Int) {
-        Toast.makeText(context, "Search ", Toast.LENGTH_SHORT).show()
     }
 }
