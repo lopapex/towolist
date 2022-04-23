@@ -37,7 +37,7 @@ class MovieListViewHolder(private val binding: ListItemMovieBinding, private val
             binding.theater.text = ""
         } else {
             binding.icon.setImageResource(R.drawable.ic_calendar)
-            binding.theater.text = "${view.context.getString(R.string.theater)} ${movieItem.releaseDate.getFormattedDateString()}"
+            binding.theater.text = "${view.context.getString(R.string.available)} ${movieItem.releaseDate.getFormattedDateString()}"
         }
 
         binding.cardContainer.setOnClickListener {

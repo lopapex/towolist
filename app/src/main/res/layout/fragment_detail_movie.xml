@@ -151,7 +151,7 @@
             android:background="@color/secondaryLight"
             android:paddingVertical="5sp"
             android:paddingStart="15sp"
-            android:text="@string/detail_theater"
+            android:text="@string/detail_available"
             android:textSize="24sp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
