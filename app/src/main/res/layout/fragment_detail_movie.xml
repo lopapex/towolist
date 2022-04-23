@@ -59,6 +59,39 @@
                     app:layout_constraintTop_toBottomOf="@+id/media_name"
                     android:text="@string/detail_watch_options" />
 
+                <ImageButton
+                    android:id="@+id/watched_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:adjustViewBounds="true"
+                    android:background="@null"
+                    android:contentDescription="@string/content_description_grid"
+                    android:scaleType="center"
+                    android:scaleX="2"
+                    android:scaleY="2"
+                    android:src="@drawable/ic_watched_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:tint="@color/secondary" />
+
+                <ImageButton
+                    android:id="@+id/to_watch_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:adjustViewBounds="true"
+                    android:background="@null"
+                    android:contentDescription="@string/content_description_grid"
+                    android:scaleType="center"
+                    android:scaleX="2"
+                    android:scaleY="2"
+                    android:src="@drawable/ic_to_watch_icon"
+                    app:layout_constraintDimensionRatio="1:1"
+                    android:layout_marginEnd="10dp"
+                    app:layout_constraintEnd_toStartOf="@+id/watched_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:tint="@color/secondary" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
