@@ -87,10 +87,11 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     }
 
     private fun loadItems(isPopular : Boolean) {
+        var movies: MutableList<MovieItem>
         if (isPopular) {
             movieRepository.getPopularMovies(
-                onSuccess = { items ->
-                    items.forEach {
+                onSuccess = { movieItems ->
+                    movieItems.forEach {
                         movieRepository.getWatchProvidersByMovieId(it.id,
                             onSuccess = { providerByState ->
                                 if (providerByState != null) {
@@ -108,37 +109,37 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                                 context?.toast(R.string.general_error.toString())
                             })
                     }
+                    movies = movieItems.toMutableList()
 
-                    adapter?.submitList(items)
-                },
-                onFailure = {
-                    context?.toast(R.string.general_error.toString())
-                }
-            )
+                    movieRepository.getPopularTvShows(
+                        onSuccess = { showItems ->
+                            showItems.forEach {
+                                movieRepository.getWatchProvidersByTvId(it.id,
+                                    onSuccess = { providerByState ->
+                                        if (providerByState != null) {
+                                            if (providerByState.flatrate != null)
+                                                it.watchNow = providerByState.flatrate.take(3)
+                                                    .map { provider -> provider.toServiceItem() }
+                                                    .toMutableList()
+                                            if (providerByState.buy != null)
+                                                it.buyRent =
+                                                    providerByState.buy.take(2).map { provider -> provider.toServiceItem() }
+                                                        .toMutableList()
+                                        }
+                                    },
+                                    onFailure = {
+                                        context?.toast(R.string.general_error.toString())
+                                    })
+                            }
 
-            movieRepository.getPopularTvShows(
-                onSuccess = { items ->
-                    items.forEach {
-                        movieRepository.getWatchProvidersByTvId(it.id,
-                            onSuccess = { providerByState ->
-                                if (providerByState != null) {
-                                    if (providerByState.flatrate != null)
-                                        it.watchNow = providerByState.flatrate.take(3)
-                                            .map { provider -> provider.toServiceItem() }
-                                            .toMutableList()
-                                    if (providerByState.buy != null)
-                                        it.buyRent =
-                                            providerByState.buy.take(2).map { provider -> provider.toServiceItem() }
-                                                .toMutableList()
-                                }
-                            },
-                            onFailure = {
-                                context?.toast(R.string.general_error.toString())
-                            })
-                    }
-
-                    adapter?.appendToList(items)
-                    adapter?.sortByPopularity()
+                            movies.addAll(showItems.toMutableList())
+                            adapter?.submitList(movies)
+                            adapter?.sortByPopularity()
+                        },
+                        onFailure = {
+                            context?.toast(R.string.general_error.toString())
+                        }
+                    )
                 },
                 onFailure = {
                     context?.toast(R.string.general_error.toString())
@@ -146,8 +147,8 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
             )
         } else {
             movieRepository.getTopRatedMovies(
-                onSuccess = { items ->
-                    items.forEach {
+                onSuccess = { movieItems ->
+                    movieItems.forEach {
                         movieRepository.getWatchProvidersByMovieId(it.id,
                             onSuccess = { providerByState ->
                                 if (providerByState != null) {
@@ -166,36 +167,36 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                             })
                     }
 
-                    adapter?.submitList(items)
-                },
-                onFailure = {
-                    context?.toast(R.string.general_error.toString())
-                }
-            )
+                    movies = movieItems.toMutableList()
+                    movieRepository.getTopRatedTvShows(
+                        onSuccess = { showItems ->
+                            showItems.forEach {
+                                movieRepository.getWatchProvidersByTvId(it.id,
+                                    onSuccess = { providerByState ->
+                                        if (providerByState != null) {
+                                            if (providerByState.flatrate != null)
+                                                it.watchNow = providerByState.flatrate.take(3)
+                                                    .map { provider -> provider.toServiceItem() }
+                                                    .toMutableList()
+                                            if (providerByState.buy != null)
+                                                it.buyRent =
+                                                    providerByState.buy.take(2).map { provider -> provider.toServiceItem() }
+                                                        .toMutableList()
+                                        }
+                                    },
+                                    onFailure = {
+                                        context?.toast(R.string.general_error.toString())
+                                    })
+                            }
 
-            movieRepository.getTopRatedTvShows(
-                onSuccess = { items ->
-                    items.forEach {
-                        movieRepository.getWatchProvidersByTvId(it.id,
-                            onSuccess = { providerByState ->
-                                if (providerByState != null) {
-                                    if (providerByState.flatrate != null)
-                                        it.watchNow = providerByState.flatrate.take(3)
-                                            .map { provider -> provider.toServiceItem() }
-                                            .toMutableList()
-                                    if (providerByState.buy != null)
-                                        it.buyRent =
-                                            providerByState.buy.take(2).map { provider -> provider.toServiceItem() }
-                                                .toMutableList()
-                                }
-                            },
-                            onFailure = {
-                                context?.toast(R.string.general_error.toString())
-                            })
-                    }
-
-                    adapter?.appendToList(items)
-                    adapter?.sortByVoteAverage()
+                            movies.addAll(showItems.toMutableList())
+                            adapter?.submitList(movies)
+                            adapter?.sortByVoteAverage()
+                        },
+                        onFailure = {
+                            context?.toast(R.string.general_error.toString())
+                        }
+                    )
                 },
                 onFailure = {
                     context?.toast(R.string.general_error.toString())
@@ -208,15 +209,6 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     }
 
     override fun onSearchConfirmed(text: CharSequence) {
-        val mainActivity : MainActivity = (activity as MainActivity)
-
-        val adapter = MovieAdapter(onItemClick = {
-            findNavController()
-                .navigate(ListFragmentDirections.actionListFragmentToDetailMovieFragment(it))
-        }, mainActivity.isListLayout())
-
-        binding.recyclerView.adapter = adapter
-
         movieRepository.searchMovies(
             query = text.toString(),
             onSuccess = { items ->
@@ -235,7 +227,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                         })
                 }
 
-                adapter.submitList(items)
+                adapter?.submitList(items)
             },
             onFailure = {
                 context?.toast(R.string.general_error.toString())
@@ -260,13 +252,14 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                         })
                 }
 
-                adapter.appendToList(items)
+                adapter?.appendToList(items)
             },
             onFailure = {
                 context?.toast(R.string.general_error.toString())
             }
         )
 
+        val mainActivity : MainActivity = (activity as MainActivity)
         mainActivity.getSearchBar().closeSearch()
     }
 
