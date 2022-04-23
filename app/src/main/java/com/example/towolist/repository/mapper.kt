@@ -12,10 +12,10 @@ fun MovieListItem.toMovieItem(): MovieItem =
     MovieItem(
         id = this.id.toLong(),
         imageSource = "${rootApiImg}${this.posterPath.toString()}",
-        name = this.popularity.toString(),
+        name = this.title,
         releaseDate = this.releaseDate,
-        rating =  R.string.r,
         popularity = this.popularity,
+        voteAverage = this.voteAverage,
         watchNow = mutableListOf<ServiceItem>().apply {
             repeat(3) {
                 val item = ServiceItem(
@@ -44,10 +44,10 @@ fun TvShowListItem.toMovieItem(): MovieItem =
     MovieItem(
         id = this.id.toLong(),
         imageSource = "${rootApiImg}${this.posterPath.toString()}",
-        name = this.popularity.toString(),
+        name = this.name,
         releaseDate = this.firstAirDate,
-        rating = R.string.r,
         popularity = this.popularity,
+        voteAverage = this.voteAverage,
         watchNow = mutableListOf<ServiceItem>().apply {
             repeat(3) {
                 val item = ServiceItem(

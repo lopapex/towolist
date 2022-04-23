@@ -10,7 +10,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.towolist.databinding.ActivityMainBinding
 import com.example.towolist.ui.`interface`.IUpdateLayoutFragment
-import com.example.towolist.ui.filter.spinner.SpinnerActivity
 import com.mancj.materialsearchbar.MaterialSearchBar
 
 class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListener {
@@ -31,8 +30,8 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         initFilterBottomFragment(navController)
         initializeBottomNavigationListener(navController)
 
-        val spinner = initFilterMovieTypes()
-        spinner.onItemSelectedListener = SpinnerActivity()
+        //val spinner = initFilterMovieTypes()
+        //spinner.onItemSelectedListener = SpinnerActivity()
 
         binding.searchBar.setOnSearchActionListener(this)
 
@@ -43,7 +42,7 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 
-    private fun initFilterMovieTypes(): Spinner {
+    fun setupSpinner(): Spinner {
         val spinner = binding.spinner
         ArrayAdapter.createFromResource(
             this,

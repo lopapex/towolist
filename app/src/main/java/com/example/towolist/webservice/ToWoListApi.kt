@@ -21,4 +21,18 @@ interface ToWoListApi {
         @Query("language") language: String,
         @Query("page") page: Int
     ): Call<TvShowListResponse>
+
+    @GET("movie/top_rated")
+    fun getTopRatedMovies(
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): Call<MovieListResponse>
+
+    @GET("tv/top_rated")
+    fun getTopRatedTvShows(
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): Call<TvShowListResponse>
 }

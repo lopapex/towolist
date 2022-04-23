@@ -62,6 +62,48 @@ class MovieRepository(
             })
     }
 
+    fun getTopRatedMovies(onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
+        toWoListApi.getTopRatedMovies(apiKey, language, 1)
+            .enqueue(object : Callback<MovieListResponse> {
+
+                override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
+                    val responseBody = response.body()
+                    if (response.isSuccessful && responseBody != null) {
+                        onSuccess(responseBody.results.map { movieListItem ->
+                            movieListItem.toMovieItem()
+                        })
+                    } else {
+                        onFailure(IllegalStateException("Response was not successful"))
+                    }
+                }
+
+                override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
+                    onFailure(t)
+                }
+            })
+    }
+
+    fun getTopRatedTvShows(onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
+        toWoListApi.getTopRatedTvShows(apiKey, language, 1)
+            .enqueue(object : Callback<TvShowListResponse> {
+
+                override fun onResponse(call: Call<TvShowListResponse>, response: Response<TvShowListResponse>) {
+                    val responseBody = response.body()
+                    if (response.isSuccessful && responseBody != null) {
+                        onSuccess(responseBody.results.map { tvShowListItem ->
+                            tvShowListItem.toMovieItem()
+                        })
+                    } else {
+                        onFailure(IllegalStateException("Response was not successful"))
+                    }
+                }
+
+                override fun onFailure(call: Call<TvShowListResponse>, t: Throwable) {
+                    onFailure(t)
+                }
+            })
+    }
+
     fun getMockedData(count: Int = 10): List<MovieItem> =
         mutableListOf<MovieItem>().apply {
             repeat(count) { it ->
@@ -70,7 +112,6 @@ class MovieRepository(
                     name = "The Batman $it",
                     releaseDate = "2005-06-10",
                     imageSource = "${rootApiImg}/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-                    rating = if (it % 2 == 0) R.string.r else R.string.pg,
                     watchNow = if (it % 8 == 0) mutableListOf<ServiceItem>().apply {
                         repeat(3) {
                             val item = ServiceItem(
@@ -93,7 +134,8 @@ class MovieRepository(
                     } else mutableListOf<ServiceItem>(),
                     isToWatch = it%2 == 0,
                     isWatched = it%3 == 0,
-                    popularity = 0F
+                    popularity = 0F,
+                    voteAverage = 0F
                 )
                 add(item)
             }

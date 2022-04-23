@@ -23,7 +23,7 @@ class MovieListViewHolder(private val binding: ListItemMovieBinding, private val
 
         binding.mediaName.text = movieItem.name
 
-        binding.info.text = "${movieItem.releaseDate.substringBefore("-")} ${view.context.getString(movieItem.rating)}"
+        binding.info.text = "${movieItem.releaseDate.substringBefore("-")}"
 
         val services = movieItem.watchNow + movieItem.buyRent
 

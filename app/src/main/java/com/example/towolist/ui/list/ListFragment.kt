@@ -6,14 +6,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.towolist.MainActivity
-import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.ui.`interface`.IUpdateLayoutFragment
@@ -40,6 +40,22 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
         super.onViewCreated(view, savedInstanceState)
 
         val mainActivity : MainActivity = (activity as MainActivity)
+
+        val spinner = mainActivity.setupSpinner()
+        spinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                updateLayout(mainActivity.isListLayout())
+            }
+        }
+
         updateLayout(mainActivity.isListLayout())
     }
 
@@ -66,14 +82,31 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
             movieRepository.getPopularTvShows(
                 onSuccess = { items ->
                     adapter.appendToList(items)
+                    adapter.sortByPopularity()
                 },
                 onFailure = {
                     context?.toast("Something happened!")
                 }
             )
-            adapter.sortByPopularity()
         } else {
+            movieRepository.getTopRatedMovies(
+                onSuccess = { items ->
+                    adapter.submitList(items)
+                },
+                onFailure = {
+                    context?.toast("Something happened!")
+                }
+            )
 
+            movieRepository.getTopRatedTvShows(
+                onSuccess = { items ->
+                    adapter.appendToList(items)
+                    adapter.sortByVoteAverage()
+                },
+                onFailure = {
+                    context?.toast("Something happened!")
+                }
+            )
         }
 
         binding.recyclerView.apply {

@@ -49,4 +49,9 @@ class MovieAdapter(
         movies.sortByDescending { movie -> movie.popularity }
         notifyDataSetChanged()
     }
+
+    fun sortByVoteAverage() {
+        movies.sortByDescending { movie -> movie.voteAverage }
+        notifyDataSetChanged()
+    }
 }
