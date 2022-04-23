@@ -35,10 +35,11 @@ class MovieRepository {
                             )
                             add(item)
                         }
-                    } else mutableListOf<ServiceItem>()
+                    } else mutableListOf<ServiceItem>(),
+                    isToWatch = it%2 == 0,
+                    isWatched = it%3 == 0
                 )
                 add(item)
             }
         }
-
 }
