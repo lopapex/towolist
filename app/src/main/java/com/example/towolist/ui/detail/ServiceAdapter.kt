@@ -26,7 +26,7 @@ class ServiceAdapter(context: Activity, private val items: List<ServiceItem>)
 
 
         binding.serviceName.text = items[position].name
-        binding.options.text = "${items[position].name} bagr"
+        binding.options.text = items[position].name
 
         Glide.with(parent.context)
             .load(items[position].iconSource)

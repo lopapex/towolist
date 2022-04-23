@@ -14,8 +14,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.towolist.MainActivity
+import com.example.towolist.data.ServiceItem
 import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
+import com.example.towolist.repository.toServiceItem
 import com.example.towolist.ui.`interface`.IUpdateLayoutFragment
 
 
@@ -72,6 +74,21 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
         if (mainActivity.isPopularSpinnerOption()) {
             movieRepository.getPopularMovies(
                 onSuccess = { items ->
+                    items.forEach {
+                        movieRepository.getWatchProvidersByMovieId(it.id,
+                            onSuccess = { providerByState ->
+                                if (providerByState != null) {
+                                    if (providerByState.flatrate != null)
+                                        it.watchNow = providerByState.flatrate.take(3).map {provider -> provider.toServiceItem()}.toMutableList()
+                                    if (providerByState.buy != null)
+                                        it.buyRent = providerByState.buy.take(2).map {provider -> provider.toServiceItem() }.toMutableList()
+                                }
+                            },
+                            onFailure = {
+                                context?.toast("Something happened!")
+                            })
+                    }
+
                     adapter.submitList(items)
                 },
                 onFailure = {
@@ -81,6 +98,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
 
             movieRepository.getPopularTvShows(
                 onSuccess = { items ->
+
                     adapter.appendToList(items)
                     adapter.sortByPopularity()
                 },
@@ -91,6 +109,21 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
         } else {
             movieRepository.getTopRatedMovies(
                 onSuccess = { items ->
+                    items.forEach {
+                        movieRepository.getWatchProvidersByMovieId(it.id,
+                            onSuccess = { providerByState ->
+                                if (providerByState != null) {
+                                    if (providerByState.flatrate != null)
+                                        it.watchNow = providerByState.flatrate.take(3).map {provider -> provider.toServiceItem()}.toMutableList()
+                                    if (providerByState.buy != null)
+                                        it.buyRent = providerByState.buy.take(2).map {provider -> provider.toServiceItem() }.toMutableList()
+                                }
+                            },
+                            onFailure = {
+                                context?.toast("Something happened!")
+                            })
+                    }
+
                     adapter.submitList(items)
                 },
                 onFailure = {
@@ -100,6 +133,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
 
             movieRepository.getTopRatedTvShows(
                 onSuccess = { items ->
+
                     adapter.appendToList(items)
                     adapter.sortByVoteAverage()
                 },

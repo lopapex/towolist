@@ -11,8 +11,8 @@ data class MovieItem(
     val releaseDate: String,
     val popularity: Float,
     val voteAverage: Float,
-    val watchNow: List<ServiceItem>,
-    val buyRent: List<ServiceItem>,
+    var watchNow: List<ServiceItem>,
+    var buyRent: List<ServiceItem>,
     val isToWatch: Boolean,
     val isWatched: Boolean
 ): Parcelable

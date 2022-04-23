@@ -1,13 +1,11 @@
 package com.example.towolist.repository
 
 import android.content.Context
-import com.example.towolist.R
 import com.example.towolist.data.MovieItem
 import com.example.towolist.data.ServiceItem
 import com.example.towolist.webservice.RetrofitUtil
 import com.example.towolist.webservice.ToWoListApi
-import com.example.towolist.webservice.response.MovieListResponse
-import com.example.towolist.webservice.response.TvShowListResponse
+import com.example.towolist.webservice.response.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -99,6 +97,25 @@ class MovieRepository(
                 }
 
                 override fun onFailure(call: Call<TvShowListResponse>, t: Throwable) {
+                    onFailure(t)
+                }
+            })
+    }
+
+    fun getWatchProvidersByMovieId(movieId: Long, onSuccess: (WatchProviderByStateResponse?) -> Unit, onFailure: (Throwable) -> Unit) {
+        toWoListApi.getWatchProvidersByMovieId(movieId, apiKey)
+            .enqueue(object : Callback<WatchProviderListResponse> {
+
+                override fun onResponse(call: Call<WatchProviderListResponse>, response: Response<WatchProviderListResponse>) {
+                    val responseBody = response.body()
+                    if (response.isSuccessful && responseBody != null) {
+                            onSuccess(responseBody.results.CZ)
+                    } else {
+                        onFailure(IllegalStateException("Response was not successful"))
+                    }
+                }
+
+                override fun onFailure(call: Call<WatchProviderListResponse>, t: Throwable) {
                     onFailure(t)
                 }
             })
