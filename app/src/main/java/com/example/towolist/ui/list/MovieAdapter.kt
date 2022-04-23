@@ -38,4 +38,19 @@ class MovieAdapter(
         movies = newMovieItems.toMutableList()
         notifyDataSetChanged()
     }
+
+    fun appendToList(movieItems: List<MovieItem>) {
+        movies.addAll(movieItems.toMutableList())
+        notifyDataSetChanged()
+    }
+
+    fun sortByPopularity() {
+        movies.sortByDescending { movie -> movie.popularity }
+        notifyDataSetChanged()
+    }
+
+    fun sortByVoteAverage() {
+        movies.sortByDescending { movie -> movie.voteAverage }
+        notifyDataSetChanged()
+    }
 }

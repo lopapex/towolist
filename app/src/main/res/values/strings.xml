@@ -3,6 +3,7 @@
     <string name="title_activity_main">ToWoList</string>
 
     <string name="general_error">Something went wrong :(</string>
+    <string name="response_error">Response was not successful</string>
 
     <string name="main_navigation_list">List</string>
     <string name="main_navigation_to_watch">To watch</string>
@@ -11,7 +12,7 @@
     <string name="detail_watch_options">Watch Options</string>
     <string name="detail_watch_now">WATCH NOW</string>
     <string name="detail_rent_buy">RENT/ BUY</string>
-    <string name="detail_theater">IN THEATERS</string>
+    <string name="detail_available">AVAILABLE AT</string>
 
     <string name="filter_button">Filter</string>
 
@@ -24,7 +25,7 @@
     <string name="pg">PG</string>
     <string name="r">R</string>
     <string name="any">Any</string>
-    <string name="theater">In theaters</string>
+    <string name="available">Available at</string>
 
     <string name="filter_text">Filter</string>
     <string name="filer_text_movies">Movies</string>

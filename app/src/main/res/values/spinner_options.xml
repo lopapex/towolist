@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="spinner_options">
-        <item>Newest stuff</item>
-        <item>Movies</item>
-        <item>Series</item>
+        <item>Popular</item>
+        <item>Top Rated</item>
     </string-array>
 </resources>
