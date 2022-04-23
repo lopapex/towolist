@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.towolist.R
 import com.example.towolist.data.ServiceItem
@@ -36,6 +38,9 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
             .fallback(R.drawable.empty_image)
             .into(binding.poster)
 
+        updateImageButtonColor(binding.watchedIcon, item.isWatched, view)
+        updateImageButtonColor(binding.toWatchIcon, item.isToWatch, view)
+
         if (item.watchNow.isNotEmpty()) {
             val watchNowListAdapter = ServiceAdapter(context as Activity, item.watchNow)
             binding.watchNowList.adapter = watchNowListAdapter
@@ -57,5 +62,10 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
 
             binding.calendarIcon.visibility = View.VISIBLE
         }
+    }
+
+    private fun updateImageButtonColor(btn: ImageButton, isActive: Boolean, view: View) {
+        val color = if (isActive) R.color.secondaryLight else R.color.secondary
+        btn.imageTintList = ContextCompat.getColorStateList(view.context, color)
     }
 }
