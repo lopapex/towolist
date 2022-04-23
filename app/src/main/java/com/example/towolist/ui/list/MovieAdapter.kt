@@ -3,6 +3,7 @@ package com.example.towolist.ui.list
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.towolist.MainActivity
 import com.example.towolist.databinding.GridItemMovieBinding
 import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.ListItemMovieBinding
@@ -41,6 +42,11 @@ class MovieAdapter(
 
     fun appendToList(movieItems: List<MovieItem>) {
         movies.addAll(movieItems.toMutableList())
+        notifyDataSetChanged()
+    }
+
+    fun sortByPopularity() {
+        movies.sortByDescending { movie -> movie.popularity }
         notifyDataSetChanged()
     }
 }

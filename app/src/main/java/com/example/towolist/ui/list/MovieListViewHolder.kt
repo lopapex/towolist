@@ -8,7 +8,6 @@ import com.example.towolist.R
 import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.ListItemMovieBinding
 import com.example.towolist.utils.getFormattedDateString
-import kotlinx.coroutines.flow.merge
 
 class MovieListViewHolder(private val binding: ListItemMovieBinding, private val view: View)
     : RecyclerView.ViewHolder(binding.root) {
@@ -24,7 +23,7 @@ class MovieListViewHolder(private val binding: ListItemMovieBinding, private val
 
         binding.mediaName.text = movieItem.name
 
-        binding.info.text = "${movieItem.release_date.substringBefore("-")} ${view.context.getString(movieItem.rating)}"
+        binding.info.text = "${movieItem.releaseDate.substringBefore("-")} ${view.context.getString(movieItem.rating)}"
 
         val services = movieItem.watchNow + movieItem.buyRent
 
@@ -38,7 +37,7 @@ class MovieListViewHolder(private val binding: ListItemMovieBinding, private val
             binding.theater.text = ""
         } else {
             binding.icon.setImageResource(R.drawable.ic_calendar)
-            binding.theater.text = "${view.context.getString(R.string.theater)} ${movieItem.release_date.getFormattedDateString()}"
+            binding.theater.text = "${view.context.getString(R.string.theater)} ${movieItem.releaseDate.getFormattedDateString()}"
         }
 
         binding.cardContainer.setOnClickListener {

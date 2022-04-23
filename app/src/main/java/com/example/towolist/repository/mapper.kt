@@ -1,5 +1,6 @@
 package com.example.towolist.repository
 
+import com.example.towolist.R
 import com.example.towolist.data.MovieItem
 import com.example.towolist.data.ServiceItem
 import com.example.towolist.webservice.response.MovieListItem
@@ -12,6 +13,9 @@ fun MovieListItem.toMovieItem(): MovieItem =
         id = this.id.toLong(),
         imageSource = "${rootApiImg}${this.posterPath.toString()}",
         name = this.popularity.toString(),
+        releaseDate = this.releaseDate,
+        rating =  R.string.r,
+        popularity = this.popularity,
         watchNow = mutableListOf<ServiceItem>().apply {
             repeat(3) {
                 val item = ServiceItem(
@@ -31,7 +35,9 @@ fun MovieListItem.toMovieItem(): MovieItem =
                 )
                 add(item)
             }
-        }
+        },
+        isToWatch = true,
+        isWatched = false
     )
 
 fun TvShowListItem.toMovieItem(): MovieItem =
@@ -39,6 +45,9 @@ fun TvShowListItem.toMovieItem(): MovieItem =
         id = this.id.toLong(),
         imageSource = "${rootApiImg}${this.posterPath.toString()}",
         name = this.popularity.toString(),
+        releaseDate = this.firstAirDate,
+        rating = R.string.r,
+        popularity = this.popularity,
         watchNow = mutableListOf<ServiceItem>().apply {
             repeat(3) {
                 val item = ServiceItem(
@@ -58,5 +67,7 @@ fun TvShowListItem.toMovieItem(): MovieItem =
                 )
                 add(item)
             }
-        }
+        },
+        isToWatch = true,
+        isWatched = false
     )

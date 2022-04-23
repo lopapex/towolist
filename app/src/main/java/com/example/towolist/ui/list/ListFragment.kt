@@ -48,25 +48,33 @@ class ListFragment : Fragment(), IUpdateLayoutFragment {
             findNavController()
                 .navigate(ListFragmentDirections.actionListFragmentToDetailMovieFragment(it))
         }, isList)
+
         binding.recyclerView.adapter = adapter
 
-        movieRepository.getPopularMovies(
-            onSuccess = { items ->
-                adapter.submitList((items))
-            },
-            onFailure = {
-                context?.toast("Something happened!")
-            }
-        )
+        val mainActivity : MainActivity = (activity as MainActivity)
 
-        movieRepository.getPopularTvShows(
-            onSuccess = { items ->
-                adapter.appendToList((items))
-            },
-            onFailure = {
-                context?.toast("Something happened!")
-            }
-        )
+        if (mainActivity.isPopularSpinnerOption()) {
+            movieRepository.getPopularMovies(
+                onSuccess = { items ->
+                    adapter.submitList(items)
+                },
+                onFailure = {
+                    context?.toast("Something happened!")
+                }
+            )
+
+            movieRepository.getPopularTvShows(
+                onSuccess = { items ->
+                    adapter.appendToList(items)
+                },
+                onFailure = {
+                    context?.toast("Something happened!")
+                }
+            )
+            adapter.sortByPopularity()
+        } else {
+
+        }
 
         binding.recyclerView.apply {
             layoutManager = if (isList) LinearLayoutManager(context) else GridLayoutManager(context, 3)

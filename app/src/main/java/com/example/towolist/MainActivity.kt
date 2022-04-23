@@ -112,4 +112,8 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
     fun isListLayout(): Boolean {
         return binding.gridButton.isEnabled
     }
+
+    fun isPopularSpinnerOption(): Boolean {
+        return binding.spinner.selectedItem.toString() == resources.getStringArray(R.array.spinner_options)[0]
+    }
 }
