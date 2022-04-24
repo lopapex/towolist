@@ -21,13 +21,12 @@ import com.example.towolist.repository.MovieRepository
 import com.example.towolist.repository.toServiceItem
 import com.example.towolist.ui.IUpdateLayoutFragment
 import com.example.towolist.webservice.response.WatchProviderByStateResponse
-import com.example.towolist.webservice.response.WatchProviderInfoResponse
 import com.mancj.materialsearchbar.MaterialSearchBar
 
 
 class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSearchActionListener {
 
-    fun Context.toast(text: String) {
+    private fun Context.toast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 
