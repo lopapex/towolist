@@ -22,7 +22,6 @@ class MovieRepository(
     private val watchedMovieDao: WatchedMovieDao = database.watchedMovieDao(),
     private val toWoListApi: ToWoListApi = RetrofitUtil.createAqiWebService()
 ) {
-    private val rootApiImg = "https://image.tmdb.org/t/p/original"
     private val apiKey = "7d983af93fb311150ed909fbc0873210"
     private val language = "en-US"
 
