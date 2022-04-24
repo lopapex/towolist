@@ -20,6 +20,8 @@ import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.repository.toServiceItem
 import com.example.towolist.ui.IUpdateLayoutFragment
+import com.example.towolist.webservice.response.WatchProviderByStateResponse
+import com.example.towolist.webservice.response.WatchProviderInfoResponse
 import com.mancj.materialsearchbar.MaterialSearchBar
 
 
@@ -98,16 +100,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                     movieItems.forEach {
                         movieRepository.getWatchProvidersByMovieId(it.id,
                             onSuccess = { providerByState ->
-                                if (providerByState != null) {
-                                    if (providerByState.flatrate != null)
-                                        it.watchNow = providerByState.flatrate.take(3)
-                                            .map { provider -> provider.toServiceItem() }
-                                            .toMutableList()
-                                    if (providerByState.buy != null)
-                                        it.buyRent =
-                                            providerByState.buy.take(2).map { provider -> provider.toServiceItem() }
-                                                .toMutableList()
-                                }
+                                setProviders(providerByState, it)
                             },
                             onFailure = {
                                 context?.toast(R.string.general_error.toString())
@@ -120,16 +113,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                             showItems.forEach {
                                 movieRepository.getWatchProvidersByTvId(it.id,
                                     onSuccess = { providerByState ->
-                                        if (providerByState != null) {
-                                            if (providerByState.flatrate != null)
-                                                it.watchNow = providerByState.flatrate.take(3)
-                                                    .map { provider -> provider.toServiceItem() }
-                                                    .toMutableList()
-                                            if (providerByState.buy != null)
-                                                it.buyRent =
-                                                    providerByState.buy.take(2).map { provider -> provider.toServiceItem() }
-                                                        .toMutableList()
-                                        }
+                                        setProviders(providerByState, it)
                                     },
                                     onFailure = {
                                         context?.toast(R.string.general_error.toString())
@@ -155,16 +139,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                     movieItems.forEach {
                         movieRepository.getWatchProvidersByMovieId(it.id,
                             onSuccess = { providerByState ->
-                                if (providerByState != null) {
-                                    if (providerByState.flatrate != null)
-                                        it.watchNow = providerByState.flatrate.take(3)
-                                            .map { provider -> provider.toServiceItem() }
-                                            .toMutableList()
-                                    if (providerByState.buy != null)
-                                        it.buyRent =
-                                            providerByState.buy.take(2).map { provider -> provider.toServiceItem() }
-                                                .toMutableList()
-                                }
+                                setProviders(providerByState, it)
                             },
                             onFailure = {
                                 context?.toast(R.string.general_error.toString())
@@ -177,16 +152,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                             showItems.forEach {
                                 movieRepository.getWatchProvidersByTvId(it.id,
                                     onSuccess = { providerByState ->
-                                        if (providerByState != null) {
-                                            if (providerByState.flatrate != null)
-                                                it.watchNow = providerByState.flatrate.take(3)
-                                                    .map { provider -> provider.toServiceItem() }
-                                                    .toMutableList()
-                                            if (providerByState.buy != null)
-                                                it.buyRent =
-                                                    providerByState.buy.take(2).map { provider -> provider.toServiceItem() }
-                                                        .toMutableList()
-                                        }
+                                        setProviders(providerByState, it)
                                     },
                                     onFailure = {
                                         context?.toast(R.string.general_error.toString())
@@ -226,12 +192,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                 movieItems.forEach {
                     movieRepository.getWatchProvidersByMovieId(it.id,
                         onSuccess = { providerByState ->
-                            if (providerByState != null) {
-                                if (providerByState.flatrate != null)
-                                    it.watchNow = providerByState.flatrate.take(3).map {provider -> provider.toServiceItem()}.toMutableList()
-                                if (providerByState.buy != null)
-                                    it.buyRent = providerByState.buy.take(2).map {provider -> provider.toServiceItem() }.toMutableList()
-                            }
+                            setProviders(providerByState, it)
                         },
                         onFailure = {
                             context?.toast(R.string.general_error.toString())
@@ -246,12 +207,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                         showItems.forEach {
                             movieRepository.getWatchProvidersByTvId(it.id,
                                 onSuccess = { providerByState ->
-                                    if (providerByState != null) {
-                                        if (providerByState.flatrate != null)
-                                            it.watchNow = providerByState.flatrate.take(3).map {provider -> provider.toServiceItem()}.toMutableList()
-                                        if (providerByState.buy != null)
-                                            it.buyRent = providerByState.buy.take(2).map {provider -> provider.toServiceItem() }.toMutableList()
-                                    }
+                                    setProviders(providerByState, it)
                                 },
                                 onFailure = {
                                     context?.toast(R.string.general_error.toString())
@@ -276,6 +232,22 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     }
 
     override fun onButtonClicked(buttonCode: Int) {
+    }
+
+    private fun setProviders(
+        providerByState: WatchProviderByStateResponse?,
+        it: MovieItem,
+    ) {
+        if (providerByState != null) {
+            if (providerByState.flatrate != null)
+                it.watchNow = providerByState.flatrate
+                    .map { provider -> provider.toServiceItem() }
+                    .toMutableList()
+            if (providerByState.buy != null)
+                it.buyRent = providerByState.buy
+                    .map { provider -> provider.toServiceItem() }
+                    .toMutableList()
+        }
     }
 
     private fun closeKeyboard(mainActivity: MainActivity) {
