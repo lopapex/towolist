@@ -20,7 +20,7 @@ fun MovieListItem.toMovieItem(): MovieItem =
         voteAverage = this.voteAverage,
         watchNow = mutableListOf(),
         buyRent = mutableListOf(),
-        isToWatch = true,
+        isToWatch = false,
         isWatched = false
     )
 
@@ -34,7 +34,7 @@ fun TvShowListItem.toMovieItem(): MovieItem =
         voteAverage = this.voteAverage,
         watchNow = mutableListOf(),
         buyRent = mutableListOf(),
-        isToWatch = true,
+        isToWatch = false,
         isWatched = false
     )
 

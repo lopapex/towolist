@@ -31,7 +31,7 @@ class WatchedFragment : Fragment(), IUpdateLayoutFragment {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        movies = movieRepository.getMockedData(1)
+        movies = movieRepository.getWatchedMovies()
 
         val mainActivity : MainActivity = (activity as MainActivity)
         updateLayout(mainActivity.isListLayout())
