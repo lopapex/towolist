@@ -19,8 +19,7 @@ import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.repository.toServiceItem
-import com.example.towolist.ui.`interface`.IUpdateLayoutFragment
-import com.example.towolist.webservice.response.WatchProviderInfoResponse
+import com.example.towolist.ui.IUpdateLayoutFragment
 import com.mancj.materialsearchbar.MaterialSearchBar
 
 

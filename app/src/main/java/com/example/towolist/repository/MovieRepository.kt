@@ -7,6 +7,7 @@ import com.example.towolist.data.ServiceItem
 import com.example.towolist.database.ToWoDatabase
 import com.example.towolist.database.dao.ToWatchMovieDao
 import com.example.towolist.database.dao.WatchedMovieDao
+import com.example.towolist.database.entity.ToWatchMovieEntity
 import com.example.towolist.webservice.RetrofitUtil
 import com.example.towolist.webservice.ToWoListApi
 import com.example.towolist.webservice.response.*
@@ -16,9 +17,9 @@ import retrofit2.Response
 
 class MovieRepository(
     context: Context,
-//    private val database: ToWoDatabase = ToWoDatabase.create(context),
-//    private val toWatchedMovieDao: ToWatchMovieDao = database.toWatchMovieDao(),
-//    private val watchedMovieDao: WatchedMovieDao = database.watchedMovieDao(),
+    private val database: ToWoDatabase = ToWoDatabase.create(context),
+    private val toWatchedMovieDao: ToWatchMovieDao = database.toWatchMovieDao(),
+    private val watchedMovieDao: WatchedMovieDao = database.watchedMovieDao(),
     private val toWoListApi: ToWoListApi = RetrofitUtil.createAqiWebService()
 ) {
     private val rootApiImg = "https://image.tmdb.org/t/p/original"
@@ -116,7 +117,7 @@ class MovieRepository(
                 override fun onResponse(call: Call<WatchProviderListResponse>, response: Response<WatchProviderListResponse>) {
                     val responseBody = response.body()
                     if (response.isSuccessful && responseBody != null) {
-                            onSuccess(responseBody.results.CZ)
+                        onSuccess(responseBody.results.CZ)
                     } else {
                         onFailure(IllegalStateException(R.string.response_error.toString()))
                     }
@@ -169,7 +170,7 @@ class MovieRepository(
     }
 
     fun searchTvShows(query: String, onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
-        toWoListApi.searchTvShows(apiKey, language, query,1)
+        toWoListApi.searchTvShows(apiKey, language, query, 1)
             .enqueue(object : Callback<TvShowListResponse> {
 
                 override fun onResponse(call: Call<TvShowListResponse>, response: Response<TvShowListResponse>) {
@@ -229,8 +230,8 @@ class MovieRepository(
                             add(item)
                         }
                     } else mutableListOf<ServiceItem>(),
-                    isToWatch = it%2 == 0,
-                    isWatched = it%3 == 0,
+                    isToWatch = it % 2 == 0,
+                    isWatched = it % 3 == 0,
                     popularity = 0F,
                     voteAverage = 0F
                 )
