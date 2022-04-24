@@ -45,25 +45,29 @@ fun WatchProviderInfoResponse.toServiceItem(): ServiceItem =
         name = this.providerName
     )
 
-fun MovieItem.toToWatchMovieEntity(): ToWatchMovieEntity =
-    ToWatchMovieEntity(
+fun MovieItem.toToWatchMovieEntity(): ToWatchMovieEntity? =
+    this.releaseDate?.let {
+        ToWatchMovieEntity(
         id = this.id,
         imageSource = this.imageSource,
         name = this.name,
-        releaseDate = this.releaseDate,
+        releaseDate = it,
         popularity = this.popularity,
         voteAverage = this.voteAverage
     )
+    }
 
-fun MovieItem.toWatchedMovieEntity(): WatchedMovieEntity =
-    WatchedMovieEntity(
+fun MovieItem.toWatchedMovieEntity(): WatchedMovieEntity? =
+    this.releaseDate?.let {
+        WatchedMovieEntity(
         id = this.id,
         imageSource = this.imageSource,
         name = this.name,
-        releaseDate = this.releaseDate,
+        releaseDate = it,
         popularity = this.popularity,
         voteAverage = this.voteAverage
     )
+    }
 
 fun ToWatchMovieEntity.toMovieItem(): MovieItem =
     MovieItem(

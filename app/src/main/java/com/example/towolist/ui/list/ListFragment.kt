@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.Toast
@@ -57,7 +58,11 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                 position: Int,
                 id: Long
             ) {
-                loadItems(mainActivity.isPopularSpinnerOption())
+                if (mainActivity.getSearchBar().isSearchOpened) {
+                    if (mainActivity.isPopularSpinnerOption()) adapter?.sortByPopularity() else adapter?.sortByVoteAverage()
+                } else {
+                    loadItems(mainActivity.isPopularSpinnerOption())
+                }
             }
         }
 
@@ -206,6 +211,10 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     }
 
     override fun onSearchStateChanged(enabled: Boolean) {
+        if (!enabled) {
+            val mainActivity : MainActivity = (activity as MainActivity)
+            loadItems(mainActivity.isPopularSpinnerOption())
+        }
     }
 
     override fun onSearchConfirmed(text: CharSequence) {
@@ -264,9 +273,14 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
             }
         )
 
-        mainActivity.getSearchBar().closeSearch()
+        closeKeyboard(mainActivity)
     }
 
     override fun onButtonClicked(buttonCode: Int) {
+    }
+
+    private fun closeKeyboard(mainActivity: MainActivity) {
+        val imm = mainActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 }
