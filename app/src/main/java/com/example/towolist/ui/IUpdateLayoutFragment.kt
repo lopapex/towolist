@@ -1,4 +1,4 @@
-package com.example.towolist.ui.`interface`
+package com.example.towolist.ui
 
 interface IUpdateLayoutFragment {
 

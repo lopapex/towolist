@@ -9,7 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.towolist.databinding.ActivityMainBinding
-import com.example.towolist.ui.`interface`.IUpdateLayoutFragment
+import com.example.towolist.ui.IUpdateLayoutFragment
 import com.mancj.materialsearchbar.MaterialSearchBar
 
 class MainActivity : AppCompatActivity() {
