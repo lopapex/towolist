@@ -4,6 +4,9 @@ import android.content.Context
 import com.example.towolist.R
 import com.example.towolist.data.MovieItem
 import com.example.towolist.data.ServiceItem
+import com.example.towolist.database.ToWoDatabase
+import com.example.towolist.database.dao.ToWatchMovieDao
+import com.example.towolist.database.dao.WatchedMovieDao
 import com.example.towolist.webservice.RetrofitUtil
 import com.example.towolist.webservice.ToWoListApi
 import com.example.towolist.webservice.response.*
@@ -12,6 +15,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MovieRepository(
+    context: Context,
+//    private val database: ToWoDatabase = ToWoDatabase.create(context),
+//    private val toWatchedMovieDao: ToWatchMovieDao = database.toWatchMovieDao(),
+//    private val watchedMovieDao: WatchedMovieDao = database.watchedMovieDao(),
     private val toWoListApi: ToWoListApi = RetrofitUtil.createAqiWebService()
 ) {
     private val rootApiImg = "https://image.tmdb.org/t/p/original"
@@ -181,6 +188,18 @@ class MovieRepository(
                 }
             })
     }
+
+//    fun getToWatchMovies(): List<MovieItem> =
+//        toWatchedMovieDao.getAll()
+//            .map { entity ->
+//                entity.toMovieItem()
+//            }
+//
+//    fun getWatchedMovies(): List<MovieItem> =
+//        watchedMovieDao.getAll()
+//            .map { entity ->
+//                entity.toMovieItem()
+//            }
 
     fun getMockedData(count: Int = 10): List<MovieItem> =
         mutableListOf<MovieItem>().apply {

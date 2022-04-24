@@ -30,7 +30,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     }
 
     private val movieRepository: MovieRepository by lazy {
-        MovieRepository()
+        MovieRepository(requireContext())
     }
 
     private lateinit var binding: FragmentListBinding
