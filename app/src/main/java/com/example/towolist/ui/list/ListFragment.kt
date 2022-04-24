@@ -94,6 +94,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
 
     private fun loadItems(isPopular : Boolean) {
         var movies: MutableList<MovieItem>
+        binding.progressBar.visibility = View.VISIBLE
         if (isPopular) {
             movieRepository.getPopularMovies(
                 onSuccess = { movieItems ->
@@ -111,6 +112,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                             movies.addAll(showItems.toMutableList())
                             adapter?.submitList(movies)
                             adapter?.sortByPopularity()
+                            binding.progressBar.visibility = View.GONE
                         },
                         onFailure = {
                             context?.toast(R.string.general_error.toString())
@@ -138,6 +140,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                             movies.addAll(showItems.toMutableList())
                             adapter?.submitList(movies)
                             adapter?.sortByVoteAverage()
+                            binding.progressBar.visibility = View.GONE
                         },
                         onFailure = {
                             context?.toast(R.string.general_error.toString())
@@ -160,8 +163,10 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
 
     override fun onSearchConfirmed(text: CharSequence) {
         val mainActivity : MainActivity = (activity as MainActivity)
+        var movies: MutableList<MovieItem> = mutableListOf()
+        binding.progressBar.visibility = View.VISIBLE
+        adapter?.submitList(movies)
 
-        var movies: MutableList<MovieItem>
         movieRepository.searchMovies(
             query = text.toString(),
             onSuccess = { movieItems ->
@@ -181,6 +186,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                         movies.addAll(showItems.toMutableList())
                         adapter?.submitList(movies)
                         if (mainActivity.isPopularSpinnerOption()) adapter?.sortByPopularity() else adapter?.sortByVoteAverage()
+                        binding.progressBar.visibility = View.GONE
                     },
                     onFailure = {
                         context?.toast(R.string.general_error.toString())
