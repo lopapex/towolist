@@ -2,6 +2,8 @@ package com.example.towolist.repository
 
 import com.example.towolist.data.MovieItem
 import com.example.towolist.data.ServiceItem
+import com.example.towolist.database.entity.ToWatchMovieEntity
+import com.example.towolist.database.entity.WatchedMovieEntity
 import com.example.towolist.webservice.response.MovieListItem
 import com.example.towolist.webservice.response.TvShowListItem
 import com.example.towolist.webservice.response.WatchProviderInfoResponse
@@ -41,4 +43,52 @@ fun WatchProviderInfoResponse.toServiceItem(): ServiceItem =
         id = this.providerId.toLong(),
         iconSource = "${rootApiImg}${this.logoPath}",
         name = this.providerName
+    )
+
+fun MovieItem.toToWatchMovieEntity(): ToWatchMovieEntity =
+    ToWatchMovieEntity(
+        id = this.id,
+        imageSource = this.imageSource,
+        name = this.name,
+        releaseDate = this.releaseDate,
+        popularity = this.popularity,
+        voteAverage = this.voteAverage
+    )
+
+fun MovieItem.toWatchedMovieEntity(): WatchedMovieEntity =
+    WatchedMovieEntity(
+        id = this.id,
+        imageSource = this.imageSource,
+        name = this.name,
+        releaseDate = this.releaseDate,
+        popularity = this.popularity,
+        voteAverage = this.voteAverage
+    )
+
+fun ToWatchMovieEntity.toMovieItem(): MovieItem =
+    MovieItem(
+        id = this.id,
+        imageSource = this.imageSource,
+        name = this.name,
+        releaseDate = this.releaseDate,
+        popularity = this.popularity,
+        voteAverage = this.voteAverage,
+        watchNow = mutableListOf(),
+        buyRent = mutableListOf(),
+        isToWatch = true,
+        isWatched = false
+    )
+
+fun WatchedMovieEntity.toMovieItem(): MovieItem =
+    MovieItem(
+        id = this.id,
+        imageSource = this.imageSource,
+        name = this.name,
+        releaseDate = this.releaseDate,
+        popularity = this.popularity,
+        voteAverage = this.voteAverage,
+        watchNow = mutableListOf(),
+        buyRent = mutableListOf(),
+        isToWatch = false,
+        isWatched = true
     )
