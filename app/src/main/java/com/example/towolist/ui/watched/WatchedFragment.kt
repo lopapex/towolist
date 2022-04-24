@@ -18,7 +18,7 @@ import com.example.towolist.ui.list.MovieAdapter
 class WatchedFragment : Fragment(), IUpdateLayoutFragment {
 
     private val movieRepository: MovieRepository by lazy {
-        MovieRepository()
+        MovieRepository(requireContext())
     }
 
     private lateinit var binding: FragmentWatchedBinding
