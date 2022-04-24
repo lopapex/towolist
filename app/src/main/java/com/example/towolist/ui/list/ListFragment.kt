@@ -93,8 +93,10 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     }
 
     private fun loadItems(isPopular : Boolean) {
-        var movies: MutableList<MovieItem>
+        var movies: MutableList<MovieItem> = mutableListOf()
         binding.progressBar.visibility = View.VISIBLE
+        adapter?.submitList(movies)
+
         if (isPopular) {
             movieRepository.getPopularMovies(
                 onSuccess = { movieItems ->
