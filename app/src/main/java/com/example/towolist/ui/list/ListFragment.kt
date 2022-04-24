@@ -98,26 +98,14 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
             movieRepository.getPopularMovies(
                 onSuccess = { movieItems ->
                     movieItems.forEach {
-                        movieRepository.getWatchProvidersByMovieId(it.id,
-                            onSuccess = { providerByState ->
-                                setProviders(providerByState, it)
-                            },
-                            onFailure = {
-                                context?.toast(R.string.general_error.toString())
-                            })
+                        getWatchProvidersMovies(it)
                     }
                     movies = movieItems.toMutableList()
 
                     movieRepository.getPopularTvShows(
                         onSuccess = { showItems ->
                             showItems.forEach {
-                                movieRepository.getWatchProvidersByTvId(it.id,
-                                    onSuccess = { providerByState ->
-                                        setProviders(providerByState, it)
-                                    },
-                                    onFailure = {
-                                        context?.toast(R.string.general_error.toString())
-                                    })
+                                getWatchProvidersShows(it)
                             }
 
                             movies.addAll(showItems.toMutableList())
@@ -137,26 +125,14 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
             movieRepository.getTopRatedMovies(
                 onSuccess = { movieItems ->
                     movieItems.forEach {
-                        movieRepository.getWatchProvidersByMovieId(it.id,
-                            onSuccess = { providerByState ->
-                                setProviders(providerByState, it)
-                            },
-                            onFailure = {
-                                context?.toast(R.string.general_error.toString())
-                            })
+                        getWatchProvidersMovies(it)
                     }
 
                     movies = movieItems.toMutableList()
                     movieRepository.getTopRatedTvShows(
                         onSuccess = { showItems ->
                             showItems.forEach {
-                                movieRepository.getWatchProvidersByTvId(it.id,
-                                    onSuccess = { providerByState ->
-                                        setProviders(providerByState, it)
-                                    },
-                                    onFailure = {
-                                        context?.toast(R.string.general_error.toString())
-                                    })
+                                getWatchProvidersShows(it)
                             }
 
                             movies.addAll(showItems.toMutableList())
@@ -190,13 +166,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
             query = text.toString(),
             onSuccess = { movieItems ->
                 movieItems.forEach {
-                    movieRepository.getWatchProvidersByMovieId(it.id,
-                        onSuccess = { providerByState ->
-                            setProviders(providerByState, it)
-                        },
-                        onFailure = {
-                            context?.toast(R.string.general_error.toString())
-                        })
+                    getWatchProvidersMovies(it)
                 }
 
                 movies = movieItems.toMutableList()
@@ -205,13 +175,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                     query = text.toString(),
                     onSuccess = { showItems ->
                         showItems.forEach {
-                            movieRepository.getWatchProvidersByTvId(it.id,
-                                onSuccess = { providerByState ->
-                                    setProviders(providerByState, it)
-                                },
-                                onFailure = {
-                                    context?.toast(R.string.general_error.toString())
-                                })
+                            getWatchProvidersShows(it)
                         }
 
                         movies.addAll(showItems.toMutableList())
@@ -232,6 +196,28 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     }
 
     override fun onButtonClicked(buttonCode: Int) {
+    }
+
+    private fun getWatchProvidersMovies(it: MovieItem) {
+        movieRepository.getWatchProvidersByMovieId(
+            it.id,
+            onSuccess = { providerByState ->
+                setProviders(providerByState, it)
+            },
+            onFailure = {
+                context?.toast(R.string.general_error.toString())
+            })
+    }
+
+    private fun getWatchProvidersShows(it: MovieItem) {
+        movieRepository.getWatchProvidersByTvId(
+            it.id,
+            onSuccess = { providerByState ->
+                setProviders(providerByState, it)
+            },
+            onFailure = {
+                context?.toast(R.string.general_error.toString())
+            })
     }
 
     private fun setProviders(
