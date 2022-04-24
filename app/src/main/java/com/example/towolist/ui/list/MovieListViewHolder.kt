@@ -23,7 +23,8 @@ class MovieListViewHolder(private val binding: ListItemMovieBinding, private val
 
         binding.mediaName.text = movieItem.name
 
-        binding.info.text = "${movieItem.releaseDate.substringBefore("-")}"
+        binding.info.text =
+            if (movieItem.releaseDate != null) "${movieItem.releaseDate.substringBefore("-")}" else view.context?.getString(R.string.unknown)
 
         val services = movieItem.watchNow + movieItem.buyRent
 
@@ -37,7 +38,9 @@ class MovieListViewHolder(private val binding: ListItemMovieBinding, private val
             binding.theater.text = ""
         } else {
             binding.icon.setImageResource(R.drawable.ic_calendar)
-            binding.theater.text = "${view.context.getString(R.string.available)} ${movieItem.releaseDate.getFormattedDateString()}"
+            binding.theater.text =
+                "${view.context.getString(R.string.available)} " +
+                    "${if (movieItem.releaseDate != null) movieItem.releaseDate.getFormattedDateString() else view.context?.getString(R.string.unknown)}"
         }
 
         binding.cardContainer.setOnClickListener {

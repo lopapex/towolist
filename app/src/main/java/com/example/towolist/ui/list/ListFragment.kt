@@ -209,10 +209,13 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     }
 
     override fun onSearchConfirmed(text: CharSequence) {
+        val mainActivity : MainActivity = (activity as MainActivity)
+
+        var movies: MutableList<MovieItem>
         movieRepository.searchMovies(
             query = text.toString(),
-            onSuccess = { items ->
-                items.forEach {
+            onSuccess = { movieItems ->
+                movieItems.forEach {
                     movieRepository.getWatchProvidersByMovieId(it.id,
                         onSuccess = { providerByState ->
                             if (providerByState != null) {
@@ -227,39 +230,40 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                         })
                 }
 
-                adapter?.submitList(items)
+                movies = movieItems.toMutableList()
+
+                movieRepository.searchTvShows(
+                    query = text.toString(),
+                    onSuccess = { showItems ->
+                        showItems.forEach {
+                            movieRepository.getWatchProvidersByTvId(it.id,
+                                onSuccess = { providerByState ->
+                                    if (providerByState != null) {
+                                        if (providerByState.flatrate != null)
+                                            it.watchNow = providerByState.flatrate.take(3).map {provider -> provider.toServiceItem()}.toMutableList()
+                                        if (providerByState.buy != null)
+                                            it.buyRent = providerByState.buy.take(2).map {provider -> provider.toServiceItem() }.toMutableList()
+                                    }
+                                },
+                                onFailure = {
+                                    context?.toast(R.string.general_error.toString())
+                                })
+                        }
+
+                        movies.addAll(showItems.toMutableList())
+                        adapter?.submitList(movies)
+                        if (mainActivity.isPopularSpinnerOption()) adapter?.sortByPopularity() else adapter?.sortByVoteAverage()
+                    },
+                    onFailure = {
+                        context?.toast(R.string.general_error.toString())
+                    }
+                )
             },
             onFailure = {
                 context?.toast(R.string.general_error.toString())
             }
         )
 
-        movieRepository.searchTvShows(
-            query = text.toString(),
-            onSuccess = { items ->
-                items.forEach {
-                    movieRepository.getWatchProvidersByTvId(it.id,
-                        onSuccess = { providerByState ->
-                            if (providerByState != null) {
-                                if (providerByState.flatrate != null)
-                                    it.watchNow = providerByState.flatrate.take(3).map {provider -> provider.toServiceItem()}.toMutableList()
-                                if (providerByState.buy != null)
-                                    it.buyRent = providerByState.buy.take(2).map {provider -> provider.toServiceItem() }.toMutableList()
-                            }
-                        },
-                        onFailure = {
-                            context?.toast(R.string.general_error.toString())
-                        })
-                }
-
-                adapter?.appendToList(items)
-            },
-            onFailure = {
-                context?.toast(R.string.general_error.toString())
-            }
-        )
-
-        val mainActivity : MainActivity = (activity as MainActivity)
         mainActivity.getSearchBar().closeSearch()
     }
 
