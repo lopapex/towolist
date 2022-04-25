@@ -25,8 +25,8 @@ class MovieRepository(
     private val apiKey = "7d983af93fb311150ed909fbc0873210"
     private val language = "en-US"
 
-    fun getPopularMovies(onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
-        toWoListApi.getPopularMovies(apiKey, language, 1)
+    fun getPopularMovies(page: Int, onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
+        toWoListApi.getPopularMovies(apiKey, language, page)
             .enqueue(object : Callback<MovieListResponse> {
 
                 override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
@@ -46,8 +46,8 @@ class MovieRepository(
             })
     }
 
-    fun getPopularTvShows(onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
-        toWoListApi.getPopularTvShows(apiKey, language, 1)
+    fun getPopularTvShows(page: Int, onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
+        toWoListApi.getPopularTvShows(apiKey, language, page)
             .enqueue(object : Callback<TvShowListResponse> {
 
                 override fun onResponse(call: Call<TvShowListResponse>, response: Response<TvShowListResponse>) {
@@ -67,8 +67,8 @@ class MovieRepository(
             })
     }
 
-    fun getTopRatedMovies(onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
-        toWoListApi.getTopRatedMovies(apiKey, language, 1)
+    fun getTopRatedMovies(page: Int, onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
+        toWoListApi.getTopRatedMovies(apiKey, language, page)
             .enqueue(object : Callback<MovieListResponse> {
 
                 override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
@@ -88,8 +88,8 @@ class MovieRepository(
             })
     }
 
-    fun getTopRatedTvShows(onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
-        toWoListApi.getTopRatedTvShows(apiKey, language, 1)
+    fun getTopRatedTvShows(page: Int, onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
+        toWoListApi.getTopRatedTvShows(apiKey, language, page)
             .enqueue(object : Callback<TvShowListResponse> {
 
                 override fun onResponse(call: Call<TvShowListResponse>, response: Response<TvShowListResponse>) {
@@ -147,8 +147,8 @@ class MovieRepository(
             })
     }
 
-    fun searchMovies(query: String, onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
-        toWoListApi.searchMovies(apiKey, language, query, 1)
+    fun searchMovies(page: Int, query: String, onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
+        toWoListApi.searchMovies(apiKey, language, query, page)
             .enqueue(object : Callback<MovieListResponse> {
 
                 override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
@@ -168,8 +168,8 @@ class MovieRepository(
             })
     }
 
-    fun searchTvShows(query: String, onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
-        toWoListApi.searchTvShows(apiKey, language, query, 1)
+    fun searchTvShows(page: Int, query: String, onSuccess: (List<MovieItem>) -> Unit, onFailure: (Throwable) -> Unit) {
+        toWoListApi.searchTvShows(apiKey, language, query, page)
             .enqueue(object : Callback<TvShowListResponse> {
 
                 override fun onResponse(call: Call<TvShowListResponse>, response: Response<TvShowListResponse>) {

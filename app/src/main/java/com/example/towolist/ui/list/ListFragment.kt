@@ -36,6 +36,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
 
     private lateinit var binding: FragmentListBinding
     private var adapter: MovieAdapter? = null
+    private var page: Int = 1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentListBinding.inflate(layoutInflater, container, false)
@@ -98,6 +99,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
 
         if (isPopular) {
             movieRepository.getPopularMovies(
+                page,
                 onSuccess = { movieItems ->
                     movieItems.forEach {
                         getWatchProvidersMovies(it)
@@ -105,6 +107,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                     movies = movieItems.toMutableList()
 
                     movieRepository.getPopularTvShows(
+                        page,
                         onSuccess = { showItems ->
                             showItems.forEach {
                                 getWatchProvidersShows(it)
@@ -126,6 +129,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
             )
         } else {
             movieRepository.getTopRatedMovies(
+                page,
                 onSuccess = { movieItems ->
                     movieItems.forEach {
                         getWatchProvidersMovies(it)
@@ -133,6 +137,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
 
                     movies = movieItems.toMutableList()
                     movieRepository.getTopRatedTvShows(
+                        page,
                         onSuccess = { showItems ->
                             showItems.forEach {
                                 getWatchProvidersShows(it)
@@ -169,6 +174,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
         adapter?.submitList(movies)
 
         movieRepository.searchMovies(
+            page,
             query = text.toString(),
             onSuccess = { movieItems ->
                 movieItems.forEach {
@@ -178,6 +184,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                 movies = movieItems.toMutableList()
 
                 movieRepository.searchTvShows(
+                    page,
                     query = text.toString(),
                     onSuccess = { showItems ->
                         showItems.forEach {
