@@ -31,10 +31,10 @@ class FilterFragment : BottomSheetDialogFragment() {
         chipListener(binding.chipR, listOf(binding.chipPg, binding.chipAny))
     }
 
-    private fun chipListener(clicked: Chip, disabled: List<Chip>) {
+    private fun chipListener(clicked: Chip, toUncheck: List<Chip>) {
         clicked.setOnClickListener {
             clicked.isChecked = true
-            disabled.forEach { chip ->
+            toUncheck.forEach { chip ->
                 chip.isChecked = false
             }
         }
