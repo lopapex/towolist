@@ -35,7 +35,7 @@ class FilterFragment : BottomSheetDialogFragment() {
         clicked.setOnClickListener {
             clicked.isChecked = true
             disabled.forEach { chip ->
-                chip.isClickable = false
+                chip.isChecked = false
             }
         }
     }
