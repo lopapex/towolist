@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.towolist.MainActivity
 import com.example.towolist.R
 import com.example.towolist.data.MovieItem
@@ -36,7 +37,14 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
 
     private lateinit var binding: FragmentListBinding
     private lateinit var adapter: MovieAdapter
-    private var page: Int = 1
+
+    private var pagePopular: Int = 1
+    private var pageTopRated: Int = 1
+    private var pageSearch: Int = 1
+    private var popular: MutableList<MovieItem> = mutableListOf()
+    private var topRated: MutableList<MovieItem> = mutableListOf()
+    private var searchText: String = ""
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentListBinding.inflate(layoutInflater, container, false)
@@ -62,8 +70,20 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                 if (mainActivity.getSearchBar().isSearchOpened) {
                     if (mainActivity.isPopularSpinnerOption()) adapter.sortByPopularity() else adapter.sortByVoteAverage()
                 } else {
-                    loadItems(mainActivity.isPopularSpinnerOption())
-                    page++
+                    if (mainActivity.isPopularSpinnerOption()) {
+                        if (popular.isEmpty()) {
+                            loadItems(mainActivity.isPopularSpinnerOption(), false)
+                        } else {
+                            adapter.submitList(popular)
+                        }
+                    } else {
+                        if (topRated.isEmpty()) {
+                            loadItems(mainActivity.isPopularSpinnerOption(), false)
+                        } else {
+                            adapter.submitList(topRated)
+                        }
+                    }
+                    binding.recyclerView.scrollToPosition(0)
                 }
             }
         }
@@ -72,6 +92,21 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
         searchBar.setOnSearchActionListener(this)
 
         updateLayout(mainActivity.isListLayout())
+
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (!recyclerView.canScrollVertically(1) && adapter.getMovies().isNotEmpty()) {
+                    if (mainActivity.getSearchBar().isSearchOpened) {
+                        pageSearch++
+                        search(mainActivity, true)
+                    } else {
+                        if (mainActivity.isPopularSpinnerOption()) pagePopular++ else pageTopRated++
+                        loadItems(mainActivity.isPopularSpinnerOption(), true)
+                    }
+                }
+            }
+        })
     }
 
     override fun updateLayout(isList: Boolean) {
@@ -92,14 +127,19 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
         }
     }
 
-    private fun loadItems(isPopular : Boolean) {
-        val movies = adapter.getMovies().toMutableList()
-        binding.progressBar.visibility = View.VISIBLE
-        adapter.submitList(mutableListOf())
+    private fun loadItems(isPopular : Boolean, isUpdate: Boolean) {
+        val movies: MutableList<MovieItem> = mutableListOf()
+
+        if (isUpdate) {
+            binding.progressUpdate.visibility = View.VISIBLE
+        } else {
+            adapter.submitList(movies)
+            binding.progressLoad.visibility = View.VISIBLE
+        }
 
         if (isPopular) {
             movieRepository.getPopularMovies(
-                page,
+                pagePopular,
                 onSuccess = { movieItems ->
                     movieItems.forEach {
                         getWatchProvidersMovies(it)
@@ -107,16 +147,20 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                     movies.addAll(movieItems.toMutableList())
 
                     movieRepository.getPopularTvShows(
-                        page,
+                        pagePopular,
                         onSuccess = { showItems ->
                             showItems.forEach {
                                 getWatchProvidersShows(it)
                             }
-
                             movies.addAll(showItems.toMutableList())
-                            adapter.appendToList(movies)
-                            adapter.sortByPopularity()
-                            binding.progressBar.visibility = View.GONE
+                            movies.sortByDescending { movie -> movie.popularity }
+                            popular.addAll(movies)
+                            adapter.submitList(popular)
+                            if (isUpdate) {
+                                binding.progressUpdate.visibility = View.GONE
+                            } else {
+                                binding.progressLoad.visibility = View.GONE
+                            }
                         },
                         onFailure = {
                             context?.toast(R.string.general_error.toString())
@@ -129,7 +173,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
             )
         } else {
             movieRepository.getTopRatedMovies(
-                page,
+                pageTopRated,
                 onSuccess = { movieItems ->
                     movieItems.forEach {
                         getWatchProvidersMovies(it)
@@ -137,16 +181,21 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
 
                     movies.addAll(movieItems.toMutableList())
                     movieRepository.getTopRatedTvShows(
-                        page,
+                        pageTopRated,
                         onSuccess = { showItems ->
                             showItems.forEach {
                                 getWatchProvidersShows(it)
                             }
 
                             movies.addAll(showItems.toMutableList())
-                            adapter.appendToList(movies)
-                            adapter.sortByVoteAverage()
-                            binding.progressBar.visibility = View.GONE
+                            movies.sortByDescending { movie -> movie.voteAverage }
+                            topRated.addAll(movies)
+                            adapter.submitList(topRated)
+                            if (isUpdate) {
+                                binding.progressUpdate.visibility = View.GONE
+                            } else {
+                                binding.progressLoad.visibility = View.GONE
+                            }
                         },
                         onFailure = {
                             context?.toast(R.string.general_error.toString())
@@ -163,19 +212,34 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     override fun onSearchStateChanged(enabled: Boolean) {
         if (!enabled) {
             val mainActivity : MainActivity = (activity as MainActivity)
-            loadItems(mainActivity.isPopularSpinnerOption())
+            loadItems(mainActivity.isPopularSpinnerOption(), false)
+            searchText = ""
+            pageSearch = 1
         }
     }
 
     override fun onSearchConfirmed(text: CharSequence) {
         val mainActivity : MainActivity = (activity as MainActivity)
+        if (searchText == "") {
+            searchText = text.toString()
+            search(mainActivity, false)
+        }
+
+        closeKeyboard(mainActivity)
+    }
+
+    private fun search(mainActivity: MainActivity, isUpdate: Boolean) {
         var movies: MutableList<MovieItem> = mutableListOf()
-        binding.progressBar.visibility = View.VISIBLE
-        adapter.submitList(movies)
+        if (isUpdate) {
+            binding.progressUpdate.visibility = View.VISIBLE
+        } else {
+            adapter.submitList(movies)
+            binding.progressLoad.visibility = View.VISIBLE
+        }
 
         movieRepository.searchMovies(
-            page,
-            query = text.toString(),
+            pageSearch,
+            query = searchText,
             onSuccess = { movieItems ->
                 movieItems.forEach {
                     getWatchProvidersMovies(it)
@@ -184,17 +248,21 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                 movies = movieItems.toMutableList()
 
                 movieRepository.searchTvShows(
-                    page,
-                    query = text.toString(),
+                    pageSearch,
+                    query = searchText,
                     onSuccess = { showItems ->
                         showItems.forEach {
                             getWatchProvidersShows(it)
                         }
 
                         movies.addAll(showItems.toMutableList())
+                        movies.sortByDescending { movie -> if (mainActivity.isPopularSpinnerOption()) movie.popularity else movie.voteAverage }
                         adapter.appendToList(movies)
-                        if (mainActivity.isPopularSpinnerOption()) adapter.sortByPopularity() else adapter.sortByVoteAverage()
-                        binding.progressBar.visibility = View.GONE
+                        if (isUpdate) {
+                            binding.progressUpdate.visibility = View.GONE
+                        } else {
+                            binding.progressLoad.visibility = View.GONE
+                        }
                     },
                     onFailure = {
                         context?.toast(R.string.general_error.toString())
@@ -205,8 +273,6 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                 context?.toast(R.string.general_error.toString())
             }
         )
-
-        closeKeyboard(mainActivity)
     }
 
     override fun onButtonClicked(buttonCode: Int) {
