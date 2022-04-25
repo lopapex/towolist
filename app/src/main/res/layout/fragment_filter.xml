@@ -73,33 +73,34 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/chip_type_group" />
 
-    <com.google.android.material.button.MaterialButtonToggleGroup
+    <com.google.android.material.chip.ChipGroup
         android:id="@+id/toggleButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/divider">
 
-        <Button
-            android:id="@+id/filter_button_pg"
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_pg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pg"
-            style="?attr/materialButtonOutlinedStyle"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             />
-        <Button
-            android:id="@+id/filter_button_r"
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_r"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/r"
-            style="?attr/materialButtonOutlinedStyle"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             />
-        <Button
-            android:id="@+id/filter_button_any"
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_any"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/any"
-            style="?attr/materialButtonOutlinedStyle"
+            android:checked="true"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             />
-    </com.google.android.material.button.MaterialButtonToggleGroup>
+    </com.google.android.material.chip.ChipGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
