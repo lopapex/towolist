@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -44,6 +45,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     private var popular: MutableList<MovieItem> = mutableListOf()
     private var topRated: MutableList<MovieItem> = mutableListOf()
     private var searchText: String = ""
+    private var searching: Boolean = false
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -70,19 +72,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                 if (mainActivity.getSearchBar().isSearchOpened) {
                     if (mainActivity.isPopularSpinnerOption()) adapter.sortByPopularity() else adapter.sortByVoteAverage()
                 } else {
-                    if (mainActivity.isPopularSpinnerOption()) {
-                        if (popular.isEmpty()) {
-                            loadItems(mainActivity.isPopularSpinnerOption(), false)
-                        } else {
-                            adapter.submitList(popular)
-                        }
-                    } else {
-                        if (topRated.isEmpty()) {
-                            loadItems(mainActivity.isPopularSpinnerOption(), false)
-                        } else {
-                            adapter.submitList(topRated)
-                        }
-                    }
+                    loadIfEmpty(mainActivity.isPopularSpinnerOption())
                     binding.recyclerView.scrollToPosition(0)
                 }
             }
@@ -129,14 +119,8 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
 
     private fun loadItems(isPopular : Boolean, isUpdate: Boolean) {
         val movies: MutableList<MovieItem> = mutableListOf()
-
-        if (isUpdate) {
-            binding.progressUpdate.visibility = View.VISIBLE
-        } else {
-            adapter.submitList(movies)
-            binding.progressLoad.visibility = View.VISIBLE
-        }
-
+        val loader = initLoader(isUpdate)
+        
         if (isPopular) {
             movieRepository.getPopularMovies(
                 pagePopular,
@@ -156,11 +140,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                             movies.sortByDescending { movie -> movie.popularity }
                             popular.addAll(movies)
                             adapter.submitList(popular)
-                            if (isUpdate) {
-                                binding.progressUpdate.visibility = View.GONE
-                            } else {
-                                binding.progressLoad.visibility = View.GONE
-                            }
+                            loader.visibility = View.GONE
                         },
                         onFailure = {
                             context?.toast(R.string.general_error.toString())
@@ -212,7 +192,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     override fun onSearchStateChanged(enabled: Boolean) {
         if (!enabled) {
             val mainActivity : MainActivity = (activity as MainActivity)
-            loadItems(mainActivity.isPopularSpinnerOption(), false)
+            loadIfEmpty(mainActivity.isPopularSpinnerOption())
             searchText = ""
             pageSearch = 1
         }
@@ -220,22 +200,18 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
 
     override fun onSearchConfirmed(text: CharSequence) {
         val mainActivity : MainActivity = (activity as MainActivity)
-        if (searchText == "") {
+        if (!searching) {
             searchText = text.toString()
             search(mainActivity, false)
         }
 
+        searching = !searching
         closeKeyboard(mainActivity)
     }
 
     private fun search(mainActivity: MainActivity, isUpdate: Boolean) {
-        var movies: MutableList<MovieItem> = mutableListOf()
-        if (isUpdate) {
-            binding.progressUpdate.visibility = View.VISIBLE
-        } else {
-            adapter.submitList(movies)
-            binding.progressLoad.visibility = View.VISIBLE
-        }
+        var movies: MutableList<MovieItem>
+        val loader = initLoader(isUpdate)
 
         movieRepository.searchMovies(
             pageSearch,
@@ -258,11 +234,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                         movies.addAll(showItems.toMutableList())
                         movies.sortByDescending { movie -> if (mainActivity.isPopularSpinnerOption()) movie.popularity else movie.voteAverage }
                         adapter.appendToList(movies)
-                        if (isUpdate) {
-                            binding.progressUpdate.visibility = View.GONE
-                        } else {
-                            binding.progressLoad.visibility = View.GONE
-                        }
+                        loader.visibility = View.GONE
                     },
                     onFailure = {
                         context?.toast(R.string.general_error.toString())
@@ -319,5 +291,30 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     private fun closeKeyboard(mainActivity: MainActivity) {
         val imm = mainActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
+    }
+
+    private fun initLoader(isUpdate: Boolean): ProgressBar {
+        if (!isUpdate) {
+            adapter.submitList(mutableListOf())
+        }
+        val loader = if (isUpdate) binding.progressUpdate else binding.progressLoad
+        loader.visibility = View.VISIBLE
+        return loader
+    }
+
+    private fun loadIfEmpty(isPopular: Boolean) {
+        if (isPopular) {
+            if (popular.isEmpty()) {
+                loadItems(isPopular, false)
+            } else {
+                adapter.submitList(popular)
+            }
+        } else {
+            if (topRated.isEmpty()) {
+                loadItems(isPopular, false)
+            } else {
+                adapter.submitList(topRated)
+            }
+        }
     }
 }
