@@ -62,8 +62,8 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                 if (mainActivity.getSearchBar().isSearchOpened) {
                     if (mainActivity.isPopularSpinnerOption()) adapter.sortByPopularity() else adapter.sortByVoteAverage()
                 } else {
-                    page++
                     loadItems(mainActivity.isPopularSpinnerOption())
+                    page++
                 }
             }
         }
@@ -72,7 +72,6 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
         searchBar.setOnSearchActionListener(this)
 
         updateLayout(mainActivity.isListLayout())
-        loadItems(mainActivity.isPopularSpinnerOption())
     }
 
     override fun updateLayout(isList: Boolean) {
@@ -94,7 +93,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     }
 
     private fun loadItems(isPopular : Boolean) {
-        var movies: MutableList<MovieItem> = mutableListOf()
+        val movies = adapter.getMovies().toMutableList()
         binding.progressBar.visibility = View.VISIBLE
         adapter.submitList(mutableListOf())
 
@@ -105,7 +104,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                     movieItems.forEach {
                         getWatchProvidersMovies(it)
                     }
-                    movies = movieItems.toMutableList()
+                    movies.addAll(movieItems.toMutableList())
 
                     movieRepository.getPopularTvShows(
                         page,
@@ -136,7 +135,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                         getWatchProvidersMovies(it)
                     }
 
-                    movies = movieItems.toMutableList()
+                    movies.addAll(movieItems.toMutableList())
                     movieRepository.getTopRatedTvShows(
                         page,
                         onSuccess = { showItems ->
