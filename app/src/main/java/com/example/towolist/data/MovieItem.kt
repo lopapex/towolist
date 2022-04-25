@@ -8,6 +8,7 @@ data class MovieItem(
     val id: Long,
     val imageSource: String,
     val name: String,
+    val isMovie : Boolean,
     val releaseDate: String?,
     val popularity: Float,
     val voteAverage: Float,
