@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.towolist.databinding.FragmentFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.chip.Chip
 
 class FilterFragment : BottomSheetDialogFragment() {
 
@@ -16,4 +17,24 @@ class FilterFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        chipListener(binding.chipAll, listOf(binding.chipMovies, binding.chipSeries))
+        chipListener(binding.chipMovies, listOf(binding.chipAll, binding.chipSeries))
+        chipListener(binding.chipSeries, listOf(binding.chipMovies, binding.chipAll))
+
+        chipListener(binding.chipAny, listOf(binding.chipPg, binding.chipR))
+        chipListener(binding.chipPg, listOf(binding.chipAny, binding.chipR))
+        chipListener(binding.chipR, listOf(binding.chipPg, binding.chipAny))
+    }
+
+    private fun chipListener(clicked: Chip, disabled: List<Chip>) {
+        clicked.setOnClickListener {
+            clicked.isChecked = true
+            disabled.forEach { chip ->
+                chip.isClickable = false
+            }
+        }
+    }
 }
