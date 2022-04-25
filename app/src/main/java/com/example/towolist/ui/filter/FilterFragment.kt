@@ -64,19 +64,14 @@ class FilterFragment : BottomSheetDialogFragment() {
 
         listOf(
             binding.chipWatchAmazon,
-            binding.chipWatchApple,
             binding.chipWatchHbo,
             binding.chipWatchNetflix,
-            binding.chipWatchGoogle
         ).forEach {
             it.isChecked = true
         }
 
         listOf(
-            binding.chipBuyrentAmazon,
             binding.chipBuyrentApple,
-            binding.chipBuyrentHbo,
-            binding.chipBuyrentNetflix,
             binding.chipBuyrentGoogle
         ).forEach {
             it.isChecked = true
