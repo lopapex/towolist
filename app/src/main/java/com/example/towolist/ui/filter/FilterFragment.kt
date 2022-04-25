@@ -1,9 +1,11 @@
 package com.example.towolist.ui.filter
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.towolist.databinding.FragmentFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
@@ -36,5 +38,10 @@ class FilterFragment : BottomSheetDialogFragment() {
                 chip.isClickable = false
             }
         }
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        Toast.makeText(context, "Dialog ending", Toast.LENGTH_LONG).show()
     }
 }
