@@ -15,7 +15,11 @@ class FilterFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentFilterBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentFilterBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -33,6 +37,10 @@ class FilterFragment : BottomSheetDialogFragment() {
 
         chipGroupListener(binding.chipWatchGroup)
         chipGroupListener(binding.chipBuyrentGroup)
+
+        binding.filterResetButton.setOnClickListener {
+            setDefaultState()
+        }
     }
 
     private fun chipListener(clicked: Chip, toUncheck: List<Chip>) {
@@ -48,6 +56,34 @@ class FilterFragment : BottomSheetDialogFragment() {
         clicked.setOnClickListener {
             clicked.clearCheck()
         }
+    }
+
+    private fun setDefaultState() {
+        binding.chipTypeGroup.clearCheck()
+        binding.chipAll.isChecked = true
+
+        listOf(
+            binding.chipWatchAmazon,
+            binding.chipWatchApple,
+            binding.chipWatchHbo,
+            binding.chipWatchNetflix,
+            binding.chipWatchGoogle
+        ).forEach {
+            it.isChecked = true
+        }
+
+        listOf(
+            binding.chipBuyrentAmazon,
+            binding.chipBuyrentApple,
+            binding.chipBuyrentHbo,
+            binding.chipBuyrentNetflix,
+            binding.chipBuyrentGoogle
+        ).forEach {
+            it.isChecked = true
+        }
+
+        binding.chipPgrGroup.clearCheck()
+        binding.chipAny.isChecked = true
     }
 
     override fun onCancel(dialog: DialogInterface) {
