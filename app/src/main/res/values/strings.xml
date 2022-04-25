@@ -39,4 +39,11 @@
     <string name="filer_text_all">All</string>
     <string name="filter_reset">Reset</string>
 
+    <string name="netflix">Netflix</string>
+    <string name="hbo">HBO</string>
+    <string name="apple">Apple</string>
+    <string name="google">Google</string>
+    <string name="amazon">Amazon</string>
+
+
 </resources>

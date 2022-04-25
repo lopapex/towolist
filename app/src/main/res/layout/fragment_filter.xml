@@ -27,7 +27,7 @@
             android:id="@+id/filter_reset_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:text="@string/filter_reset"
             style="?attr/materialButtonOutlinedStyle"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -40,6 +40,7 @@
         android:id="@+id/chip_type_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         app:layout_constraintTop_toBottomOf="@id/filter_top_layout">
 
         <com.google.android.material.chip.Chip
@@ -73,11 +74,140 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/chip_type_group" />
 
+    <TextView
+        android:id="@+id/filter_watch_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        android:text="@string/detail_watch_now" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chip_watch_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toBottomOf="@id/filter_watch_text_view">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_watch_netflix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/netflix"
+            android:checked="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_watch_hbo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hbo"
+            android:checked="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_watch_apple"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/apple"
+            android:checked="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_watch_google"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/google"
+            android:checked="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_watch_amazon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/amazon"
+            android:checked="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/chip_watch_group" />
+
+    <TextView
+        android:id="@+id/filter_rentbuy_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toBottomOf="@id/divider1"
+        android:text="@string/detail_rent_buy" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chip_buyrent_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toBottomOf="@id/filter_rentbuy_text_view">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_buyrent_netflix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/netflix"
+            android:checked="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_buyrent_hbo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hbo"
+            android:checked="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_buyrent_apple"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/apple"
+            android:checked="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_buyrent_google"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/google"
+            android:checked="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_buyrent_amazon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/amazon"
+            android:checked="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/chip_buyrent_group" />
+
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/toggleButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/divider">
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toBottomOf="@id/divider2">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_pg"
