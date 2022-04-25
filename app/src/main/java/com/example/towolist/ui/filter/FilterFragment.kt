@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.example.towolist.databinding.FragmentFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 
 class FilterFragment : BottomSheetDialogFragment() {
 
@@ -29,14 +30,23 @@ class FilterFragment : BottomSheetDialogFragment() {
         chipListener(binding.chipAny, listOf(binding.chipPg, binding.chipR))
         chipListener(binding.chipPg, listOf(binding.chipAny, binding.chipR))
         chipListener(binding.chipR, listOf(binding.chipPg, binding.chipAny))
+
+        chipGroupListener(binding.chipWatchGroup)
+        chipGroupListener(binding.chipBuyrentGroup)
     }
 
     private fun chipListener(clicked: Chip, toUncheck: List<Chip>) {
         clicked.setOnClickListener {
             clicked.isChecked = true
-            toUncheck.forEach { chip ->
-                chip.isChecked = false
+            toUncheck.forEach {
+                it.isChecked = false
             }
+        }
+    }
+
+    private fun chipGroupListener(clicked: ChipGroup) {
+        clicked.setOnClickListener {
+            clicked.clearCheck()
         }
     }
 
