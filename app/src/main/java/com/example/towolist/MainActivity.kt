@@ -1,7 +1,9 @@
 package com.example.towolist
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -13,7 +15,7 @@ import com.example.towolist.databinding.ActivityMainBinding
 import com.example.towolist.ui.IMainActivityFragment
 import com.mancj.materialsearchbar.MaterialSearchBar
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListener {
 
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -35,9 +37,12 @@ class MainActivity : AppCompatActivity() {
         layoutButtonListener(binding.gridButton, binding.listButton)
         layoutButtonListener(binding.listButton, binding.gridButton)
 
+        setupSpinner()
+        binding.searchBar.setOnSearchActionListener(this)
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        setupSpinner()
+
     }
 
     private fun setupSpinner() {
@@ -120,5 +125,32 @@ class MainActivity : AppCompatActivity() {
 
     fun getSearchBar(): MaterialSearchBar {
         return binding.searchBar
+    }
+
+    override fun onSearchStateChanged(enabled: Boolean) {
+        if (!enabled) {
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val fragments =
+                navHostFragment.childFragmentManager.fragments as List<IMainActivityFragment>
+            fragments.forEach { fragment ->
+                fragment.searchClose()
+            }
+        }
+    }
+
+    override fun onSearchConfirmed(text: CharSequence?) {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val fragments =
+            navHostFragment.childFragmentManager.fragments as List<IMainActivityFragment>
+        fragments.forEach { fragment ->
+            fragment.search(text, false)
+        }
+    }
+
+
+    override fun onButtonClicked(buttonCode: Int) {
+        TODO("Not yet implemented")
     }
 }

@@ -41,6 +41,15 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
     }
 
     override fun updateSpinner() {
+        TODO("Not yet implemented")
+    }
+
+    override fun search(text: CharSequence?, isUpdate: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override fun searchClose() {
+        TODO("Not yet implemented")
     }
 
     override fun updateLayout(isList: Boolean) {

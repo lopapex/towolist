@@ -23,10 +23,9 @@ import com.example.towolist.repository.MovieRepository
 import com.example.towolist.repository.toServiceItem
 import com.example.towolist.ui.IMainActivityFragment
 import com.example.towolist.webservice.response.WatchProviderByStateResponse
-import com.mancj.materialsearchbar.MaterialSearchBar
 
 
-class ListFragment : Fragment(), IMainActivityFragment, MaterialSearchBar.OnSearchActionListener {
+class ListFragment : Fragment(), IMainActivityFragment {
 
     private fun Context.toast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
@@ -56,9 +55,6 @@ class ListFragment : Fragment(), IMainActivityFragment, MaterialSearchBar.OnSear
 
         val mainActivity : MainActivity = (activity as MainActivity)
 
-        val searchBar = mainActivity.getSearchBar()
-        searchBar.setOnSearchActionListener(this)
-
         updateLayout(mainActivity.isListLayout())
 
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -67,7 +63,7 @@ class ListFragment : Fragment(), IMainActivityFragment, MaterialSearchBar.OnSear
                 if (!recyclerView.canScrollVertically(1) && adapter.getMovies().isNotEmpty()) {
                     if (mainActivity.getSearchBar().isSearchOpened) {
                         pageSearch++
-                        search(mainActivity, true)
+                        search(searchText, true)
                     } else {
                         if (mainActivity.isPopularSpinnerOption()) pagePopular++ else pageTopRated++
                         loadItems(mainActivity.isPopularSpinnerOption(), true)
@@ -177,29 +173,23 @@ class ListFragment : Fragment(), IMainActivityFragment, MaterialSearchBar.OnSear
         }
     }
 
-    override fun onSearchStateChanged(enabled: Boolean) {
-        if (!enabled) {
-            val mainActivity : MainActivity = (activity as MainActivity)
-            loadIfEmpty(mainActivity.isPopularSpinnerOption())
-            searchText = ""
-            pageSearch = 1
-            binding.recyclerView.scrollToPosition(0)
-            binding.noItemsFoundView.visibility = View.GONE
-        }
-    }
-
-    override fun onSearchConfirmed(text: CharSequence) {
+    override fun searchClose() {
         val mainActivity : MainActivity = (activity as MainActivity)
-        searchText = text.toString()
-        search(mainActivity, false)
-
-        closeKeyboard(mainActivity)
+        loadIfEmpty(mainActivity.isPopularSpinnerOption())
+        searchText = ""
+        binding.recyclerView.scrollToPosition(0)
+        binding.noItemsFoundView.visibility = View.GONE
     }
 
-    private fun search(mainActivity: MainActivity, isUpdate: Boolean) {
+    override fun search(text: CharSequence?, isUpdate: Boolean) {
+        val mainActivity : MainActivity = (activity as MainActivity)
         var movies: MutableList<MovieItem>
         binding.noItemsFoundView.visibility = View.GONE
         val loader = initLoader(isUpdate)
+        searchText = text.toString()
+        if (!isUpdate) {
+            pageSearch = 1
+        }
 
         movieRepository.searchMovies(
             pageSearch,
@@ -236,9 +226,8 @@ class ListFragment : Fragment(), IMainActivityFragment, MaterialSearchBar.OnSear
                 context?.toast(R.string.general_error.toString())
             }
         )
-    }
 
-    override fun onButtonClicked(buttonCode: Int) {
+        closeKeyboard(mainActivity)
     }
 
     private fun getWatchProvidersMovies(it: MovieItem) {
