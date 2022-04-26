@@ -226,8 +226,6 @@ class ListFragment : Fragment(), IMainActivityFragment {
                 context?.toast(R.string.general_error.toString())
             }
         )
-
-        closeKeyboard(mainActivity)
     }
 
     private fun getWatchProvidersMovies(it: MovieItem) {
@@ -266,11 +264,6 @@ class ListFragment : Fragment(), IMainActivityFragment {
                     .map { provider -> provider.toServiceItem() }
                     .toMutableList()
         }
-    }
-
-    private fun closeKeyboard(mainActivity: MainActivity) {
-        val imm = mainActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
     private fun initLoader(isUpdate: Boolean): ProgressBar {

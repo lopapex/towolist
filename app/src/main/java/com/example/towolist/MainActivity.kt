@@ -8,6 +8,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -115,18 +116,6 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         }
     }
 
-    fun isListLayout(): Boolean {
-        return binding.gridButton.isEnabled
-    }
-
-    fun isPopularSpinnerOption(): Boolean {
-        return binding.spinner.selectedItem.toString() == resources.getStringArray(R.array.spinner_options)[0]
-    }
-
-    fun getSearchBar(): MaterialSearchBar {
-        return binding.searchBar
-    }
-
     override fun onSearchStateChanged(enabled: Boolean) {
         if (!enabled) {
             val navHostFragment =
@@ -146,10 +135,27 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
             navHostFragment.childFragmentManager.fragments as List<IMainActivityFragment>
         fragments.forEach { fragment ->
             fragment.search(text, false)
+            closeKeyboard(fragment as Fragment)
         }
     }
 
+    private fun closeKeyboard(fragment: Fragment) {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow((fragment).requireView().windowToken, 0)
+    }
 
     override fun onButtonClicked(buttonCode: Int) {
+    }
+
+    fun isListLayout(): Boolean {
+        return binding.gridButton.isEnabled
+    }
+
+    fun isPopularSpinnerOption(): Boolean {
+        return binding.spinner.selectedItem.toString() == resources.getStringArray(R.array.spinner_options)[0]
+    }
+
+    fun getSearchBar(): MaterialSearchBar {
+        return binding.searchBar
     }
 }
