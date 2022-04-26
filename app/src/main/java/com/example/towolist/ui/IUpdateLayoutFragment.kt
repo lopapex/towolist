@@ -1,6 +1,8 @@
 package com.example.towolist.ui
 
-interface IUpdateLayoutFragment {
+interface IMainActivityFragment {
 
     fun updateLayout(isList: Boolean)
+
+    fun updateSpinner()
 }

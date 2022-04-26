@@ -21,12 +21,12 @@ import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.repository.toServiceItem
-import com.example.towolist.ui.IUpdateLayoutFragment
+import com.example.towolist.ui.IMainActivityFragment
 import com.example.towolist.webservice.response.WatchProviderByStateResponse
 import com.mancj.materialsearchbar.MaterialSearchBar
 
 
-class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSearchActionListener {
+class ListFragment : Fragment(), IMainActivityFragment, MaterialSearchBar.OnSearchActionListener {
 
     private fun Context.toast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
@@ -56,26 +56,6 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
 
         val mainActivity : MainActivity = (activity as MainActivity)
 
-        val spinner = mainActivity.setupSpinner()
-        spinner.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if (mainActivity.getSearchBar().isSearchOpened) {
-                    if (mainActivity.isPopularSpinnerOption()) adapter.sortByPopularity() else adapter.sortByVoteAverage()
-                } else {
-                    loadIfEmpty(mainActivity.isPopularSpinnerOption())
-                    binding.recyclerView.scrollToPosition(0)
-                }
-            }
-        }
-
         val searchBar = mainActivity.getSearchBar()
         searchBar.setOnSearchActionListener(this)
 
@@ -95,6 +75,16 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                 }
             }
         })
+    }
+
+    override fun updateSpinner() {
+        val mainActivity : MainActivity = (activity as MainActivity)
+        if (mainActivity.getSearchBar().isSearchOpened) {
+            if (mainActivity.isPopularSpinnerOption()) adapter.sortByPopularity() else adapter.sortByVoteAverage()
+        } else {
+            loadIfEmpty(mainActivity.isPopularSpinnerOption())
+            binding.recyclerView.scrollToPosition(0)
+        }
     }
 
     override fun updateLayout(isList: Boolean) {

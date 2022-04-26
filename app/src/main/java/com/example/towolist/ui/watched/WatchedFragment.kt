@@ -12,10 +12,10 @@ import com.example.towolist.MainActivity
 import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentWatchedBinding
 import com.example.towolist.repository.MovieRepository
-import com.example.towolist.ui.IUpdateLayoutFragment
+import com.example.towolist.ui.IMainActivityFragment
 import com.example.towolist.ui.list.MovieAdapter
 
-class WatchedFragment : Fragment(), IUpdateLayoutFragment {
+class WatchedFragment : Fragment(), IMainActivityFragment {
 
     private val movieRepository: MovieRepository by lazy {
         MovieRepository(requireContext())
@@ -38,6 +38,9 @@ class WatchedFragment : Fragment(), IUpdateLayoutFragment {
 
         val mainActivity : MainActivity = (activity as MainActivity)
         updateLayout(mainActivity.isListLayout())
+    }
+
+    override fun updateSpinner() {
     }
 
     override fun updateLayout(isList: Boolean) {

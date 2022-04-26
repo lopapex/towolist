@@ -1,6 +1,7 @@
 package com.example.towolist
 
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -9,7 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.towolist.databinding.ActivityMainBinding
-import com.example.towolist.ui.IUpdateLayoutFragment
+import com.example.towolist.ui.IMainActivityFragment
 import com.mancj.materialsearchbar.MaterialSearchBar
 
 class MainActivity : AppCompatActivity() {
@@ -35,9 +36,11 @@ class MainActivity : AppCompatActivity() {
         layoutButtonListener(binding.listButton, binding.gridButton)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+        setupSpinner()
     }
 
-    fun setupSpinner(): Spinner {
+    private fun setupSpinner() {
         val spinner = binding.spinner
         ArrayAdapter.createFromResource(
             this,
@@ -48,7 +51,25 @@ class MainActivity : AppCompatActivity() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
         }
-        return spinner
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val navHostFragment =
+                    supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                val fragments =
+                    navHostFragment.childFragmentManager.fragments as List<IMainActivityFragment>
+                fragments.forEach { fragment ->
+                    fragment.updateSpinner()
+                }
+            }
+        }
     }
 
     private fun initFilterBottomFragment(navController: NavController) {
@@ -83,7 +104,7 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val fragments =
-            navHostFragment.childFragmentManager.fragments as List<IUpdateLayoutFragment>
+            navHostFragment.childFragmentManager.fragments as List<IMainActivityFragment>
         fragments.forEach { fragment ->
             fragment.updateLayout(binding.gridButton.isEnabled)
         }
