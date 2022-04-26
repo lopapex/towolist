@@ -37,6 +37,7 @@
     <string name="filer_text_movies">Movies</string>
     <string name="filer_text_series">Series</string>
     <string name="filer_text_all">All</string>
+    <string name="filter_text_vote_average">Vote Average</string>
     <string name="filter_reset">Reset</string>
 
     <string name="netflix">Netflix</string>
