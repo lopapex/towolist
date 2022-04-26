@@ -1,6 +1,5 @@
 package com.example.towolist
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -21,6 +20,7 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+    private var spinnerDefault = true;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,13 +67,17 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
                 position: Int,
                 id: Long
             ) {
-                val navHostFragment =
-                    supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-                val fragments =
-                    navHostFragment.childFragmentManager.fragments as List<IMainActivityFragment>
-                fragments.forEach { fragment ->
-                    fragment.updateSpinner()
+                if (!spinnerDefault) {
+                    val navHostFragment =
+                        supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                    val fragments =
+                        navHostFragment.childFragmentManager.fragments as List<IMainActivityFragment>
+                    fragments.forEach { fragment ->
+                        fragment.updateSpinner()
+                    }
                 }
+
+                spinnerDefault = false
             }
         }
     }

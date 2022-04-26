@@ -71,6 +71,8 @@ class ListFragment : Fragment(), IMainActivityFragment {
                 }
             }
         })
+
+        loadItems(mainActivity.isPopularSpinnerOption(), false)
     }
 
     override fun updateSpinner() {
