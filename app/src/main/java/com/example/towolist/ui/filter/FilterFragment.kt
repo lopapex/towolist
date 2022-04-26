@@ -31,10 +31,6 @@ class FilterFragment : BottomSheetDialogFragment() {
         chipListener(binding.chipMovies, listOf(binding.chipAll, binding.chipSeries))
         chipListener(binding.chipSeries, listOf(binding.chipMovies, binding.chipAll))
 
-        chipListener(binding.chipAny, listOf(binding.chipPg, binding.chipR))
-        chipListener(binding.chipPg, listOf(binding.chipAny, binding.chipR))
-        chipListener(binding.chipR, listOf(binding.chipPg, binding.chipAny))
-
         chipGroupListener(binding.chipWatchGroup)
         chipGroupListener(binding.chipBuyrentGroup)
 
@@ -76,9 +72,6 @@ class FilterFragment : BottomSheetDialogFragment() {
         ).forEach {
             it.isChecked = true
         }
-
-        binding.chipPgrGroup.clearCheck()
-        binding.chipAny.isChecked = true
     }
 
     override fun onCancel(dialog: DialogInterface) {
