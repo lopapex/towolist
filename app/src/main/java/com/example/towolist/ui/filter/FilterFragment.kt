@@ -37,6 +37,8 @@ class FilterFragment : BottomSheetDialogFragment() {
         binding.filterResetButton.setOnClickListener {
             setDefaultState()
         }
+
+        binding.voteAverageSlider.isTickVisible = false
     }
 
     private fun chipListener(clicked: Chip, toUncheck: List<Chip>) {
@@ -72,6 +74,8 @@ class FilterFragment : BottomSheetDialogFragment() {
         ).forEach {
             it.isChecked = true
         }
+
+        binding.voteAverageSlider.setValues(0F, 10F)
     }
 
     override fun onCancel(dialog: DialogInterface) {
