@@ -45,8 +45,6 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
     private var popular: MutableList<MovieItem> = mutableListOf()
     private var topRated: MutableList<MovieItem> = mutableListOf()
     private var searchText: String = ""
-    private var searching: Boolean = false
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentListBinding.inflate(layoutInflater, container, false)
@@ -195,17 +193,15 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
             loadIfEmpty(mainActivity.isPopularSpinnerOption())
             searchText = ""
             pageSearch = 1
+            binding.recyclerView.scrollToPosition(0)
         }
     }
 
     override fun onSearchConfirmed(text: CharSequence) {
         val mainActivity : MainActivity = (activity as MainActivity)
-        if (!searching) {
-            searchText = text.toString()
-            search(mainActivity, false)
-        }
+        searchText = text.toString()
+        search(mainActivity, false)
 
-        searching = !searching
         closeKeyboard(mainActivity)
     }
 
