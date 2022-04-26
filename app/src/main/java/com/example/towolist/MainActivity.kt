@@ -151,6 +151,5 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
 
 
     override fun onButtonClicked(buttonCode: Int) {
-        TODO("Not yet implemented")
     }
 }
