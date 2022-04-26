@@ -22,6 +22,11 @@
     <string name="content_description_list">List</string>
     <string name="content_description_icon">Icon</string>
 
+    <string name="no_items_found_text">No items found</string>
+    <string name="no_items_found_icon">😢</string>
+    <string name="empty_text">Go to List tab and add first Item</string>
+    <string name="empty_icon">💡</string>
+
 
     <string name="pg">PG</string>
     <string name="r">R</string>

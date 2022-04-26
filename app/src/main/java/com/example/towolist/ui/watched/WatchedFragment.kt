@@ -32,6 +32,9 @@ class WatchedFragment : Fragment(), IUpdateLayoutFragment {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         movies = movieRepository.getWatchedMovies()
+        if (movies.isEmpty()) {
+            binding.emptyView.visibility = View.VISIBLE
+        }
 
         val mainActivity : MainActivity = (activity as MainActivity)
         updateLayout(mainActivity.isListLayout())

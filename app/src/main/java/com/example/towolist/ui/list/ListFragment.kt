@@ -194,6 +194,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
             searchText = ""
             pageSearch = 1
             binding.recyclerView.scrollToPosition(0)
+            binding.noItemsFoundView.visibility = View.GONE
         }
     }
 
@@ -207,6 +208,7 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
 
     private fun search(mainActivity: MainActivity, isUpdate: Boolean) {
         var movies: MutableList<MovieItem>
+        binding.noItemsFoundView.visibility = View.GONE
         val loader = initLoader(isUpdate)
 
         movieRepository.searchMovies(
@@ -231,6 +233,9 @@ class ListFragment : Fragment(), IUpdateLayoutFragment, MaterialSearchBar.OnSear
                         movies.sortByDescending { movie -> if (mainActivity.isPopularSpinnerOption()) movie.popularity else movie.voteAverage }
                         adapter.appendToList(movies)
                         loader.visibility = View.GONE
+                        if (adapter.getMovies().isEmpty()) {
+                            binding.noItemsFoundView.visibility = View.VISIBLE
+                        }
                     },
                     onFailure = {
                         context?.toast(R.string.general_error.toString())
