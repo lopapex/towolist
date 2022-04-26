@@ -85,9 +85,12 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
         if (item.buyRent.isEmpty() && item.watchNow.isEmpty()) {
             binding.theater.visibility = View.VISIBLE
             binding.theaterText.text =
-                if (item.releaseDate != null) item.releaseDate?.getFormattedDateString() else context?.getString(R.string.unknown)
-            binding.theaterText.visibility = View.VISIBLE
+                if (item.releaseDate != null && item.releaseDate.isNotEmpty())
+                    item.releaseDate.getFormattedDateString()
+                else
+                    context?.getString(R.string.unknown)
 
+            binding.theaterText.visibility = View.VISIBLE
             binding.calendarIcon.visibility = View.VISIBLE
         }
     }
