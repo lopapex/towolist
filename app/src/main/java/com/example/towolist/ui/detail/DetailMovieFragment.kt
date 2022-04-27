@@ -11,6 +11,8 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageButton
 import android.widget.ListView
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.towolist.R
@@ -64,15 +66,23 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
         updateImageButtonColor(binding.watchedIcon, movieRepository.getWatchedByMovieId(item.id), view)
 
         binding.toWatchIcon.setOnClickListener {
-            val isToWatch = !item.isToWatch
+            setFragmentResult("updateToWatch", bundleOf(Pair("item", item)))
+            item = item.copy(isToWatch = !item.isToWatch)
+            if (!item.isToWatch) {
+                dismiss()
+            }
             movieRepository.updateToWatchMovies(item)
-            updateImageButtonColor(binding.toWatchIcon, isToWatch, view)
+            updateImageButtonColor(binding.toWatchIcon, item.isToWatch, view)
         }
 
         binding.watchedIcon.setOnClickListener {
-            val isWatched = !item.isWatched
+            setFragmentResult("updateWatched", bundleOf(Pair("item", item)))
+            item = item.copy(isWatched = !item.isWatched)
+            if (!item.isWatched) {
+                dismiss()
+            }
             movieRepository.updateWatchedMovies(item)
-            updateImageButtonColor(binding.watchedIcon, isWatched, view)
+            updateImageButtonColor(binding.watchedIcon, item.isWatched, view)
         }
 
         updateBasedOnServices(item)

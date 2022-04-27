@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -59,6 +60,15 @@ class WatchedFragment : Fragment(), IMainActivityFragment {
         }, isList)
         binding.recyclerView.adapter = adapter
         adapter.submitList(movies)
+
+        setFragmentResultListener("updateWatched") { key, bundle ->
+            val item = bundle.get("item") as MovieItem
+            val index = adapter.getMovies().indexOf(item)
+
+            if (item.isWatched && index >= 0) {
+                adapter.removeItem(index)
+            }
+        }
 
         binding.recyclerView.apply {
             layoutManager = if (isList) LinearLayoutManager(context) else GridLayoutManager(context, 3)

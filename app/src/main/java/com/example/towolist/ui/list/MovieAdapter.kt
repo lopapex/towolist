@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.towolist.databinding.GridItemMovieBinding
 import com.example.towolist.data.MovieItem
+import com.example.towolist.databinding.FragmentToWatchBinding
 import com.example.towolist.databinding.ListItemMovieBinding
 
 class MovieAdapter(
@@ -55,6 +56,11 @@ class MovieAdapter(
     }
 
     fun getMovies(): List<MovieItem> {
-        return movies;
+        return movies
+    }
+
+    fun removeItem(position: Int) {
+        movies.removeAt(position)
+        notifyItemRemoved(position)
     }
 }

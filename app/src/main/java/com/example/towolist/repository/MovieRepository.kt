@@ -194,8 +194,7 @@ class MovieRepository(
             }
 
     fun updateToWatchMovies(item: MovieItem) {
-        val isToWatch = !item.isToWatch
-        if (isToWatch) {
+        if (item.isToWatch) {
             toWatchMovieDao.saveEntity(item.toToWatchMovieEntity()!!)
         } else {
             toWatchMovieDao.deleteById(item.id)
@@ -209,8 +208,7 @@ class MovieRepository(
             }
 
     fun updateWatchedMovies(item: MovieItem) {
-        val isWatched = !item.isWatched
-        if (isWatched) {
+        if (item.isWatched) {
             watchedMovieDao.saveEntity(item.toWatchedMovieEntity()!!)
         } else {
             watchedMovieDao.deleteById(item.id)

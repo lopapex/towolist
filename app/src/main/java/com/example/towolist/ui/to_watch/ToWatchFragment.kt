@@ -1,14 +1,18 @@
 package com.example.towolist.ui.to_watch
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.towolist.MainActivity
+import com.example.towolist.R
 import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentToWatchBinding
 import com.example.towolist.repository.MovieRepository
@@ -52,6 +56,10 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
         TODO("Not yet implemented")
     }
 
+    private fun Context.toast(text: String) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+    }
+
     override fun updateLayout(isList: Boolean) {
         val adapter = MovieAdapter(onItemClick = {
             findNavController()
@@ -59,6 +67,15 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
         }, isList)
         binding.recyclerView.adapter = adapter
         adapter.submitList(movies)
+
+        setFragmentResultListener("updateToWatch") { key, bundle ->
+            val item = bundle.get("item") as MovieItem
+            val index = adapter.getMovies().indexOf(item)
+
+            if (item.isToWatch && index >= 0) {
+                adapter.removeItem(index)
+            }
+        }
 
         binding.recyclerView.apply {
             layoutManager = if (isList) LinearLayoutManager(context) else GridLayoutManager(context, 3)
