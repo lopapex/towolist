@@ -21,6 +21,7 @@ abstract class ToWoDatabase : RoomDatabase() {
         fun create(context: Context): ToWoDatabase =
             Room.databaseBuilder(context, ToWoDatabase::class.java, NAME)
                 .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
                 .build()
     }
 

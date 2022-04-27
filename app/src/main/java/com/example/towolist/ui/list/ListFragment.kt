@@ -110,6 +110,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                 onSuccess = { movieItems ->
                     movieItems.forEach {
                         getWatchProvidersMovies(it, loader)
+                        setFlags(it)
                     }
                     movies.addAll(movieItems.toMutableList())
 
@@ -118,6 +119,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                         onSuccess = { showItems ->
                             showItems.forEach {
                                 getWatchProvidersShows(it, loader)
+                                setFlags(it)
                             }
                             movies.addAll(showItems.toMutableList())
                             movies.sortByDescending { movie -> movie.popularity }
@@ -140,6 +142,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                 onSuccess = { movieItems ->
                     movieItems.forEach {
                         getWatchProvidersMovies(it, loader)
+                        setFlags(it)
                     }
 
                     movies.addAll(movieItems.toMutableList())
@@ -148,6 +151,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                         onSuccess = { showItems ->
                             showItems.forEach {
                                 getWatchProvidersShows(it, loader)
+                                setFlags(it)
                             }
 
                             movies.addAll(showItems.toMutableList())
@@ -196,6 +200,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
             onSuccess = { movieItems ->
                 movieItems.forEach {
                     getWatchProvidersMovies(it, loader)
+                    setFlags(it)
                 }
 
                 movies = movieItems.toMutableList()
@@ -206,6 +211,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                     onSuccess = { showItems ->
                         showItems.forEach {
                             getWatchProvidersShows(it, loader)
+                            setFlags(it)
                         }
 
                         movies.addAll(showItems.toMutableList())
@@ -263,6 +269,11 @@ class ListFragment : Fragment(), IMainActivityFragment {
                     .map { provider -> provider.toServiceItem() }
                     .toMutableList()
         }
+    }
+
+    private fun setFlags(it: MovieItem) {
+        it.isToWatch = movieRepository.getToWatchByMovieId(it.id)
+        it.isWatched = movieRepository.getWatchedByMovieId(it.id)
     }
 
     private fun initLoader(isUpdate: Boolean): ProgressBar {

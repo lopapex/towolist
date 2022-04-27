@@ -3,11 +3,9 @@ package com.example.towolist.repository
 import android.content.Context
 import com.example.towolist.R
 import com.example.towolist.data.MovieItem
-import com.example.towolist.data.ServiceItem
 import com.example.towolist.database.ToWoDatabase
 import com.example.towolist.database.dao.ToWatchMovieDao
 import com.example.towolist.database.dao.WatchedMovieDao
-import com.example.towolist.database.entity.ToWatchMovieEntity
 import com.example.towolist.webservice.RetrofitUtil
 import com.example.towolist.webservice.ToWoListApi
 import com.example.towolist.webservice.response.*
@@ -18,7 +16,7 @@ import retrofit2.Response
 class MovieRepository(
     context: Context,
     private val database: ToWoDatabase = ToWoDatabase.create(context),
-    private val toWatchedMovieDao: ToWatchMovieDao = database.toWatchMovieDao(),
+    private val toWatchMovieDao: ToWatchMovieDao = database.toWatchMovieDao(),
     private val watchedMovieDao: WatchedMovieDao = database.watchedMovieDao(),
     private val toWoListApi: ToWoListApi = RetrofitUtil.createAqiWebService()
 ) {
@@ -190,14 +188,42 @@ class MovieRepository(
     }
 
     fun getToWatchMovies(): List<MovieItem> =
-        toWatchedMovieDao.getAll()
+        toWatchMovieDao.getAll()
             .map { entity ->
                 entity.toMovieItem()
             }
+
+    fun updateToWatchMovies(item: MovieItem) {
+        val isToWatch = !item.isToWatch
+        if (isToWatch) {
+            toWatchMovieDao.saveEntity(item.toToWatchMovieEntity()!!)
+        } else {
+            toWatchMovieDao.deleteById(item.id)
+        }
+    }
 
     fun getWatchedMovies(): List<MovieItem> =
         watchedMovieDao.getAll()
             .map { entity ->
                 entity.toMovieItem()
             }
+
+    fun updateWatchedMovies(item: MovieItem) {
+        val isWatched = !item.isWatched
+        if (isWatched) {
+            watchedMovieDao.saveEntity(item.toWatchedMovieEntity()!!)
+        } else {
+            watchedMovieDao.deleteById(item.id)
+        }
+    }
+
+    fun getToWatchByMovieId(id: Long): Boolean {
+        val movie = toWatchMovieDao.getById(id)
+        return movie != null
+    }
+
+    fun getWatchedByMovieId(id: Long): Boolean {
+        val movie = watchedMovieDao.getById(id)
+        return movie != null
+    }
 }

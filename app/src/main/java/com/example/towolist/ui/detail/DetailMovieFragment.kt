@@ -11,19 +11,25 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageButton
 import android.widget.ListView
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.towolist.R
 import com.example.towolist.data.MovieItem
 import com.example.towolist.data.ServiceInfo
 import com.example.towolist.data.ServiceItem
 import com.example.towolist.databinding.FragmentDetailMovieBinding
-import com.example.towolist.databinding.ServiceListBinding
+import com.example.towolist.repository.MovieRepository
+import com.example.towolist.ui.list.ListFragmentDirections
+import com.example.towolist.ui.list.MovieAdapter
 import com.example.towolist.utils.getFormattedDateString
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
 class DetailMovieFragment() : BottomSheetDialogFragment() {
+
+    private val movieRepository: MovieRepository by lazy {
+        MovieRepository(requireContext())
+    }
 
     private lateinit var binding: FragmentDetailMovieBinding
     private var services : Map<String, ServiceInfo> = mapOf(
@@ -43,7 +49,7 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val item = DetailMovieFragmentArgs.fromBundle(requireArguments()).item
+        var item = DetailMovieFragmentArgs.fromBundle(requireArguments()).item
 
         binding.mediaName.text = item.name
 
@@ -54,8 +60,20 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
             .fallback(R.drawable.empty_image)
             .into(binding.poster)
 
-        updateImageButtonColor(binding.watchedIcon, item.isWatched, view)
-        updateImageButtonColor(binding.toWatchIcon, item.isToWatch, view)
+        updateImageButtonColor(binding.toWatchIcon, movieRepository.getToWatchByMovieId(item.id), view)
+        updateImageButtonColor(binding.watchedIcon, movieRepository.getWatchedByMovieId(item.id), view)
+
+        binding.toWatchIcon.setOnClickListener {
+            val isToWatch = !item.isToWatch
+            movieRepository.updateToWatchMovies(item)
+            updateImageButtonColor(binding.toWatchIcon, isToWatch, view)
+        }
+
+        binding.watchedIcon.setOnClickListener {
+            val isWatched = !item.isWatched
+            movieRepository.updateWatchedMovies(item)
+            updateImageButtonColor(binding.watchedIcon, isWatched, view)
+        }
 
         updateBasedOnServices(item)
     }

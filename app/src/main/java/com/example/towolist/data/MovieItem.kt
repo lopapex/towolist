@@ -13,6 +13,6 @@ data class MovieItem(
     val voteAverage: Float,
     var watchNow: List<ServiceItem>,
     var buyRent: List<ServiceItem>,
-    val isToWatch: Boolean,
-    val isWatched: Boolean
+    var isToWatch: Boolean,
+    var isWatched: Boolean
 ): Parcelable
