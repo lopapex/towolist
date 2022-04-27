@@ -2,6 +2,7 @@ package com.example.towolist.ui.filter
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.example.towolist.databinding.FragmentFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import java.util.logging.Logger
 
 class FilterFragment : BottomSheetDialogFragment() {
 
@@ -94,15 +96,18 @@ class FilterFragment : BottomSheetDialogFragment() {
 
             if (item.voteAverage < voteFrom || voteTo < item.voteAverage) {
                 result = false
+                Log.i("FILTER", "vote average out of scope!")
             }
 
             if (!binding.chipAll.isChecked) {
                 if (binding.chipMovies.isChecked && !item.isMovie) {
                     result = false
+                    Log.i("FILTER", "not a movie!")
                 }
 
                 if (binding.chipSeries.isChecked && item.isMovie) {
                     result = false
+                    Log.i("FILTER", "not a series!")
                 }
             }
 
@@ -111,8 +116,9 @@ class FilterFragment : BottomSheetDialogFragment() {
             if (item.watchNow
                     .map { it.name }
                     .intersect(listOf(watchSelection))
-                    .isEmpty()
+                    .isNotEmpty()
             ) {
+                Log.i("FILTER", "watch selection out of scope!")
                 result = false
             }
 
@@ -121,8 +127,9 @@ class FilterFragment : BottomSheetDialogFragment() {
             if (item.buyRent
                     .map { it.name }
                     .intersect(listOf(rentBuySelection))
-                    .isEmpty()
+                    .isNotEmpty()
             ) {
+                Log.i("FILTER", "buy rent selection out of scope!")
                 result = false
             }
 
