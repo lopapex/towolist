@@ -23,6 +23,8 @@ class WatchedFragment : Fragment(), IMainActivityFragment {
     }
 
     private lateinit var binding: FragmentWatchedBinding
+    private lateinit var adapter: MovieAdapter
+
     private lateinit var movies: List<MovieItem>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -39,10 +41,12 @@ class WatchedFragment : Fragment(), IMainActivityFragment {
 
         val mainActivity : MainActivity = (activity as MainActivity)
         updateLayout(mainActivity.isListLayout())
+        updateSpinner()
     }
 
     override fun updateSpinner() {
-        TODO("Not yet implemented")
+        val mainActivity : MainActivity = (activity as MainActivity)
+        if (mainActivity.isPopularSpinnerOption()) adapter.sortByPopularity() else adapter.sortByVoteAverage()
     }
 
     override fun search(text: CharSequence?, isUpdate: Boolean) {
@@ -54,21 +58,21 @@ class WatchedFragment : Fragment(), IMainActivityFragment {
     }
 
     override fun updateLayout(isList: Boolean) {
-        val adapter = MovieAdapter(onItemClick = {
+        adapter = MovieAdapter(onItemClick = {
             findNavController()
                 .navigate(WatchedFragmentDirections.actionWatchedFragmentToDetailMovieFragment(it))
         }, isList)
         binding.recyclerView.adapter = adapter
         adapter.submitList(movies)
 
-        setFragmentResultListener("updateWatched") { key, bundle ->
+        setFragmentResultListener("updateWatched") { _, bundle ->
             val item = bundle.get("item") as MovieItem
-            val index = adapter.getMovies().indexOf(item)
+            val index = movies.indexOf(item)
 
             if (item.isWatched && index >= 0) {
                 adapter.removeItem(index)
             }
-            binding.emptyView.visibility = if (adapter.getMovies().isEmpty()) View.VISIBLE else View.GONE
+            binding.emptyView.visibility = if (movies.isEmpty()) View.VISIBLE else View.GONE
         }
 
         binding.recyclerView.apply {
