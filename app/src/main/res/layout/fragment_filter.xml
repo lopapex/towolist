@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:text="@string/netflix"
             android:checked="true"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             />
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_watch_hbo"
@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:text="@string/hbo"
             android:checked="true"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             />
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_watch_amazon"
@@ -111,7 +111,7 @@
             android:layout_height="wrap_content"
             android:text="@string/amazon"
             android:checked="true"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             />
 
     </com.google.android.material.chip.ChipGroup>
@@ -143,7 +143,7 @@
             android:layout_height="wrap_content"
             android:text="@string/apple"
             android:checked="true"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             />
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_buyrent_google"
@@ -151,7 +151,7 @@
             android:layout_height="wrap_content"
             android:text="@string/google"
             android:checked="true"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             />
 
     </com.google.android.material.chip.ChipGroup>
