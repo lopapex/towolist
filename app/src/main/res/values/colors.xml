@@ -12,4 +12,12 @@
     <color name="secondaryLight">#4D000000</color>
     <color name="secondaryDark">#000000</color>
     <color name="secondaryText">#ffffff</color>
+
+    <color name="indicatorListEnd">#00000000</color>
+    <color name="indicatorListCenter">#90000000</color>
+    <color name="indicatorListStart">#65000000</color>
+
+    <color name="indicatorGridEnd">#ffffff</color>
+    <color name="indicatorGridCenter">#90ffffff</color>
+    <color name="indicatorGridStart">#65ffffff</color>
 </resources>

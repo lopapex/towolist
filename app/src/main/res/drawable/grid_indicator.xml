@@ -4,9 +4,9 @@
 
     <corners android:radius="30dp" />
     <gradient
-        android:endColor="#ffffff"
-        android:centerColor="#90ffffff"
-        android:startColor="#65ffffff"
+        android:endColor="@color/indicatorGridEnd"
+        android:centerColor="@color/indicatorGridCenter"
+        android:startColor="@color/indicatorGridStart"
         android:angle="-90"/>
 
 </shape>
