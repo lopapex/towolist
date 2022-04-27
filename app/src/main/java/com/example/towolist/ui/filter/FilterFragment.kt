@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
+import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
@@ -36,6 +39,10 @@ class FilterFragment : BottomSheetDialogFragment() {
 
         binding.filterResetButton.setOnClickListener {
             setDefaultState()
+        }
+
+        binding.filterConfirmButton.setOnClickListener {
+            setFragmentResult("filterFragment", bundleOf(Pair("predicate", predicate())))
         }
 
         binding.voteAverageSlider.isTickVisible = false
@@ -78,8 +85,75 @@ class FilterFragment : BottomSheetDialogFragment() {
         binding.voteAverageSlider.setValues(0F, 10F)
     }
 
-    override fun onCancel(dialog: DialogInterface) {
-        super.onCancel(dialog)
-        Toast.makeText(context, "Dialog ending", Toast.LENGTH_LONG).show()
+    private fun predicate(): (MovieItem) -> Boolean {
+        return {item: MovieItem ->
+            val voteFrom = binding.voteAverageSlider.valueFrom
+            val voteTo = binding.voteAverageSlider.valueTo
+
+            var result = true
+
+            if (item.voteAverage < voteFrom || voteTo < item.voteAverage) {
+                result = false
+            }
+
+            if (!binding.chipAll.isChecked) {
+                if (binding.chipMovies.isChecked && !item.isMovie) {
+                    result = false
+                }
+
+                if (binding.chipSeries.isChecked && item.isMovie) {
+                    result = false
+                }
+            }
+
+            val watchSelection = retrieveWatchOptions()
+
+            if (item.watchNow
+                    .map { it.name }
+                    .intersect(listOf(watchSelection))
+                    .isEmpty()
+            ) {
+                result = false
+            }
+
+            val rentBuySelection = retrieveRentBuyOptions()
+
+            if (item.buyRent
+                    .map { it.name }
+                    .intersect(listOf(rentBuySelection))
+                    .isEmpty()
+            ) {
+                result = false
+            }
+
+            result
+        }
+    }
+
+    private fun retrieveWatchOptions(): MutableList<String> {
+        val watchSelection = mutableListOf<String>()
+
+        if (binding.chipWatchNetflix.isChecked)
+            watchSelection.add("Netflix")
+
+        if (binding.chipWatchAmazon.isChecked)
+            watchSelection.add("Amazon Prime Video")
+
+        if (binding.chipWatchHbo.isChecked)
+            watchSelection.add("HBO Max")
+
+        return watchSelection
+    }
+
+    private fun retrieveRentBuyOptions(): MutableList<String> {
+        val watchSelection = mutableListOf<String>()
+
+        if (binding.chipBuyrentApple.isChecked)
+            watchSelection.add("Apple iTunes")
+
+        if (binding.chipBuyrentGoogle.isChecked)
+            watchSelection.add("Google Play Movies")
+
+        return watchSelection
     }
 }

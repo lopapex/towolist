@@ -44,6 +44,8 @@ class ListFragment : Fragment(), IMainActivityFragment {
     private var topRated: MutableList<MovieItem> = mutableListOf()
     private var searchText: String = ""
     private var outsideCall: Boolean = false
+    private var fetchFreshData = true
+    private var adapterData = listOf<MovieItem>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentListBinding.inflate(layoutInflater, container, false)
@@ -79,6 +81,8 @@ class ListFragment : Fragment(), IMainActivityFragment {
         } else {
             loadItems(mainActivity.isPopularSpinnerOption(), false)
         }
+
+        setupFragmentListenerForFilter()
     }
 
     override fun updateSpinner() {
@@ -315,6 +319,19 @@ class ListFragment : Fragment(), IMainActivityFragment {
             } else {
                 adapter.submitList(topRated)
             }
+        }
+    }
+
+    private fun setupFragmentListenerForFilter() {
+        setFragmentResultListener("filterFragment") { _, bundle ->
+            val predicate = bundle.get("predicate") as (MovieItem) -> Boolean
+
+            if (fetchFreshData) {
+                adapterData = adapter.getMovies()
+                fetchFreshData = false
+            }
+
+            adapter.submitList(adapterData.filter(predicate))
         }
     }
 }
