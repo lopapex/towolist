@@ -12,22 +12,24 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/filter_confirm_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/filter_confirm"
-            app:layout_constraintBottom_toBottomOf="@+id/filter_reset_button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/filter_reset_button" />
-
-        <Button
             android:id="@+id/filter_reset_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:text="@string/filter_reset"
             style="?attr/materialButtonOutlinedStyle"
+            app:layout_constraintBottom_toBottomOf="@+id/filter_confirm_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/filter_confirm_button" />
+
+        <Button
+            android:id="@+id/filter_confirm_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="@string/filter_confirm"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
