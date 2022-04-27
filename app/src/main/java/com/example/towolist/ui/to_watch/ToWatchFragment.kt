@@ -56,10 +56,6 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
         TODO("Not yet implemented")
     }
 
-    private fun Context.toast(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-    }
-
     override fun updateLayout(isList: Boolean) {
         val adapter = MovieAdapter(onItemClick = {
             findNavController()
