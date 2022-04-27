@@ -29,6 +29,8 @@ import com.example.towolist.ui.IMainActivityFragment
 import com.example.towolist.ui.list.ListFragment
 import com.example.towolist.ui.list.ListFragmentDirections
 import com.example.towolist.ui.list.MovieAdapter
+import com.example.towolist.ui.to_watch.ToWatchFragment
+import com.example.towolist.ui.watched.WatchedFragment
 import com.example.towolist.utils.getFormattedDateString
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -70,32 +72,22 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
 
         updateImageButtonColor(binding.toWatchIcon, movieRepository.getToWatchByMovieId(item.id), view)
         updateImageButtonColor(binding.watchedIcon, movieRepository.getWatchedByMovieId(item.id), view)
+        val fragment = parentFragmentManager.findFragmentById(R.id.nav_host_fragment)
+        setButtonsBasedOnFragment(fragment)
 
-        binding.toWatchIcon.setOnClickListener {
-            setFragmentResult("updateToWatch", bundleOf(Pair("item", item)))
-            item = item.copy(isToWatch = !item.isToWatch)
-            val fragment = parentFragmentManager.findFragmentById(R.id.nav_host_fragment)
-
-            if (!item.isToWatch && fragment !is ListFragment) {
-                dismiss()
-            }
-            movieRepository.updateToWatchMovies(item)
-            updateImageButtonColor(binding.toWatchIcon, item.isToWatch, view)
-        }
-
-        binding.watchedIcon.setOnClickListener {
-            setFragmentResult("updateWatched", bundleOf(Pair("item", item)))
-            item = item.copy(isWatched = !item.isWatched)
-            val fragment = parentFragmentManager.findFragmentById(R.id.nav_host_fragment)
-
-            if (!item.isWatched && fragment !is ListFragment) {
-                dismiss()
-            }
-            movieRepository.updateWatchedMovies(item)
-            updateImageButtonColor(binding.watchedIcon, item.isWatched, view)
-        }
+        item = toWatchOnClick(item, fragment, view)
+        item = watchedOnClick(item, fragment, view)
 
         updateBasedOnServices(item)
+    }
+
+    private fun setButtonsBasedOnFragment(fragment: Fragment?) {
+        if (fragment is ToWatchFragment) {
+            binding.watchedIcon.visibility = View.GONE
+        }
+        if (fragment is WatchedFragment) {
+            binding.toWatchIcon.visibility = View.GONE
+        }
     }
 
     private fun updateImageButtonColor(btn: ImageButton, isActive: Boolean, view: View) {
@@ -131,6 +123,44 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
             binding.theaterText.visibility = View.VISIBLE
             binding.calendarIcon.visibility = View.VISIBLE
         }
+    }
+
+    private fun watchedOnClick(
+        item: MovieItem,
+        fragment: Fragment?,
+        view: View
+    ): MovieItem {
+        var itemCopy = item
+        binding.watchedIcon.setOnClickListener {
+            setFragmentResult("updateWatched", bundleOf(Pair("item", itemCopy)))
+            itemCopy = itemCopy.copy(isWatched = !itemCopy.isWatched)
+
+            if (!itemCopy.isWatched && fragment !is ListFragment) {
+                dismiss()
+            }
+            movieRepository.updateWatchedMovies(itemCopy)
+            updateImageButtonColor(binding.watchedIcon, itemCopy.isWatched, view)
+        }
+        return itemCopy
+    }
+
+    private fun toWatchOnClick(
+        item: MovieItem,
+        fragment: Fragment?,
+        view: View
+    ): MovieItem {
+        var itemCopy = item
+        binding.toWatchIcon.setOnClickListener {
+            setFragmentResult("updateToWatch", bundleOf(Pair("item", itemCopy)))
+            itemCopy = itemCopy.copy(isToWatch = !itemCopy.isToWatch)
+
+            if (!itemCopy.isToWatch && fragment !is ListFragment) {
+                dismiss()
+            }
+            movieRepository.updateToWatchMovies(itemCopy)
+            updateImageButtonColor(binding.toWatchIcon, itemCopy.isToWatch, view)
+        }
+        return itemCopy
     }
 
     private fun onClickOpen(items: List<ServiceItem>, list: ListView) {
