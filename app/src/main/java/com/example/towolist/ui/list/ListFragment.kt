@@ -109,7 +109,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                 pagePopular,
                 onSuccess = { movieItems ->
                     movieItems.forEach {
-                        getWatchProvidersMovies(it)
+                        getWatchProvidersMovies(it, loader)
                     }
                     movies.addAll(movieItems.toMutableList())
 
@@ -117,7 +117,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                         pagePopular,
                         onSuccess = { showItems ->
                             showItems.forEach {
-                                getWatchProvidersShows(it)
+                                getWatchProvidersShows(it, loader)
                             }
                             movies.addAll(showItems.toMutableList())
                             movies.sortByDescending { movie -> movie.popularity }
@@ -126,12 +126,12 @@ class ListFragment : Fragment(), IMainActivityFragment {
                             loader.visibility = View.GONE
                         },
                         onFailure = {
-                            context?.toast(R.string.general_error.toString())
+                            requestFailed(loader)
                         }
                     )
                 },
                 onFailure = {
-                    context?.toast(R.string.general_error.toString())
+                    requestFailed(loader)
                 }
             )
         } else {
@@ -139,7 +139,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                 pageTopRated,
                 onSuccess = { movieItems ->
                     movieItems.forEach {
-                        getWatchProvidersMovies(it)
+                        getWatchProvidersMovies(it, loader)
                     }
 
                     movies.addAll(movieItems.toMutableList())
@@ -147,7 +147,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                         pageTopRated,
                         onSuccess = { showItems ->
                             showItems.forEach {
-                                getWatchProvidersShows(it)
+                                getWatchProvidersShows(it, loader)
                             }
 
                             movies.addAll(showItems.toMutableList())
@@ -161,12 +161,12 @@ class ListFragment : Fragment(), IMainActivityFragment {
                             }
                         },
                         onFailure = {
-                            context?.toast(R.string.general_error.toString())
+                            requestFailed(loader)
                         }
                     )
                 },
                 onFailure = {
-                    context?.toast(R.string.general_error.toString())
+                    requestFailed(loader)
                 }
             )
         }
@@ -195,7 +195,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
             query = searchText,
             onSuccess = { movieItems ->
                 movieItems.forEach {
-                    getWatchProvidersMovies(it)
+                    getWatchProvidersMovies(it, loader)
                 }
 
                 movies = movieItems.toMutableList()
@@ -205,7 +205,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                     query = searchText,
                     onSuccess = { showItems ->
                         showItems.forEach {
-                            getWatchProvidersShows(it)
+                            getWatchProvidersShows(it, loader)
                         }
 
                         movies.addAll(showItems.toMutableList())
@@ -217,35 +217,35 @@ class ListFragment : Fragment(), IMainActivityFragment {
                         }
                     },
                     onFailure = {
-                        context?.toast(R.string.general_error.toString())
+                        requestFailed(loader)
                     }
                 )
             },
             onFailure = {
-                context?.toast(R.string.general_error.toString())
+                requestFailed(loader)
             }
         )
     }
 
-    private fun getWatchProvidersMovies(it: MovieItem) {
+    private fun getWatchProvidersMovies(it: MovieItem, loader: ProgressBar) {
         movieRepository.getWatchProvidersByMovieId(
             it.id,
             onSuccess = { providerByState ->
                 setProviders(providerByState, it)
             },
             onFailure = {
-                context?.toast(R.string.general_error.toString())
+                requestFailed(loader)
             })
     }
 
-    private fun getWatchProvidersShows(it: MovieItem) {
+    private fun getWatchProvidersShows(it: MovieItem, loader: ProgressBar) {
         movieRepository.getWatchProvidersByTvId(
             it.id,
             onSuccess = { providerByState ->
                 setProviders(providerByState, it)
             },
             onFailure = {
-                context?.toast(R.string.general_error.toString())
+                requestFailed(loader)
             })
     }
 
@@ -272,6 +272,11 @@ class ListFragment : Fragment(), IMainActivityFragment {
         val loader = if (isUpdate) binding.progressUpdate else binding.progressLoad
         loader.visibility = View.VISIBLE
         return loader
+    }
+
+    private fun requestFailed(loader: ProgressBar) {
+        context?.toast(requireContext().getString(R.string.general_error))
+        loader.visibility = View.GONE
     }
 
     private fun loadIfEmpty(isPopular: Boolean) {
