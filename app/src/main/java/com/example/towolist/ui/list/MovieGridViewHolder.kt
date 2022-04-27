@@ -22,5 +22,6 @@ class MovieGridViewHolder(private val binding: GridItemMovieBinding, private val
         binding.cardContainer.setOnClickListener {
             onItemClick(movieItem)
         }
+        binding.voteTextView.text = movieItem.voteAverage.toString()
     }
 }

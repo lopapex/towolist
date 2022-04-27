@@ -47,5 +47,7 @@ class MovieListViewHolder(private val binding: ListItemMovieBinding, private val
         binding.cardContainer.setOnClickListener {
             onItemClick(movieItem)
         }
+
+        binding.voteTextView.text = movieItem.voteAverage.toString()
     }
 }
