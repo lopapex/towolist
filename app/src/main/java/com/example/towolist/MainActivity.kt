@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
-    private var spinnerDefault = true;
+    private var spinnerDefault = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +91,7 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
     private fun initializeBottomNavigationListener(navController: NavController) {
         binding.bottomNavigation.setOnItemSelectedListener {
             navController.navigate(it.itemId)
+            resetSpinnerOption()
             binding.searchBar.setPlaceHolder(it.title)
             true
         }
@@ -157,6 +158,10 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
 
     fun isPopularSpinnerOption(): Boolean {
         return binding.spinner.selectedItem.toString() == resources.getStringArray(R.array.spinner_options)[0]
+    }
+
+    fun resetSpinnerOption() {
+        binding.spinner.setSelection(0)
     }
 
     fun getSearchBar(): MaterialSearchBar {
