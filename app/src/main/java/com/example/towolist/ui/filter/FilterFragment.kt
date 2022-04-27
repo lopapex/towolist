@@ -93,8 +93,8 @@ class FilterFragment : BottomSheetDialogFragment() {
             Log.v(logTag, "thresholds are:")
             logCurrentThreshHoldsVerbose()
 
-            val voteFrom = binding.voteAverageSlider.valueFrom
-            val voteTo = binding.voteAverageSlider.valueTo
+            val voteFrom = binding.voteAverageSlider.values[0]
+            val voteTo = binding.voteAverageSlider.values[1]
 
             var result = true
 
@@ -181,8 +181,8 @@ class FilterFragment : BottomSheetDialogFragment() {
         Log.d(logTag, "chipBuyrentApple: ${binding.chipBuyrentApple.isChecked}")
         Log.d(logTag, "chipBuyrentGoogle: ${binding.chipBuyrentGoogle.isChecked}")
 
-        Log.d(logTag, "voteFrom: ${binding.voteAverageSlider.valueFrom}")
-        Log.d(logTag, "voteTo: ${binding.voteAverageSlider.valueTo}")
+        Log.d(logTag, "voteFrom: ${binding.voteAverageSlider.values[0]}")
+        Log.d(logTag, "voteTo: ${binding.voteAverageSlider.values[1]}")
     }
 
     private fun logCurrentThreshHoldsVerbose() {
@@ -197,7 +197,7 @@ class FilterFragment : BottomSheetDialogFragment() {
         Log.v(logTag, "chipBuyrentApple: ${binding.chipBuyrentApple.isChecked}")
         Log.v(logTag, "chipBuyrentGoogle: ${binding.chipBuyrentGoogle.isChecked}")
 
-        Log.v(logTag, "voteFrom: ${binding.voteAverageSlider.valueFrom}")
-        Log.v(logTag, "voteTo: ${binding.voteAverageSlider.valueTo}")
+        Log.v(logTag, "voteFrom: ${binding.voteAverageSlider.values[0]}")
+        Log.v(logTag, "voteTo: ${binding.voteAverageSlider.values[1]}")
     }
 }
