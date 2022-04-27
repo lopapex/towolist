@@ -33,10 +33,18 @@
     <string name="any">Any</string>
     <string name="available">Available from</string>
 
-    <string name="filter_text">Filter</string>
+    <string name="filter_confirm">Confirm</string>
     <string name="filer_text_movies">Movies</string>
     <string name="filer_text_series">Series</string>
     <string name="filer_text_all">All</string>
+    <string name="filter_text_vote_average">Vote Average</string>
     <string name="filter_reset">Reset</string>
+
+    <string name="netflix">Netflix</string>
+    <string name="hbo">HBO</string>
+    <string name="apple">Apple</string>
+    <string name="google">Google</string>
+    <string name="amazon">Amazon</string>
+
 
 </resources>
