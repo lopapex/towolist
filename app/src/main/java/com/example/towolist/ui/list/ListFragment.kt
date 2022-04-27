@@ -78,8 +78,8 @@ class ListFragment : Fragment(), IMainActivityFragment {
             if (mainActivity.isPopularSpinnerOption()) adapter.sortByPopularity() else adapter.sortByVoteAverage()
         } else {
             loadIfEmpty(mainActivity.isPopularSpinnerOption())
-            binding.recyclerView.scrollToPosition(0)
         }
+        binding.recyclerView.scrollToPosition(0)
     }
 
     override fun updateLayout(isList: Boolean) {
