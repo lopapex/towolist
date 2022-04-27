@@ -9,6 +9,11 @@
         android:name="com.example.towolist.ui.list.ListFragment"
         tools:layout="@layout/fragment_list"
         android:label="ListFragment" >
+        <argument
+            android:name="text"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
         <action
             android:id="@+id/action_listFragment_to_detailMovieFragment"
             app:destination="@id/detailMovieFragment" />
@@ -22,6 +27,9 @@
         <action
             android:id="@+id/action_toWatchFragment_to_detailMovieFragment"
             app:destination="@id/detailMovieFragment" />
+        <action
+            android:id="@+id/action_toWatchFragment_to_listFragment"
+            app:destination="@id/listFragment" />
     </fragment>
 
     <fragment
@@ -32,6 +40,9 @@
         <action
             android:id="@+id/action_watchedFragment_to_detailMovieFragment"
             app:destination="@id/detailMovieFragment" />
+        <action
+            android:id="@+id/action_watchedFragment_to_listFragment"
+            app:destination="@id/listFragment" />
     </fragment>
 
     <dialog

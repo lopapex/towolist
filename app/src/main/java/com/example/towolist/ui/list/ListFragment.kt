@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.repository.toServiceItem
 import com.example.towolist.ui.IMainActivityFragment
+import com.example.towolist.ui.detail.DetailMovieFragmentArgs
 import com.example.towolist.webservice.response.WatchProviderByStateResponse
 
 
@@ -41,6 +43,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
     private var popular: MutableList<MovieItem> = mutableListOf()
     private var topRated: MutableList<MovieItem> = mutableListOf()
     private var searchText: String = ""
+    private var outsideCall: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentListBinding.inflate(layoutInflater, container, false)
@@ -69,7 +72,13 @@ class ListFragment : Fragment(), IMainActivityFragment {
             }
         })
 
-        loadItems(mainActivity.isPopularSpinnerOption(), false)
+        val text = ListFragmentArgs.fromBundle(requireArguments()).text
+        outsideCall = text != null
+        if (text != null) {
+            search(text, false)
+        } else {
+            loadItems(mainActivity.isPopularSpinnerOption(), false)
+        }
     }
 
     override fun updateSpinner() {
@@ -182,6 +191,9 @@ class ListFragment : Fragment(), IMainActivityFragment {
         searchText = ""
         binding.recyclerView.scrollToPosition(0)
         binding.noItemsFoundView.visibility = View.GONE
+        if (outsideCall) {
+            findNavController().navigateUp()
+        }
     }
 
     override fun search(text: CharSequence?, isUpdate: Boolean) {

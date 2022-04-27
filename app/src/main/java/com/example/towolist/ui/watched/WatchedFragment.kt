@@ -15,6 +15,7 @@ import com.example.towolist.databinding.FragmentWatchedBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.ui.IMainActivityFragment
 import com.example.towolist.ui.list.MovieAdapter
+import com.example.towolist.ui.to_watch.ToWatchFragmentDirections
 
 class WatchedFragment : Fragment(), IMainActivityFragment {
 
@@ -50,11 +51,11 @@ class WatchedFragment : Fragment(), IMainActivityFragment {
     }
 
     override fun search(text: CharSequence?, isUpdate: Boolean) {
-        TODO("Not yet implemented")
+        findNavController()
+            .navigate(WatchedFragmentDirections.actionWatchedFragmentToListFragment(text.toString()))
     }
 
     override fun searchClose() {
-        TODO("Not yet implemented")
     }
 
     override fun updateLayout(isList: Boolean) {

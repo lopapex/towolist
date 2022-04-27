@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.fragment.app.ListFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -53,11 +56,11 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
     }
 
     override fun search(text: CharSequence?, isUpdate: Boolean) {
-        TODO("Not yet implemented")
+        findNavController()
+            .navigate(ToWatchFragmentDirections.actionToWatchFragmentToListFragment(text.toString()))
     }
 
     override fun searchClose() {
-        TODO("Not yet implemented")
     }
 
     override fun updateLayout(isList: Boolean) {
