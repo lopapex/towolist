@@ -11,14 +11,12 @@
         android:background="@color/secondaryLight"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/filter_text_view"
+        <Button
+            android:id="@+id/filter_confirm_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/filter_text"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            android:text="@string/filter_confirm"
             app:layout_constraintBottom_toBottomOf="@+id/filter_reset_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/filter_reset_button" />

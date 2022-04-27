@@ -33,7 +33,7 @@
     <string name="any">Any</string>
     <string name="available">Available from</string>
 
-    <string name="filter_text">Filter</string>
+    <string name="filter_confirm">Confirm</string>
     <string name="filer_text_movies">Movies</string>
     <string name="filer_text_series">Series</string>
     <string name="filer_text_all">All</string>
