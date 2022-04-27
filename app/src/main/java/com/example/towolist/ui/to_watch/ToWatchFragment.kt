@@ -71,6 +71,7 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
             if (item.isToWatch && index >= 0) {
                 adapter.removeItem(index)
             }
+            binding.emptyView.visibility = if (adapter.getMovies().isEmpty()) View.VISIBLE else View.GONE
         }
 
         binding.recyclerView.apply {
