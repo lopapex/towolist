@@ -12,6 +12,7 @@ import com.example.towolist.databinding.FragmentFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import kotlin.math.log
 
 class FilterFragment : BottomSheetDialogFragment() {
 
@@ -27,8 +28,27 @@ class FilterFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
+    // This is far initial state after application start
+    companion object {
+        var moviesChecked = false
+        var seriesChecked = false
+        var allChecked = true
+
+        var netflixChecked = true
+        var hboChecked = true
+        var amazonChecked = true
+        var appleChecked = true
+        var googleChecked = true
+
+        var voteFrom = 0F
+        var voteTo = 10F
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(logTag, "onViewCreatedCalled")
+
+        restoreState()
 
         chipListener(binding.chipAll, listOf(binding.chipMovies, binding.chipSeries))
         chipListener(binding.chipMovies, listOf(binding.chipAll, binding.chipSeries))
@@ -42,12 +62,43 @@ class FilterFragment : BottomSheetDialogFragment() {
         }
 
         binding.filterConfirmButton.setOnClickListener {
+            Log.d(logTag, "saved state")
+            saveState()
             Log.d(logTag, "setting fragment result with thresholds:")
             logCurrentThreshHoldsDebug()
             setFragmentResult("filterFragment", bundleOf(Pair("predicate", predicate())))
         }
 
         binding.voteAverageSlider.isTickVisible = false
+    }
+
+    private fun restoreState() {
+        binding.chipMovies.isChecked = moviesChecked
+        binding.chipSeries.isChecked = seriesChecked
+        binding.chipAll.isChecked = allChecked
+
+        binding.chipWatchNetflix.isChecked = netflixChecked
+        binding.chipWatchHbo.isChecked = hboChecked
+        binding.chipWatchAmazon.isChecked = amazonChecked
+        binding.chipBuyrentApple.isChecked = appleChecked
+        binding.chipBuyrentGoogle.isChecked = googleChecked
+
+        binding.voteAverageSlider.values = listOf(voteFrom, voteTo)
+    }
+
+    private fun saveState() {
+        moviesChecked = binding.chipMovies.isChecked
+        seriesChecked = binding.chipSeries.isChecked
+        allChecked = binding.chipAll.isChecked
+
+        netflixChecked = binding.chipWatchNetflix.isChecked
+        hboChecked = binding.chipWatchHbo.isChecked
+        amazonChecked = binding.chipWatchAmazon.isChecked
+        appleChecked = binding.chipBuyrentApple.isChecked
+        googleChecked = binding.chipBuyrentGoogle.isChecked
+
+        voteFrom = binding.voteAverageSlider.values[0]
+        voteTo = binding.voteAverageSlider.values[1]
     }
 
     private fun chipListener(clicked: Chip, toUncheck: List<Chip>) {
