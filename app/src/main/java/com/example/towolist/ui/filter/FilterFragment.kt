@@ -83,7 +83,7 @@ class FilterFragment : BottomSheetDialogFragment() {
         binding.chipBuyrentApple.isChecked = appleChecked
         binding.chipBuyrentGoogle.isChecked = googleChecked
 
-        binding.voteAverageSlider.values = listOf(voteFrom, voteTo)
+        binding.voteAverageSlider.setValues(voteFrom, voteTo)
     }
 
     private fun saveState() {
@@ -144,9 +144,6 @@ class FilterFragment : BottomSheetDialogFragment() {
             Log.v(logTag, "thresholds are:")
             logCurrentThreshHoldsVerbose()
 
-            val voteFrom = binding.voteAverageSlider.values[0]
-            val voteTo = binding.voteAverageSlider.values[1]
-
             var result = true
 
             if (item.voteAverage < voteFrom || voteTo < item.voteAverage) {
@@ -154,13 +151,13 @@ class FilterFragment : BottomSheetDialogFragment() {
                 Log.v(logTag, "vote average out of scope!")
             }
 
-            if (!binding.chipAll.isChecked) {
-                if (binding.chipMovies.isChecked && !item.isMovie) {
+            if (!allChecked) {
+                if (moviesChecked && !item.isMovie) {
                     result = false
                     Log.v(logTag, "not a movie!")
                 }
 
-                if (binding.chipSeries.isChecked && item.isMovie) {
+                if (seriesChecked && item.isMovie) {
                     result = false
                     Log.v(logTag, "not a series!")
                 }
@@ -196,13 +193,13 @@ class FilterFragment : BottomSheetDialogFragment() {
     private fun retrieveWatchOptions(): MutableList<String> {
         val watchSelection = mutableListOf<String>()
 
-        if (binding.chipWatchNetflix.isChecked)
+        if (netflixChecked)
             watchSelection.add("Netflix")
 
-        if (binding.chipWatchAmazon.isChecked)
+        if (amazonChecked)
             watchSelection.add("Amazon Prime Video")
 
-        if (binding.chipWatchHbo.isChecked)
+        if (hboChecked)
             watchSelection.add("HBO Max")
 
         return watchSelection
@@ -211,10 +208,10 @@ class FilterFragment : BottomSheetDialogFragment() {
     private fun retrieveRentBuyOptions(): MutableList<String> {
         val watchSelection = mutableListOf<String>()
 
-        if (binding.chipBuyrentApple.isChecked)
+        if (appleChecked)
             watchSelection.add("Apple iTunes")
 
-        if (binding.chipBuyrentGoogle.isChecked)
+        if (googleChecked)
             watchSelection.add("Google Play Movies")
 
         return watchSelection
