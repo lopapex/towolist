@@ -48,12 +48,17 @@ class ListFragment : Fragment(), IMainActivityFragment {
     private var fetchFreshData = true
     private var adapterData = listOf<MovieItem>()
 
+    private var predicate: (MovieItem) -> Boolean = {
+        true
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentListBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.i("ListFragment", "onViewCreated called")
         super.onViewCreated(view, savedInstanceState)
 
         val mainActivity : MainActivity = (activity as MainActivity)
@@ -115,6 +120,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
     }
 
     private fun loadItems(isPopular : Boolean, isUpdate: Boolean) {
+        Log.i("ListFragment", "loadItems called")
         val movies: MutableList<MovieItem> = mutableListOf()
         val loader = initLoader(isUpdate)
         
@@ -138,7 +144,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                             movies.addAll(showItems.toMutableList())
                             movies.sortByDescending { movie -> movie.popularity }
                             popular.addAll(movies)
-                            adapter.submitList(popular)
+                            adapter.submitList(popular.filter(predicate))
                             loader.visibility = View.GONE
                         },
                         onFailure = {
@@ -171,7 +177,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                             movies.addAll(showItems.toMutableList())
                             movies.sortByDescending { movie -> movie.voteAverage }
                             topRated.addAll(movies)
-                            adapter.submitList(topRated)
+                            adapter.submitList(topRated.filter(predicate))
                             if (isUpdate) {
                                 binding.progressUpdate.visibility = View.GONE
                             } else {
@@ -326,7 +332,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
     private fun setupFragmentListenerForFilter() {
         setFragmentResultListener("filterFragment") { _, bundle ->
             Log.i("FilterFragmentListener", "handling fragment result")
-            val predicate = bundle.get("predicate") as (MovieItem) -> Boolean
+            predicate = bundle.get("predicate") as (MovieItem) -> Boolean
 
             if (fetchFreshData) {
                 Log.i("FilterFragmentListener", "fetchingFreshData...")
