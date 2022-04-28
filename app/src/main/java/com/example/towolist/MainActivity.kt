@@ -101,11 +101,11 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         clicked.setOnClickListener {
             clicked.isEnabled = false
             clicked.imageTintList =
-                ContextCompat.getColorStateList(applicationContext, R.color.secondaryLight)
+                ContextCompat.getColorStateList(applicationContext, R.color.secondary)
 
             disabled.isEnabled = true
             disabled.imageTintList =
-                ContextCompat.getColorStateList(applicationContext, R.color.secondary)
+                ContextCompat.getColorStateList(applicationContext, R.color.secondaryLight)
 
             updateCurrentLayout()
         }

@@ -91,7 +91,7 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
     }
 
     private fun updateImageButtonColor(btn: ImageButton, isActive: Boolean, view: View) {
-        val color = if (isActive) R.color.secondaryLight else R.color.secondary
+        val color = if (isActive) R.color.secondary else R.color.secondaryLight
         btn.imageTintList = ContextCompat.getColorStateList(view.context, color)
     }
 
