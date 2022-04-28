@@ -2,6 +2,7 @@ package com.example.towolist.ui.list
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -324,14 +325,20 @@ class ListFragment : Fragment(), IMainActivityFragment {
 
     private fun setupFragmentListenerForFilter() {
         setFragmentResultListener("filterFragment") { _, bundle ->
+            Log.i("FilterFragmentListener", "handling fragment result")
             val predicate = bundle.get("predicate") as (MovieItem) -> Boolean
 
             if (fetchFreshData) {
+                Log.i("FilterFragmentListener", "fetchingFreshData...")
                 adapterData = adapter.getMovies()
+                Log.i("FilterFragmentListener", "fetched ${adapterData.size} items")
                 fetchFreshData = false
             }
 
-            adapter.submitList(adapterData.filter(predicate))
+            Log.i("FilterFragmentListener", "adapterData ${adapterData.size} items")
+            val filtered = adapterData.filter(predicate)
+            Log.i("FilterFragmentListener", "filtered ${filtered.size} items")
+            adapter.submitList(filtered)
         }
     }
 }
