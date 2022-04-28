@@ -21,7 +21,6 @@ import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.repository.toServiceItem
 import com.example.towolist.ui.IMainActivityFragment
-import com.example.towolist.ui.detail.DetailMovieFragmentArgs
 import com.example.towolist.webservice.response.WatchProviderByStateResponse
 
 
@@ -45,8 +44,6 @@ class ListFragment : Fragment(), IMainActivityFragment {
     private var topRated: MutableList<MovieItem> = mutableListOf()
     private var searchText: String = ""
     private var outsideCall: Boolean = false
-    private var fetchFreshData = true
-    private var adapterData = listOf<MovieItem>()
 
     private var predicate: (MovieItem) -> Boolean = {
         true
@@ -333,18 +330,8 @@ class ListFragment : Fragment(), IMainActivityFragment {
         setFragmentResultListener("filterFragment") { _, bundle ->
             Log.i("FilterFragmentListener", "handling fragment result")
             predicate = bundle.get("predicate") as (MovieItem) -> Boolean
-
-            if (fetchFreshData) {
-                Log.i("FilterFragmentListener", "fetchingFreshData...")
-                adapterData = adapter.getMovies()
-                Log.i("FilterFragmentListener", "fetched ${adapterData.size} items")
-                fetchFreshData = false
-            }
-
-            Log.i("FilterFragmentListener", "adapterData ${adapterData.size} items")
-            val filtered = adapterData.filter(predicate)
-            Log.i("FilterFragmentListener", "filtered ${filtered.size} items")
-            adapter.submitList(filtered)
+            val mainActivity : MainActivity = (activity as MainActivity)
+            loadItems(mainActivity.isPopularSpinnerOption(), false)
         }
     }
 }
