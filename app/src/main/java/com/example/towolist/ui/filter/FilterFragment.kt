@@ -163,27 +163,28 @@ class FilterFragment : BottomSheetDialogFragment() {
                 }
             }
 
-            val watchSelection = retrieveWatchOptions()
-
-            if (item.watchNow
-                    .map { it.name }
-                    .intersect(listOf(watchSelection))
-                    .isNotEmpty()
-            ) {
-                Log.v(logTag, "watch selection out of scope!")
-                result = false
-            }
-
-            val rentBuySelection = retrieveRentBuyOptions()
-
-            if (item.buyRent
-                    .map { it.name }
-                    .intersect(listOf(rentBuySelection))
-                    .isNotEmpty()
-            ) {
-                Log.v(logTag, "buy rent selection out of scope!")
-                result = false
-            }
+            // TODO uncomment this when there will be present info about services in MovieItem
+//            val watchSelection = retrieveWatchOptions()
+//
+//            if (item.watchNow
+//                    .map { it.name }
+//                    .intersect(listOf(watchSelection))
+//                    .isEmpty()
+//            ) {
+//                Log.v(logTag, "watch selection out of scope!")
+//                result = false
+//            }
+//
+//            val rentBuySelection = retrieveRentBuyOptions()
+//
+//            if (item.buyRent
+//                    .map { it.name }
+//                    .intersect(listOf(rentBuySelection))
+//                    .isEmpty()
+//            ) {
+//                Log.v(logTag, "buy rent selection out of scope!")
+//                result = false
+//            }
 
             Log.v(logTag, "result for this item is $result")
             result
