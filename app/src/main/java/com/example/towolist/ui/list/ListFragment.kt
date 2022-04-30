@@ -2,7 +2,6 @@ package com.example.towolist.ui.list
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,7 +54,6 @@ class ListFragment : Fragment(), IMainActivityFragment {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.i("ListFragment", "onViewCreated called")
         super.onViewCreated(view, savedInstanceState)
 
         val mainActivity : MainActivity = (activity as MainActivity)
@@ -117,7 +115,6 @@ class ListFragment : Fragment(), IMainActivityFragment {
     }
 
     private fun loadItems(isPopular : Boolean, isUpdate: Boolean) {
-        Log.i("ListFragment", "loadItems called")
         val movies: MutableList<MovieItem> = mutableListOf()
         val loader = initLoader(isUpdate)
         
@@ -328,7 +325,6 @@ class ListFragment : Fragment(), IMainActivityFragment {
 
     private fun setupFragmentListenerForFilter() {
         setFragmentResultListener("filterFragment") { _, bundle ->
-            Log.i("FilterFragmentListener", "handling fragment result")
             predicate = bundle.get("predicate") as (MovieItem) -> Boolean
             val mainActivity : MainActivity = (activity as MainActivity)
             loadItems(mainActivity.isPopularSpinnerOption(), false)

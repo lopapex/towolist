@@ -1,7 +1,6 @@
 package com.example.towolist.ui.filter
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import com.google.android.material.chip.ChipGroup
 class FilterFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentFilterBinding
-    private var logTag = "FILTER"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +43,6 @@ class FilterFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(logTag, "onViewCreatedCalled")
         if (firstOpen) {
             initChipStatesInCompanionObject()
             firstOpen = false
@@ -65,10 +62,7 @@ class FilterFragment : BottomSheetDialogFragment() {
         }
 
         binding.filterConfirmButton.setOnClickListener {
-            Log.d(logTag, "saved state")
             saveState()
-            Log.d(logTag, "setting fragment result with thresholds:")
-            logCurrentThreshHoldsDebug()
             setFragmentResult("filterFragment", bundleOf(Pair("predicate", predicate())))
         }
 
@@ -146,26 +140,19 @@ class FilterFragment : BottomSheetDialogFragment() {
 
     private fun predicate(): (MovieItem) -> Boolean {
         return {item: MovieItem ->
-            Log.v(logTag, "filtering item $item")
-            Log.v(logTag, "thresholds are:")
-            logCurrentThreshHoldsVerbose()
-
             var result = true
 
             if (item.voteAverage < voteFrom || voteTo < item.voteAverage) {
                 result = false
-                Log.v(logTag, "vote average out of scope!")
             }
 
             if (!allChecked) {
                 if (moviesChecked && !item.isMovie) {
                     result = false
-                    Log.v(logTag, "not a movie!")
                 }
 
                 if (seriesChecked && item.isMovie) {
                     result = false
-                    Log.v(logTag, "not a series!")
                 }
             }
 
@@ -177,7 +164,6 @@ class FilterFragment : BottomSheetDialogFragment() {
             var itemServicesNames = listOf("Netflix", "HBO Max", "Amazon Prime Video")
 
             if (!hasAnyCommonOptions(itemServicesNames, selectedServicesNames)) {
-                Log.v(logTag, "watch selection out of scope!")
                 result = false
             }
 
@@ -189,11 +175,9 @@ class FilterFragment : BottomSheetDialogFragment() {
             itemServicesNames = listOf("Apple iTunes", "Google Play Movies")
 
             if (!hasAnyCommonOptions(itemServicesNames, rentBuySelection)) {
-                Log.v(logTag, "buy rent selection out of scope!")
                 result = false
             }
 
-            Log.v(logTag, "result for this item is $result")
             result
         }
     }
@@ -234,37 +218,5 @@ class FilterFragment : BottomSheetDialogFragment() {
         for (i in 0 until binding.chipBuyrentGroup.childCount) {
             buyRentCheckStates.add(true)
         }
-    }
-
-    private fun logCurrentThreshHoldsDebug() {
-        Log.d(logTag, "chipMovies: ${binding.chipMovies.isChecked}")
-        Log.d(logTag, "chipSeries: ${binding.chipSeries.isChecked}")
-        Log.d(logTag, "chipAll: ${binding.chipAll.isChecked}")
-
-        Log.d(logTag, "chipWatchNetflix: ${binding.chipWatchNetflix.isChecked}")
-        Log.d(logTag, "chipWatchHbo: ${binding.chipWatchHbo.isChecked}")
-        Log.d(logTag, "chipWatchAmazon: ${binding.chipWatchAmazon.isChecked}")
-
-        Log.d(logTag, "chipBuyrentApple: ${binding.chipBuyrentApple.isChecked}")
-        Log.d(logTag, "chipBuyrentGoogle: ${binding.chipBuyrentGoogle.isChecked}")
-
-        Log.d(logTag, "voteFrom: ${binding.voteAverageSlider.values[0]}")
-        Log.d(logTag, "voteTo: ${binding.voteAverageSlider.values[1]}")
-    }
-
-    private fun logCurrentThreshHoldsVerbose() {
-        Log.v(logTag, "chipMovies: ${binding.chipMovies.isChecked}")
-        Log.v(logTag, "chipSeries: ${binding.chipSeries.isChecked}")
-        Log.v(logTag, "chipAll: ${binding.chipAll.isChecked}")
-
-        Log.v(logTag, "chipWatchNetflix: ${binding.chipWatchNetflix.isChecked}")
-        Log.v(logTag, "chipWatchHbo: ${binding.chipWatchHbo.isChecked}")
-        Log.v(logTag, "chipWatchAmazon: ${binding.chipWatchAmazon.isChecked}")
-
-        Log.v(logTag, "chipBuyrentApple: ${binding.chipBuyrentApple.isChecked}")
-        Log.v(logTag, "chipBuyrentGoogle: ${binding.chipBuyrentGoogle.isChecked}")
-
-        Log.v(logTag, "voteFrom: ${binding.voteAverageSlider.values[0]}")
-        Log.v(logTag, "voteTo: ${binding.voteAverageSlider.values[1]}")
     }
 }
