@@ -34,11 +34,10 @@ class FilterFragment : BottomSheetDialogFragment() {
         var seriesChecked = false
         var allChecked = true
 
-        var netflixChecked = true
-        var hboChecked = true
-        var amazonChecked = true
-        var appleChecked = true
-        var googleChecked = true
+        var firstOpen = true
+
+        var watchCheckStates = mutableListOf<Boolean>()
+        var buyRentCheckStates = mutableListOf<Boolean>()
 
         var voteFrom = 0F
         var voteTo = 10F
@@ -47,6 +46,10 @@ class FilterFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(logTag, "onViewCreatedCalled")
+        if (firstOpen) {
+            initChipStatesInCompanionObject()
+            firstOpen = false
+        }
 
         restoreState()
 
@@ -77,11 +80,15 @@ class FilterFragment : BottomSheetDialogFragment() {
         binding.chipSeries.isChecked = seriesChecked
         binding.chipAll.isChecked = allChecked
 
-        binding.chipWatchNetflix.isChecked = netflixChecked
-        binding.chipWatchHbo.isChecked = hboChecked
-        binding.chipWatchAmazon.isChecked = amazonChecked
-        binding.chipBuyrentApple.isChecked = appleChecked
-        binding.chipBuyrentGoogle.isChecked = googleChecked
+        for (i in 0 until binding.chipWatchGroup.childCount) {
+            val chip = binding.chipWatchGroup.getChildAt(i) as Chip
+            chip.isChecked = watchCheckStates[i]
+        }
+
+        for (i in 0 until binding.chipBuyrentGroup.childCount) {
+            val chip = binding.chipBuyrentGroup.getChildAt(i) as Chip
+            chip.isChecked = buyRentCheckStates[i]
+        }
 
         binding.voteAverageSlider.setValues(voteFrom, voteTo)
     }
@@ -91,11 +98,15 @@ class FilterFragment : BottomSheetDialogFragment() {
         seriesChecked = binding.chipSeries.isChecked
         allChecked = binding.chipAll.isChecked
 
-        netflixChecked = binding.chipWatchNetflix.isChecked
-        hboChecked = binding.chipWatchHbo.isChecked
-        amazonChecked = binding.chipWatchAmazon.isChecked
-        appleChecked = binding.chipBuyrentApple.isChecked
-        googleChecked = binding.chipBuyrentGoogle.isChecked
+        for (i in 0 until binding.chipWatchGroup.childCount) {
+            val chip = binding.chipWatchGroup.getChildAt(i) as Chip
+            watchCheckStates[i] = chip.isChecked
+        }
+
+        for (i in 0 until binding.chipBuyrentGroup.childCount) {
+            val chip = binding.chipBuyrentGroup.getChildAt(i) as Chip
+            buyRentCheckStates[i] = chip.isChecked
+        }
 
         voteFrom = binding.voteAverageSlider.values[0]
         voteTo = binding.voteAverageSlider.values[1]
@@ -120,19 +131,14 @@ class FilterFragment : BottomSheetDialogFragment() {
         binding.chipTypeGroup.clearCheck()
         binding.chipAll.isChecked = true
 
-        listOf(
-            binding.chipWatchAmazon,
-            binding.chipWatchHbo,
-            binding.chipWatchNetflix,
-        ).forEach {
-            it.isChecked = true
+        for (i in 0 until binding.chipWatchGroup.childCount) {
+            val chip = binding.chipWatchGroup.getChildAt(i) as Chip
+            chip.isChecked = true
         }
 
-        listOf(
-            binding.chipBuyrentApple,
-            binding.chipBuyrentGoogle
-        ).forEach {
-            it.isChecked = true
+        for (i in 0 until binding.chipBuyrentGroup.childCount) {
+            val chip = binding.chipBuyrentGroup.getChildAt(i) as Chip
+            chip.isChecked = true
         }
 
         binding.voteAverageSlider.setValues(0F, 10F)
@@ -218,6 +224,16 @@ class FilterFragment : BottomSheetDialogFragment() {
         }
 
         return false
+    }
+
+    private fun initChipStatesInCompanionObject() {
+        for (i in 0 until binding.chipWatchGroup.childCount) {
+            watchCheckStates.add(true)
+        }
+
+        for (i in 0 until binding.chipBuyrentGroup.childCount) {
+            buyRentCheckStates.add(true)
+        }
     }
 
     private fun logCurrentThreshHoldsDebug() {
