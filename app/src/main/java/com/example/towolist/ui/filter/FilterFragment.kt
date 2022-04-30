@@ -12,7 +12,7 @@ import com.example.towolist.databinding.FragmentFilterBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import kotlin.math.log
+
 
 class FilterFragment : BottomSheetDialogFragment() {
 
@@ -163,59 +163,61 @@ class FilterFragment : BottomSheetDialogFragment() {
                 }
             }
 
-            // TODO uncomment this when there will be present info about services in MovieItem
-//            val watchSelection = retrieveWatchOptions()
-//
-//            if (item.watchNow
-//                    .map { it.name }
-//                    .intersect(listOf(watchSelection))
-//                    .isEmpty()
-//            ) {
-//                Log.v(logTag, "watch selection out of scope!")
-//                result = false
-//            }
-//
-//            val rentBuySelection = retrieveRentBuyOptions()
-//
-//            if (item.buyRent
-//                    .map { it.name }
-//                    .intersect(listOf(rentBuySelection))
-//                    .isEmpty()
-//            ) {
-//                Log.v(logTag, "buy rent selection out of scope!")
-//                result = false
-//            }
+            val selectedServicesNames = retrieveChipGroupOptions(binding.chipWatchGroup)
+            /* replace this for
+             * TODO item.watchNow.map { it.name }
+             * when there will be present service items in watchNow attribute of MovieItem
+             */
+            var itemServicesNames = listOf("Netflix", "HBO Max", "Amazon Prime Video")
+
+            if (!hasAnyCommonOptions(itemServicesNames, selectedServicesNames)) {
+                Log.v(logTag, "watch selection out of scope!")
+                result = false
+            }
+
+            val rentBuySelection = retrieveChipGroupOptions(binding.chipBuyrentGroup)
+            /* replace this for
+             * TODO item.buyRent.map { it.name }
+             * when there will be present service items in buyRent attribute of MovieItem
+             */
+            itemServicesNames = listOf("Apple iTunes", "Google Play Movies")
+
+            if (!hasAnyCommonOptions(itemServicesNames, rentBuySelection)) {
+                Log.v(logTag, "buy rent selection out of scope!")
+                result = false
+            }
 
             Log.v(logTag, "result for this item is $result")
             result
         }
     }
 
-    private fun retrieveWatchOptions(): MutableList<String> {
-        val watchSelection = mutableListOf<String>()
+    private fun retrieveChipGroupOptions(chipGroup: ChipGroup): MutableList<String> {
+        val selection = mutableListOf<String>()
 
-        if (netflixChecked)
-            watchSelection.add("Netflix")
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as Chip
+            if (chip.isChecked) {
+                selection.add(chip.text.toString())
+            }
+        }
 
-        if (amazonChecked)
-            watchSelection.add("Amazon Prime Video")
-
-        if (hboChecked)
-            watchSelection.add("HBO Max")
-
-        return watchSelection
+        return selection
     }
 
-    private fun retrieveRentBuyOptions(): MutableList<String> {
-        val watchSelection = mutableListOf<String>()
+    private fun hasAnyCommonOptions(
+        itemServicesNames : List<String>,
+        selectedServicesNames : List<String>
+    ): Boolean {
+        for (serviceNameFromApi in itemServicesNames) {
+            // Since service names in filter are not equals with those returned from Movie DB API, we use contains method
+            if (selectedServicesNames.map { it.lowercase() }.any {
+                    serviceNameFromApi.lowercase().contains(it)
+            })
+                return true
+        }
 
-        if (appleChecked)
-            watchSelection.add("Apple iTunes")
-
-        if (googleChecked)
-            watchSelection.add("Google Play Movies")
-
-        return watchSelection
+        return false
     }
 
     private fun logCurrentThreshHoldsDebug() {
