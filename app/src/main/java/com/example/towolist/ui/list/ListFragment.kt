@@ -324,9 +324,9 @@ class ListFragment : Fragment(), IMainActivityFragment {
     private fun setupFragmentListenerForFilter() {
         setFragmentResultListener("filterFragment") { _, bundle ->
             adapter.updateFilterFunction(bundle.get("predicate") as (MovieItem) -> Boolean)
-            val mainActivity : MainActivity = (activity as MainActivity)
-            val movies = if (mainActivity.isPopularSpinnerOption()) popular else topRated
-            adapter.submitList(movies)
+            adapter.filterList()
+            binding.noItemsFoundView.visibility = if (adapter.getMovies().isEmpty()) View.VISIBLE else View.GONE
+            binding.recyclerView.scrollToPosition(0)
         }
     }
 }

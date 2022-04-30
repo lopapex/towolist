@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.towolist.databinding.GridItemMovieBinding
 import com.example.towolist.data.MovieItem
-import com.example.towolist.databinding.FragmentToWatchBinding
 import com.example.towolist.databinding.ListItemMovieBinding
 
 class MovieAdapter(
@@ -13,6 +12,7 @@ class MovieAdapter(
     private val isListLayout: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private var moviesAll: MutableList<MovieItem> = mutableListOf()
     private var movies: MutableList<MovieItem> = mutableListOf()
     private var predicate: (MovieItem) -> Boolean = {
         true
@@ -40,13 +40,18 @@ class MovieAdapter(
     }
 
     fun submitList(newMovieItems: List<MovieItem>) {
-        movies = newMovieItems.filter(predicate).toMutableList()
+        moviesAll = newMovieItems.toMutableList()
+        filterList()
+    }
+
+    fun filterList() {
+        movies = moviesAll.filter(predicate).toMutableList()
         notifyDataSetChanged()
     }
 
     fun appendToList(movieItems: List<MovieItem>) {
-        movies.addAll(movieItems.filter(predicate).toMutableList())
-        notifyDataSetChanged()
+        moviesAll.addAll(movieItems.toMutableList())
+        filterList()
     }
 
     fun sortByPopularity() {
