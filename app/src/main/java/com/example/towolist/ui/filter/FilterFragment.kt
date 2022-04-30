@@ -2,10 +2,12 @@ package com.example.towolist.ui.filter
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.get
 import androidx.fragment.app.setFragmentResult
 import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentFilterBinding
@@ -68,6 +70,8 @@ class FilterFragment : BottomSheetDialogFragment() {
             dismiss()
         }
 
+        binding.chipWatchGroup.isSelectionRequired = true
+        binding.chipBuyrentGroup.isSelectionRequired = true
         binding.voteAverageSlider.isTickVisible = false
     }
 
@@ -120,6 +124,8 @@ class FilterFragment : BottomSheetDialogFragment() {
     private fun chipGroupListener(clicked: ChipGroup) {
         clicked.setOnClickListener {
             clicked.clearCheck()
+            val lastOne = clicked.getChildAt(clicked.childCount - 1) as Chip
+            lastOne.isChecked = true
         }
     }
 
