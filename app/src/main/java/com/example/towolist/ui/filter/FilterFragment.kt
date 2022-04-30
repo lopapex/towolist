@@ -1,5 +1,6 @@
 package com.example.towolist.ui.filter
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -64,6 +65,7 @@ class FilterFragment : BottomSheetDialogFragment() {
         binding.filterConfirmButton.setOnClickListener {
             saveState()
             setFragmentResult("filterFragment", bundleOf(Pair("predicate", predicate())))
+            dismiss()
         }
 
         binding.voteAverageSlider.isTickVisible = false
