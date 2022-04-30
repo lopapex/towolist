@@ -324,7 +324,9 @@ class ListFragment : Fragment(), IMainActivityFragment {
     private fun setupFragmentListenerForFilter() {
         setFragmentResultListener("filterFragment") { _, bundle ->
             adapter.updateFilterFunction(bundle.get("predicate") as (MovieItem) -> Boolean)
-            adapter.submitList(adapter.getMovies())
+            val mainActivity : MainActivity = (activity as MainActivity)
+            val movies = if (mainActivity.isPopularSpinnerOption()) popular else topRated
+            adapter.submitList(movies)
         }
     }
 }
