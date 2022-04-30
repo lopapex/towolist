@@ -14,6 +14,10 @@ class MovieAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var movies: MutableList<MovieItem> = mutableListOf()
+    private var predicate: (MovieItem) -> Boolean = {
+        true
+    }
+
 
     override fun getItemCount(): Int = movies.size
 
@@ -36,12 +40,12 @@ class MovieAdapter(
     }
 
     fun submitList(newMovieItems: List<MovieItem>) {
-        movies = newMovieItems.toMutableList()
+        movies = newMovieItems.filter(predicate).toMutableList()
         notifyDataSetChanged()
     }
 
     fun appendToList(movieItems: List<MovieItem>) {
-        movies.addAll(movieItems.toMutableList())
+        movies.addAll(movieItems.filter(predicate).toMutableList())
         notifyDataSetChanged()
     }
 
@@ -62,5 +66,9 @@ class MovieAdapter(
     fun removeItem(position: Int) {
         movies.removeAt(position)
         notifyItemRemoved(position)
+    }
+
+    fun updateFilterFunction(newPredicate: (MovieItem) -> Boolean) {
+        predicate = newPredicate
     }
 }
