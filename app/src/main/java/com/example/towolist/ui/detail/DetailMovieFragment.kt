@@ -1,7 +1,6 @@
 package com.example.towolist.ui.detail
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,24 +10,18 @@ import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageButton
 import android.widget.ListView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.towolist.R
 import com.example.towolist.data.MovieItem
-import com.example.towolist.data.ServiceInfo
 import com.example.towolist.data.ServiceItem
+import com.example.towolist.data.services
 import com.example.towolist.databinding.FragmentDetailMovieBinding
 import com.example.towolist.repository.MovieRepository
-import com.example.towolist.ui.IMainActivityFragment
 import com.example.towolist.ui.list.ListFragment
-import com.example.towolist.ui.list.ListFragmentDirections
-import com.example.towolist.ui.list.MovieAdapter
 import com.example.towolist.ui.to_watch.ToWatchFragment
 import com.example.towolist.ui.watched.WatchedFragment
 import com.example.towolist.utils.getFormattedDateString
@@ -42,14 +35,6 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
     }
 
     private lateinit var binding: FragmentDetailMovieBinding
-    private var services : Map<String, ServiceInfo> = mapOf(
-        "Netflix" to ServiceInfo.Netflix,
-        "HBO Max" to ServiceInfo.HBO,
-        "Apple iTunes" to ServiceInfo.Apple,
-        "Google Play Movies" to ServiceInfo.Google,
-        "Amazon Prime Video" to ServiceInfo.Amazon,
-
-    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentDetailMovieBinding.inflate(layoutInflater, container, false)
@@ -164,7 +149,7 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
     }
 
     private fun onClickOpen(items: List<ServiceItem>, list: ListView) {
-        list.onItemClickListener = OnItemClickListener { parent, v, position, id ->
+        list.onItemClickListener = OnItemClickListener { _, v, position, _ ->
             val service = services[items[position].name]
             if (service != null) {
                 try {
