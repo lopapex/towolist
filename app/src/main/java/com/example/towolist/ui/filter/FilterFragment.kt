@@ -2,6 +2,7 @@ package com.example.towolist.ui.filter
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -179,22 +180,22 @@ class FilterFragment : BottomSheetDialogFragment() {
             }
 
             val selectedServicesNames = retrieveChipGroupOptions(binding.chipWatchGroup)
-            /* replace this for
-             * TODO item.watchNow.map { it.name }
-             * when there will be present service items in watchNow attribute of MovieItem
-             */
-            var itemServicesNames = services.filter { (_, value) -> value.isWatchNow }.keys.toList()
+
+            var itemServicesNames = item.watchNow.map { it.name }.toMutableList()
+            if (itemServicesNames.isEmpty()) {
+                itemServicesNames.add("None")
+            }
 
             if (!hasAnyCommonOptions(itemServicesNames, selectedServicesNames)) {
                 result = false
             }
 
             val rentBuySelection = retrieveChipGroupOptions(binding.chipBuyrentGroup)
-            /* replace this for
-             * TODO item.buyRent.map { it.name }
-             * when there will be present service items in buyRent attribute of MovieItem
-             */
-            itemServicesNames = services.filter { (_, value) -> !value.isWatchNow }.keys.toList()
+
+            itemServicesNames = item.buyRent.map { it.name }.toMutableList()
+            if (itemServicesNames.isEmpty()) {
+                itemServicesNames.add("None")
+            }
 
             if (!hasAnyCommonOptions(itemServicesNames, rentBuySelection)) {
                 result = false
