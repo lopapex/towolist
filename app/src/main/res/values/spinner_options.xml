@@ -4,4 +4,9 @@
         <item>Popular</item>
         <item>Top Rated</item>
     </string-array>
+
+    <string-array name="date_option">
+        <item>Newest</item>
+        <item>Oldest</item>
+    </string-array>
 </resources>

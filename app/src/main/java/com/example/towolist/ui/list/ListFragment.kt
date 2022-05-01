@@ -48,6 +48,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
         super.onViewCreated(view, savedInstanceState)
 
         val mainActivity : MainActivity = (activity as MainActivity)
+        mainActivity.setSpinnerOptions(R.array.spinner_options)
 
         updateLayout(mainActivity.isListLayout())
 
@@ -59,8 +60,8 @@ class ListFragment : Fragment(), IMainActivityFragment {
                         pageSearch++
                         search(searchText, true)
                     } else {
-                        if (mainActivity.isPopularSpinnerOption()) pagePopular++ else pageTopRated++
-                        loadItems(mainActivity.isPopularSpinnerOption(), true)
+                        if (mainActivity.isFirstSpinnerOption()) pagePopular++ else pageTopRated++
+                        loadItems(mainActivity.isFirstSpinnerOption(), true)
                     }
                 }
             }
@@ -71,7 +72,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
         if (text != null) {
             search(text, false)
         } else {
-            loadItems(mainActivity.isPopularSpinnerOption(), false)
+            loadItems(mainActivity.isFirstSpinnerOption(), false)
         }
 
         setupFragmentListenerForFilter()
@@ -80,9 +81,9 @@ class ListFragment : Fragment(), IMainActivityFragment {
     override fun updateSpinner() {
         val mainActivity : MainActivity = (activity as MainActivity)
         if (mainActivity.getSearchBar().isSearchOpened) {
-            if (mainActivity.isPopularSpinnerOption()) adapter.sortByPopularity() else adapter.sortByVoteAverage()
+            if (mainActivity.isFirstSpinnerOption()) adapter.sortByPopularity() else adapter.sortByVoteAverage()
         } else {
-            loadIfEmpty(mainActivity.isPopularSpinnerOption())
+            loadIfEmpty(mainActivity.isFirstSpinnerOption())
         }
         binding.recyclerView.scrollToPosition(0)
     }
@@ -184,7 +185,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
 
     override fun searchClose() {
         val mainActivity : MainActivity = (activity as MainActivity)
-        loadIfEmpty(mainActivity.isPopularSpinnerOption())
+        loadIfEmpty(mainActivity.isFirstSpinnerOption())
         searchText = ""
         binding.recyclerView.scrollToPosition(0)
         binding.noItemsFoundView.visibility = View.GONE
@@ -225,7 +226,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                         }
 
                         movies.addAll(showItems.toMutableList())
-                        movies.sortByDescending { movie -> if (mainActivity.isPopularSpinnerOption()) movie.popularity else movie.voteAverage }
+                        movies.sortByDescending { movie -> if (mainActivity.isFirstSpinnerOption()) movie.popularity else movie.voteAverage }
                         adapter.appendToList(movies)
                         loader.visibility = View.GONE
                         if (adapter.getMovies().isEmpty()) {
