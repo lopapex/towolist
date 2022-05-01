@@ -17,7 +17,6 @@ import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.ui.IMainActivityFragment
-import com.example.towolist.utils.toast
 
 class ListFragment : Fragment(), IMainActivityFragment {
 
@@ -47,6 +46,11 @@ class ListFragment : Fragment(), IMainActivityFragment {
 
         val mainActivity : MainActivity = (activity as MainActivity)
         mainActivity.setSpinnerOptions(R.array.online_options)
+        mainActivity.initFilterBottomFragment {
+            findNavController()
+                .navigate(ListFragmentDirections
+                    .actionListFragmentToFilterFragment(com.example.towolist.data.ParentFragment.List))
+        }
 
         updateLayout(mainActivity.isListLayout())
 

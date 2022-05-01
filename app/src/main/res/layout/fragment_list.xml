@@ -50,7 +50,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/empty_text"
+                android:id="@+id/no_items_found_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
@@ -59,14 +59,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
             <TextView
-                android:id="@+id/empty_icon"
+                android:id="@+id/no_items_found_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="30sp"
                 android:text="@string/no_items_found_icon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/empty_text" />
+                app:layout_constraintTop_toBottomOf="@+id/no_items_found_text" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

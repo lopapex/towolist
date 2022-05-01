@@ -12,8 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.ActivityMainBinding
 import com.example.towolist.ui.IMainActivityFragment
+import com.example.towolist.ui.filter.FilterFragment
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mancj.materialsearchbar.MaterialSearchBar
 
 class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListener {
@@ -30,8 +33,7 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigation.setupWithNavController(navController)
-
-        initFilterBottomFragment(navController)
+        
         initializeBottomNavigationListener(navController)
 
         binding.gridButton.isEnabled = false
@@ -68,9 +70,9 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         }
     }
 
-    private fun initFilterBottomFragment(navController: NavController) {
+    fun initFilterBottomFragment(onClick: () -> Unit) {
         binding.filterButton.setOnClickListener {
-            navController.navigate(R.id.filterFragment)
+            onClick()
         }
     }
 
@@ -164,5 +166,9 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
 
     fun getSearchBar(): MaterialSearchBar {
         return binding.searchBar
+    }
+
+    fun getFilterButton(): Button {
+        return binding.filterButton
     }
 }

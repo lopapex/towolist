@@ -10,9 +10,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.example.towolist.R
 import com.example.towolist.data.MovieItem
+import com.example.towolist.data.ParentFragment
 import com.example.towolist.data.services
 import com.example.towolist.databinding.FragmentFilterBinding
+import com.example.towolist.ui.detail.DetailMovieFragmentArgs
 import com.example.towolist.utils.addChip
+import com.example.towolist.utils.toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -36,6 +39,7 @@ class FilterFragment : BottomSheetDialogFragment() {
         var moviesChecked = false
         var seriesChecked = false
         var allChecked = true
+        var parent = ParentFragment.List
 
         var firstOpen = true
 
@@ -50,12 +54,18 @@ class FilterFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initChipGroups(view.context)
-
         if (firstOpen) {
             initChipStatesInCompanionObject()
             firstOpen = false
         }
-        restoreState()
+
+        if (parent != FilterFragmentArgs.fromBundle(requireArguments()).parent) {
+            setDefaultState()
+        } else {
+            restoreState()
+        }
+        parent = FilterFragmentArgs.fromBundle(requireArguments()).parent
+
 
         chipListener(binding.chipAll, listOf(binding.chipMovies, binding.chipSeries))
         chipListener(binding.chipMovies, listOf(binding.chipAll, binding.chipSeries))
@@ -241,5 +251,9 @@ class FilterFragment : BottomSheetDialogFragment() {
         for (i in 0 until binding.chipBuyrentGroup.childCount) {
             buyRentCheckStates.add(true)
         }
+    }
+
+    fun text() {
+        context?.toast("text")
     }
 }

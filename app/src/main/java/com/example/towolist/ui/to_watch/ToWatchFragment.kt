@@ -42,9 +42,15 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
 
         val mainActivity : MainActivity = (activity as MainActivity)
         mainActivity.setSpinnerOptions(R.array.local_options)
+        mainActivity.initFilterBottomFragment {
+            findNavController()
+                .navigate(ToWatchFragmentDirections
+                    .actionToWatchFragmentToFilterFragment(com.example.towolist.data.ParentFragment.ToWatch))
+        }
 
         updateLayout(mainActivity.isListLayout())
         updateSpinner()
+        setupFragmentListenerForFilter()
     }
 
     override fun updateSpinner() {
@@ -80,6 +86,15 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
 
         binding.recyclerView.apply {
             layoutManager = if (isList) LinearLayoutManager(context) else GridLayoutManager(context, 3)
+        }
+    }
+
+    private fun setupFragmentListenerForFilter() {
+        setFragmentResultListener("filterFragment") { _, bundle ->
+            adapter.updateFilterFunction(bundle.get("predicate") as (MovieItem) -> Boolean)
+            adapter.filterList()
+            binding.noItemsFoundView.visibility = if (adapter.getMovies().isEmpty()) View.VISIBLE else View.GONE
+            binding.recyclerView.scrollToPosition(0)
         }
     }
 }
