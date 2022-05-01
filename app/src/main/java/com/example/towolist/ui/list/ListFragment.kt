@@ -48,7 +48,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
         super.onViewCreated(view, savedInstanceState)
 
         val mainActivity : MainActivity = (activity as MainActivity)
-        mainActivity.setSpinnerOptions(R.array.spinner_options)
+        mainActivity.setSpinnerOptions(R.array.online_options)
 
         updateLayout(mainActivity.isListLayout())
 

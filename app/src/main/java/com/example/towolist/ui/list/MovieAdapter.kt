@@ -64,6 +64,16 @@ class MovieAdapter(
         notifyDataSetChanged()
     }
 
+    fun sortByOldest() {
+        movies.sortBy { movie -> movie.savedAt }
+        notifyDataSetChanged()
+    }
+
+    fun sortByYoungest() {
+        movies.sortByDescending { movie -> movie.savedAt }
+        notifyDataSetChanged()
+    }
+
     fun getMovies(): List<MovieItem> {
         return movies
     }

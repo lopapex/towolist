@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
 
     private fun setupSpinner() {
         val spinner = binding.spinner
-        setSpinnerOptions(R.array.spinner_options)
+        setSpinnerOptions(R.array.online_options)
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -150,7 +150,7 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
     }
 
     fun isFirstSpinnerOption(): Boolean {
-        return binding.spinner.selectedItem.toString() == resources.getStringArray(R.array.spinner_options)[0]
+        return binding.spinner.selectedItem.toString() == binding.spinner.getItemAtPosition(0)
     }
 
     fun resetSpinnerOption() {

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="spinner_options">
+    <string-array name="online_options">
         <item>Popular</item>
         <item>Top Rated</item>
     </string-array>
 
-    <string-array name="date_option">
+    <string-array name="local_options">
         <item>Newest</item>
         <item>Oldest</item>
     </string-array>

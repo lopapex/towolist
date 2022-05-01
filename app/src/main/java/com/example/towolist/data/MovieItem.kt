@@ -15,5 +15,6 @@ data class MovieItem(
     var watchNow: List<ServiceItem>,
     var buyRent: List<ServiceItem>,
     var isToWatch: Boolean,
-    var isWatched: Boolean
+    var isWatched: Boolean,
+    var savedAt: Long
 ): Parcelable

@@ -41,14 +41,15 @@ class WatchedFragment : Fragment(), IMainActivityFragment {
         }
 
         val mainActivity : MainActivity = (activity as MainActivity)
-        mainActivity.setSpinnerOptions(R.array.date_option)
+        mainActivity.setSpinnerOptions(R.array.local_options)
+
         updateLayout(mainActivity.isListLayout())
         updateSpinner()
     }
 
     override fun updateSpinner() {
         val mainActivity : MainActivity = (activity as MainActivity)
-        if (mainActivity.isFirstSpinnerOption()) adapter.sortByPopularity() else adapter.sortByVoteAverage()
+        if (mainActivity.isFirstSpinnerOption()) adapter.sortByYoungest() else adapter.sortByOldest()
     }
 
     override fun search(text: CharSequence?, isUpdate: Boolean) {
