@@ -167,8 +167,4 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
     fun getSearchBar(): MaterialSearchBar {
         return binding.searchBar
     }
-
-    fun getFilterButton(): Button {
-        return binding.filterButton
-    }
 }
