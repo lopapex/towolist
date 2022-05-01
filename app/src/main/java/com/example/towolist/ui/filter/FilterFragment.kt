@@ -188,7 +188,7 @@ class FilterFragment : BottomSheetDialogFragment() {
              * TODO item.watchNow.map { it.name }
              * when there will be present service items in watchNow attribute of MovieItem
              */
-            var itemServicesNames = listOf("Netflix", "HBO Max", "Amazon Prime Video")
+            var itemServicesNames = services.filter { (_, value) -> value.isWatchNow }.keys.toList()
 
             if (!hasAnyCommonOptions(itemServicesNames, selectedServicesNames)) {
                 result = false
@@ -199,7 +199,7 @@ class FilterFragment : BottomSheetDialogFragment() {
              * TODO item.buyRent.map { it.name }
              * when there will be present service items in buyRent attribute of MovieItem
              */
-            itemServicesNames = listOf("Apple iTunes", "Google Play Movies")
+            itemServicesNames = services.filter { (_, value) -> !value.isWatchNow }.keys.toList()
 
             if (!hasAnyCommonOptions(itemServicesNames, rentBuySelection)) {
                 result = false
