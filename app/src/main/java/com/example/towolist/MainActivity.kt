@@ -42,8 +42,6 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         binding.searchBar.setOnSearchActionListener(this)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
-
     }
 
     private fun setupSpinner() {

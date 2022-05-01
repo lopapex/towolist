@@ -1,11 +1,14 @@
 package com.example.towolist.repository
 
 import android.content.Context
+import android.view.View
+import android.widget.ProgressBar
 import com.example.towolist.R
 import com.example.towolist.data.MovieItem
 import com.example.towolist.database.ToWoDatabase
 import com.example.towolist.database.dao.ToWatchMovieDao
 import com.example.towolist.database.dao.WatchedMovieDao
+import com.example.towolist.utils.toast
 import com.example.towolist.webservice.RetrofitUtil
 import com.example.towolist.webservice.ToWoListApi
 import com.example.towolist.webservice.response.*
@@ -14,7 +17,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MovieRepository(
-    context: Context,
+    private val context: Context,
     private val database: ToWoDatabase = ToWoDatabase.create(context),
     private val toWatchMovieDao: ToWatchMovieDao = database.toWatchMovieDao(),
     private val watchedMovieDao: WatchedMovieDao = database.watchedMovieDao(),
@@ -187,11 +190,22 @@ class MovieRepository(
             })
     }
 
-    fun getToWatchMovies(): List<MovieItem> =
-        toWatchMovieDao.getAll()
+    fun getToWatchMovies(): List<MovieItem> {
+        val toWatchMovies = toWatchMovieDao.getAll()
             .map { entity ->
                 entity.toMovieItem()
             }
+
+        toWatchMovies.forEach {
+            if (it.isMovie) {
+                getWatchProvidersMovies(it, null)
+            } else {
+                getWatchProvidersShows(it, null)
+            }
+        }
+
+        return toWatchMovies
+    }
 
     fun updateToWatchMovies(item: MovieItem) {
         if (item.isToWatch) {
@@ -201,11 +215,22 @@ class MovieRepository(
         }
     }
 
-    fun getWatchedMovies(): List<MovieItem> =
-        watchedMovieDao.getAll()
+    fun getWatchedMovies(): List<MovieItem> {
+        val watchedMovies = watchedMovieDao.getAll()
             .map { entity ->
                 entity.toMovieItem()
             }
+
+        watchedMovies.forEach {
+            if (it.isMovie) {
+                getWatchProvidersMovies(it, null)
+            } else {
+                getWatchProvidersShows(it, null)
+            }
+        }
+
+        return watchedMovies
+    }
 
     fun updateWatchedMovies(item: MovieItem) {
         if (item.isWatched) {
@@ -223,5 +248,48 @@ class MovieRepository(
     fun getWatchedByMovieId(id: Long): Boolean {
         val movie = watchedMovieDao.getById(id)
         return movie != null
+    }
+
+    fun getWatchProvidersMovies(it: MovieItem, loader: ProgressBar?) {
+        getWatchProvidersByMovieId(
+            it.id,
+            onSuccess = { providerByState ->
+                setProviders(providerByState, it)
+            },
+            onFailure = {
+                requestFailed(loader)
+            })
+    }
+
+    fun getWatchProvidersShows(it: MovieItem, loader: ProgressBar?) {
+        getWatchProvidersByTvId(
+            it.id,
+            onSuccess = { providerByState ->
+                setProviders(providerByState, it)
+            },
+            onFailure = {
+                requestFailed(loader)
+            })
+    }
+
+    private fun setProviders(
+        providerByState: WatchProviderByStateResponse?,
+        it: MovieItem,
+    ) {
+        if (providerByState != null) {
+            if (providerByState.flatrate != null)
+                it.watchNow = providerByState.flatrate
+                    .map { provider -> provider.toServiceItem() }
+                    .toMutableList()
+            if (providerByState.buy != null)
+                it.buyRent = providerByState.buy
+                    .map { provider -> provider.toServiceItem() }
+                    .toMutableList()
+        }
+    }
+
+    fun requestFailed(loader: ProgressBar?) {
+        context.toast(context.getString(R.string.general_error))
+        loader?.visibility = View.GONE
     }
 }

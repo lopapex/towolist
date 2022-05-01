@@ -16,11 +16,8 @@ import com.example.towolist.R
 import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
-import com.example.towolist.repository.toServiceItem
 import com.example.towolist.ui.IMainActivityFragment
 import com.example.towolist.utils.toast
-import com.example.towolist.webservice.response.WatchProviderByStateResponse
-
 
 class ListFragment : Fragment(), IMainActivityFragment {
 
@@ -115,7 +112,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                 page,
                 onSuccess = { movieItems ->
                     movieItems.forEach {
-                        getWatchProvidersMovies(it, loader)
+                        movieRepository.getWatchProvidersMovies(it, loader)
                         setFlags(it)
                     }
                     movies.addAll(movieItems.toMutableList())
@@ -124,7 +121,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                         page,
                         onSuccess = { showItems ->
                             showItems.forEach {
-                                getWatchProvidersShows(it, loader)
+                                movieRepository.getWatchProvidersShows(it, loader)
                                 setFlags(it)
                             }
                             movies.addAll(showItems.toMutableList())
@@ -134,12 +131,12 @@ class ListFragment : Fragment(), IMainActivityFragment {
                             loader.visibility = View.GONE
                         },
                         onFailure = {
-                            requestFailed(loader)
+                            movieRepository.requestFailed(loader)
                         }
                     )
                 },
                 onFailure = {
-                    requestFailed(loader)
+                    movieRepository.requestFailed(loader)
                 }
             )
         } else {
@@ -147,7 +144,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                 page,
                 onSuccess = { movieItems ->
                     movieItems.forEach {
-                        getWatchProvidersMovies(it, loader)
+                        movieRepository.getWatchProvidersMovies(it, loader)
                         setFlags(it)
                     }
 
@@ -156,7 +153,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                         page,
                         onSuccess = { showItems ->
                             showItems.forEach {
-                                getWatchProvidersShows(it, loader)
+                                movieRepository.getWatchProvidersShows(it, loader)
                                 setFlags(it)
                             }
 
@@ -171,12 +168,12 @@ class ListFragment : Fragment(), IMainActivityFragment {
                             }
                         },
                         onFailure = {
-                            requestFailed(loader)
+                            movieRepository.requestFailed(loader)
                         }
                     )
                 },
                 onFailure = {
-                    requestFailed(loader)
+                    movieRepository.requestFailed(loader)
                 }
             )
         }
@@ -209,7 +206,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
             query = searchText,
             onSuccess = { movieItems ->
                 movieItems.forEach {
-                    getWatchProvidersMovies(it, loader)
+                    movieRepository.getWatchProvidersMovies(it, loader)
                     setFlags(it)
                 }
 
@@ -220,7 +217,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                     query = searchText,
                     onSuccess = { showItems ->
                         showItems.forEach {
-                            getWatchProvidersShows(it, loader)
+                            movieRepository.getWatchProvidersShows(it, loader)
                             setFlags(it)
                         }
 
@@ -233,52 +230,14 @@ class ListFragment : Fragment(), IMainActivityFragment {
                         }
                     },
                     onFailure = {
-                        requestFailed(loader)
+                        movieRepository.requestFailed(loader)
                     }
                 )
             },
             onFailure = {
-                requestFailed(loader)
+                movieRepository.requestFailed(loader)
             }
         )
-    }
-
-    private fun getWatchProvidersMovies(it: MovieItem, loader: ProgressBar) {
-        movieRepository.getWatchProvidersByMovieId(
-            it.id,
-            onSuccess = { providerByState ->
-                setProviders(providerByState, it)
-            },
-            onFailure = {
-                requestFailed(loader)
-            })
-    }
-
-    private fun getWatchProvidersShows(it: MovieItem, loader: ProgressBar) {
-        movieRepository.getWatchProvidersByTvId(
-            it.id,
-            onSuccess = { providerByState ->
-                setProviders(providerByState, it)
-            },
-            onFailure = {
-                requestFailed(loader)
-            })
-    }
-
-    private fun setProviders(
-        providerByState: WatchProviderByStateResponse?,
-        it: MovieItem,
-    ) {
-        if (providerByState != null) {
-            if (providerByState.flatrate != null)
-                it.watchNow = providerByState.flatrate
-                    .map { provider -> provider.toServiceItem() }
-                    .toMutableList()
-            if (providerByState.buy != null)
-                it.buyRent = providerByState.buy
-                    .map { provider -> provider.toServiceItem() }
-                    .toMutableList()
-        }
     }
 
     private fun setFlags(it: MovieItem) {
@@ -293,11 +252,6 @@ class ListFragment : Fragment(), IMainActivityFragment {
         val loader = if (isUpdate) binding.progressUpdate else binding.progressLoad
         loader.visibility = View.VISIBLE
         return loader
-    }
-
-    private fun requestFailed(loader: ProgressBar) {
-        context?.toast(requireContext().getString(R.string.general_error))
-        loader.visibility = View.GONE
     }
 
     private fun loadIfEmpty(isPopular: Boolean) {
