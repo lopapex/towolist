@@ -48,6 +48,11 @@ class MovieListViewHolder(private val binding: ListItemMovieBinding, private val
             onItemClick(movieItem)
         }
 
-        binding.voteTextView.text = movieItem.voteAverage.toString()
+        if (movieItem.voteAverage > 0.0) {
+            binding.indicator.visibility = View.VISIBLE
+            binding.voteTextView.text = movieItem.voteAverage.toString()
+        } else {
+            binding.indicator.visibility = View.GONE
+        }
     }
 }

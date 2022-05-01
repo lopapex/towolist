@@ -22,6 +22,12 @@ class MovieGridViewHolder(private val binding: GridItemMovieBinding, private val
         binding.cardContainer.setOnClickListener {
             onItemClick(movieItem)
         }
-        binding.voteTextView.text = movieItem.voteAverage.toString()
+
+        if (movieItem.voteAverage > 0.0) {
+            binding.indicator.visibility = View.VISIBLE
+            binding.voteTextView.text = movieItem.voteAverage.toString()
+        } else {
+            binding.indicator.visibility = View.GONE
+        }
     }
 }
