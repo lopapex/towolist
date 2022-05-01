@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
-    private var spinnerDefault = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,17 +57,13 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
                 position: Int,
                 id: Long
             ) {
-                if (!spinnerDefault) {
-                    val navHostFragment =
-                        supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-                    val fragments =
-                        navHostFragment.childFragmentManager.fragments as List<IMainActivityFragment>
-                    fragments.forEach { fragment ->
-                        fragment.updateSpinner()
-                    }
+                val navHostFragment =
+                    supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                val fragments =
+                    navHostFragment.childFragmentManager.fragments as List<IMainActivityFragment>
+                fragments.forEach { fragment ->
+                    fragment.updateSpinner()
                 }
-
-                spinnerDefault = false
             }
         }
     }

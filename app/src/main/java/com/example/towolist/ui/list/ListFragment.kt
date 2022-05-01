@@ -34,6 +34,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
     private var popular: MutableList<MovieItem> = mutableListOf()
     private var topRated: MutableList<MovieItem> = mutableListOf()
     private var searchText: String = ""
+    private var searchNotFound: Boolean = false
     private var outsideCall: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -52,7 +53,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (!recyclerView.canScrollVertically(1) && adapter.getMovies().isNotEmpty()) {
+                if (!recyclerView.canScrollVertically(1) && !searchNotFound) {
                     if (mainActivity.getSearchBar().isSearchOpened) {
                         pageSearch++
                         search(searchText, true)
@@ -64,12 +65,12 @@ class ListFragment : Fragment(), IMainActivityFragment {
             }
         })
 
+        adapter.submitList(mutableListOf())
+
         val text = ListFragmentArgs.fromBundle(requireArguments()).text
         outsideCall = text != null
-        if (text != null) {
+        if (outsideCall) {
             search(text, false)
-        } else {
-            loadItems(mainActivity.isFirstSpinnerOption(), false)
         }
 
         setupFragmentListenerForFilter()
@@ -80,7 +81,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
         if (mainActivity.getSearchBar().isSearchOpened) {
             if (mainActivity.isFirstSpinnerOption()) adapter.sortByPopularity() else adapter.sortByVoteAverage()
         } else {
-            loadIfEmpty(mainActivity.isFirstSpinnerOption())
+            loadItems(mainActivity.isFirstSpinnerOption(), false)
         }
         binding.recyclerView.scrollToPosition(0)
     }
@@ -104,6 +105,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
     }
 
     private fun loadItems(isPopular : Boolean, isUpdate: Boolean) {
+        if (outsideCall) return
         val movies: MutableList<MovieItem> = mutableListOf()
         val loader = initLoader(isUpdate)
         val page = if (isPopular) pagePopular else pageTopRated
@@ -130,6 +132,11 @@ class ListFragment : Fragment(), IMainActivityFragment {
                             popular.addAll(movies)
                             adapter.submitList(popular)
                             loader.visibility = View.GONE
+
+                            if (movies.isEmpty() || adapter.getMovies().size < 10) {
+                                pagePopular++
+                                loadItems(isPopular, true)
+                            }
                         },
                         onFailure = {
                             movieRepository.requestFailed(loader)
@@ -162,10 +169,11 @@ class ListFragment : Fragment(), IMainActivityFragment {
                             movies.sortByDescending { movie -> movie.voteAverage }
                             topRated.addAll(movies)
                             adapter.submitList(topRated)
-                            if (isUpdate) {
-                                binding.progressUpdate.visibility = View.GONE
-                            } else {
-                                binding.progressLoad.visibility = View.GONE
+
+                            loader.visibility = View.GONE
+                            if (movies.isEmpty() || adapter.getMovies().size < 10) {
+                                pageTopRated++
+                                loadItems(isPopular, true)
                             }
                         },
                         onFailure = {
@@ -225,6 +233,8 @@ class ListFragment : Fragment(), IMainActivityFragment {
                         movies.addAll(showItems.toMutableList())
                         movies.sortByDescending { movie -> if (mainActivity.isFirstSpinnerOption()) movie.popularity else movie.voteAverage }
                         adapter.appendToList(movies)
+
+                        searchNotFound = movies.isEmpty()
                         loader.visibility = View.GONE
                         if (adapter.getMovies().isEmpty()) {
                             binding.noItemsFoundView.visibility = View.VISIBLE
@@ -250,7 +260,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
         if (!isUpdate) {
             adapter.submitList(mutableListOf())
         }
-        val loader = if (isUpdate) binding.progressUpdate else binding.progressLoad
+        val loader = if (!isUpdate || adapter.getMovies().isEmpty()) binding.progressLoad else binding.progressUpdate
         loader.visibility = View.VISIBLE
         return loader
     }
@@ -275,7 +285,6 @@ class ListFragment : Fragment(), IMainActivityFragment {
         setFragmentResultListener("filterFragment") { _, bundle ->
             adapter.updateFilterFunction(bundle.get("predicate") as (MovieItem) -> Boolean)
             adapter.filterList()
-            binding.noItemsFoundView.visibility = if (adapter.getMovies().isEmpty()) View.VISIBLE else View.GONE
             binding.recyclerView.scrollToPosition(0)
         }
     }
