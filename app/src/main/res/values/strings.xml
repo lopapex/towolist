@@ -45,6 +45,7 @@
     <string name="apple">Apple</string>
     <string name="google">Google</string>
     <string name="amazon">Amazon</string>
+    <string name="none">None</string>
 
 
 </resources>

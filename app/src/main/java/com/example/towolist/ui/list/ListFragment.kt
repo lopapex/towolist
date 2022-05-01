@@ -20,7 +20,6 @@ import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.repository.toServiceItem
 import com.example.towolist.ui.IMainActivityFragment
-import com.example.towolist.ui.detail.DetailMovieFragmentArgs
 import com.example.towolist.webservice.response.WatchProviderByStateResponse
 
 
@@ -79,6 +78,8 @@ class ListFragment : Fragment(), IMainActivityFragment {
         } else {
             loadItems(mainActivity.isPopularSpinnerOption(), false)
         }
+
+        setupFragmentListenerForFilter()
     }
 
     override fun updateSpinner() {
@@ -112,10 +113,11 @@ class ListFragment : Fragment(), IMainActivityFragment {
     private fun loadItems(isPopular : Boolean, isUpdate: Boolean) {
         val movies: MutableList<MovieItem> = mutableListOf()
         val loader = initLoader(isUpdate)
-        
+        val page = if (isPopular) pagePopular else pageTopRated
+
         if (isPopular) {
             movieRepository.getPopularMovies(
-                pagePopular,
+                page,
                 onSuccess = { movieItems ->
                     movieItems.forEach {
                         getWatchProvidersMovies(it, loader)
@@ -124,7 +126,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                     movies.addAll(movieItems.toMutableList())
 
                     movieRepository.getPopularTvShows(
-                        pagePopular,
+                        page,
                         onSuccess = { showItems ->
                             showItems.forEach {
                                 getWatchProvidersShows(it, loader)
@@ -147,7 +149,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
             )
         } else {
             movieRepository.getTopRatedMovies(
-                pageTopRated,
+                page,
                 onSuccess = { movieItems ->
                     movieItems.forEach {
                         getWatchProvidersMovies(it, loader)
@@ -156,7 +158,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
 
                     movies.addAll(movieItems.toMutableList())
                     movieRepository.getTopRatedTvShows(
-                        pageTopRated,
+                        page,
                         onSuccess = { showItems ->
                             showItems.forEach {
                                 getWatchProvidersShows(it, loader)
@@ -205,9 +207,10 @@ class ListFragment : Fragment(), IMainActivityFragment {
         if (!isUpdate) {
             pageSearch = 1
         }
+        val page = pageSearch
 
         movieRepository.searchMovies(
-            pageSearch,
+            page,
             query = searchText,
             onSuccess = { movieItems ->
                 movieItems.forEach {
@@ -218,7 +221,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                 movies = movieItems.toMutableList()
 
                 movieRepository.searchTvShows(
-                    pageSearch,
+                    page,
                     query = searchText,
                     onSuccess = { showItems ->
                         showItems.forEach {
@@ -315,6 +318,15 @@ class ListFragment : Fragment(), IMainActivityFragment {
             } else {
                 adapter.submitList(topRated)
             }
+        }
+    }
+
+    private fun setupFragmentListenerForFilter() {
+        setFragmentResultListener("filterFragment") { _, bundle ->
+            adapter.updateFilterFunction(bundle.get("predicate") as (MovieItem) -> Boolean)
+            adapter.filterList()
+            binding.noItemsFoundView.visibility = if (adapter.getMovies().isEmpty()) View.VISIBLE else View.GONE
+            binding.recyclerView.scrollToPosition(0)
         }
     }
 }
