@@ -1,21 +1,15 @@
 package com.example.towolist.ui.to_watch
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.os.bundleOf
-import androidx.fragment.app.ListFragment
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.towolist.MainActivity
-import com.example.towolist.R
 import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentToWatchBinding
 import com.example.towolist.repository.MovieRepository

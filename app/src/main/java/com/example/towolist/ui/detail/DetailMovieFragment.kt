@@ -27,7 +27,6 @@ import com.example.towolist.ui.watched.WatchedFragment
 import com.example.towolist.utils.getFormattedDateString
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-
 class DetailMovieFragment() : BottomSheetDialogFragment() {
 
     private val movieRepository: MovieRepository by lazy {

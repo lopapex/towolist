@@ -5,16 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.example.towolist.R
 import com.example.towolist.data.MovieItem
 import com.example.towolist.data.services
 import com.example.towolist.databinding.FragmentFilterBinding
+import com.example.towolist.utils.addChip
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 
 
@@ -241,18 +240,5 @@ class FilterFragment : BottomSheetDialogFragment() {
         for (i in 0 until binding.chipBuyrentGroup.childCount) {
             buyRentCheckStates.add(true)
         }
-    }
-}
-
-fun ChipGroup.addChip(context: Context, label: String){
-    Chip(context).apply {
-        id = View.generateViewId()
-        text = label
-        isChecked = true
-        isClickable = true
-        isCheckable = true
-        isCheckedIconVisible = false
-        isFocusable = true
-        addView(this)
     }
 }

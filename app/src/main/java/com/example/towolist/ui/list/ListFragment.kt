@@ -1,12 +1,10 @@
 package com.example.towolist.ui.list
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
@@ -20,14 +18,11 @@ import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.repository.toServiceItem
 import com.example.towolist.ui.IMainActivityFragment
+import com.example.towolist.utils.toast
 import com.example.towolist.webservice.response.WatchProviderByStateResponse
 
 
 class ListFragment : Fragment(), IMainActivityFragment {
-
-    private fun Context.toast(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-    }
 
     private val movieRepository: MovieRepository by lazy {
         MovieRepository(requireContext())

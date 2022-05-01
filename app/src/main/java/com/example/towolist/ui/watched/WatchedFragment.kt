@@ -15,7 +15,6 @@ import com.example.towolist.databinding.FragmentWatchedBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.ui.IMainActivityFragment
 import com.example.towolist.ui.list.MovieAdapter
-import com.example.towolist.ui.to_watch.ToWatchFragmentDirections
 
 class WatchedFragment : Fragment(), IMainActivityFragment {
 
