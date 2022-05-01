@@ -57,21 +57,11 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
         updateImageButtonColor(binding.toWatchIcon, movieRepository.getToWatchByMovieId(item.id), view)
         updateImageButtonColor(binding.watchedIcon, movieRepository.getWatchedByMovieId(item.id), view)
         val fragment = parentFragmentManager.findFragmentById(R.id.nav_host_fragment)
-        setButtonsBasedOnFragment(fragment)
 
         item = toWatchOnClick(item, fragment, view)
         item = watchedOnClick(item, fragment, view)
 
         updateBasedOnServices(item)
-    }
-
-    private fun setButtonsBasedOnFragment(fragment: Fragment?) {
-        if (fragment is ToWatchFragment) {
-            binding.watchedIcon.visibility = View.GONE
-        }
-        if (fragment is WatchedFragment) {
-            binding.toWatchIcon.visibility = View.GONE
-        }
     }
 
     private fun updateImageButtonColor(btn: ImageButton, isActive: Boolean, view: View) {
@@ -118,6 +108,14 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
         binding.watchedIcon.setOnClickListener {
             setFragmentResult("updateWatched", bundleOf(Pair("item", itemCopy)))
             itemCopy = itemCopy.copy(isWatched = !itemCopy.isWatched)
+            if (itemCopy.isWatched && itemCopy.isToWatch) {
+                setFragmentResult("updateToWatch", bundleOf(Pair("item", itemCopy)))
+                itemCopy = itemCopy.copy(isToWatch = false)
+
+                movieRepository.updateToWatchMovies(itemCopy)
+                updateImageButtonColor(binding.toWatchIcon, itemCopy.isToWatch, view)
+                dismiss()
+            }
 
             if (!itemCopy.isWatched && fragment !is ListFragment) {
                 dismiss()
@@ -137,6 +135,14 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
         binding.toWatchIcon.setOnClickListener {
             setFragmentResult("updateToWatch", bundleOf(Pair("item", itemCopy)))
             itemCopy = itemCopy.copy(isToWatch = !itemCopy.isToWatch)
+            if (itemCopy.isWatched && itemCopy.isToWatch) {
+                setFragmentResult("updateWatched", bundleOf(Pair("item", itemCopy)))
+                itemCopy = itemCopy.copy(isWatched = false)
+
+                movieRepository.updateWatchedMovies(itemCopy)
+                updateImageButtonColor(binding.watchedIcon, itemCopy.isWatched, view)
+                dismiss()
+            }
 
             if (!itemCopy.isToWatch && fragment !is ListFragment) {
                 dismiss()

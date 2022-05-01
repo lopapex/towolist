@@ -16,6 +16,7 @@ import com.example.towolist.databinding.FragmentToWatchBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.ui.IMainActivityFragment
 import com.example.towolist.ui.list.MovieAdapter
+import com.example.towolist.utils.toast
 
 class ToWatchFragment : Fragment(), IMainActivityFragment {
 
@@ -76,9 +77,9 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
 
         setFragmentResultListener("updateToWatch") { _, bundle ->
             val item = bundle.get("item") as MovieItem
-            val index = adapter.getMovies().indexOf(item)
+            val index = (adapter.getMovies().indices).firstOrNull { i: Int -> item.id == adapter.getMovies()[i].id }
 
-            if (item.isToWatch && index >= 0) {
+            if (item.isToWatch && index != null) {
                 adapter.removeItem(index)
             }
             binding.emptyView.visibility = if (adapter.getMovies().isEmpty()) View.VISIBLE else View.GONE
