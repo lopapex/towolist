@@ -22,10 +22,6 @@ class FilterFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentFilterBinding
 
-    private fun Context.toast(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
