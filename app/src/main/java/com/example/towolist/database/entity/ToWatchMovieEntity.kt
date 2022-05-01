@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 class ToWatchMovieEntity(
     @PrimaryKey
     val id: Long,
+    val savedAt: Long,
     val imageSource: String,
     val name: String,
     val isMovie: Boolean,

@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.towolist.MainActivity
+import com.example.towolist.R
 import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentToWatchBinding
 import com.example.towolist.repository.MovieRepository
@@ -40,13 +41,15 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
         }
 
         val mainActivity : MainActivity = (activity as MainActivity)
+        mainActivity.setSpinnerOptions(R.array.local_options)
+
         updateLayout(mainActivity.isListLayout())
         updateSpinner()
     }
 
     override fun updateSpinner() {
         val mainActivity : MainActivity = (activity as MainActivity)
-        if (mainActivity.isPopularSpinnerOption()) adapter.sortByPopularity() else adapter.sortByVoteAverage()
+        if (mainActivity.isFirstSpinnerOption()) adapter.sortByYoungest() else adapter.sortByOldest()
     }
 
     override fun search(text: CharSequence?, isUpdate: Boolean) {

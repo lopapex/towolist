@@ -13,6 +13,7 @@ private val rootApiImg = "https://image.tmdb.org/t/p/original"
 fun MovieListItem.toMovieItem(): MovieItem =
     MovieItem(
         id = this.id.toLong(),
+        savedAt = 0,
         imageSource = "${rootApiImg}${this.posterPath.toString()}",
         name = this.title,
         isMovie = true,
@@ -28,6 +29,7 @@ fun MovieListItem.toMovieItem(): MovieItem =
 fun TvShowListItem.toMovieItem(): MovieItem =
     MovieItem(
         id = this.id.toLong(),
+        savedAt = 0,
         imageSource = "${rootApiImg}${this.posterPath.toString()}",
         name = this.name,
         isMovie = false,
@@ -51,6 +53,7 @@ fun MovieItem.toToWatchMovieEntity(): ToWatchMovieEntity? =
     this.releaseDate?.let {
         ToWatchMovieEntity(
         id = this.id,
+        savedAt = System.currentTimeMillis(),
         imageSource = this.imageSource,
         name = this.name,
         isMovie = this.isMovie,
@@ -64,6 +67,7 @@ fun MovieItem.toWatchedMovieEntity(): WatchedMovieEntity? =
     this.releaseDate?.let {
         WatchedMovieEntity(
         id = this.id,
+        savedAt = System.currentTimeMillis(),
         imageSource = this.imageSource,
         name = this.name,
         isMovie = this.isMovie,
@@ -76,6 +80,7 @@ fun MovieItem.toWatchedMovieEntity(): WatchedMovieEntity? =
 fun ToWatchMovieEntity.toMovieItem(): MovieItem =
     MovieItem(
         id = this.id,
+        savedAt = this.savedAt,
         imageSource = this.imageSource,
         name = this.name,
         isMovie = this.isMovie,
@@ -91,6 +96,7 @@ fun ToWatchMovieEntity.toMovieItem(): MovieItem =
 fun WatchedMovieEntity.toMovieItem(): MovieItem =
     MovieItem(
         id = this.id,
+        savedAt = this.savedAt,
         imageSource = this.imageSource,
         name = this.name,
         isMovie = this.isMovie,

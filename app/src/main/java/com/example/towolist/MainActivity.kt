@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.annotation.ArrayRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -46,15 +47,7 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
 
     private fun setupSpinner() {
         val spinner = binding.spinner
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.spinner_options,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            // This layout value is standard
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = adapter
-        }
+        setSpinnerOptions(R.array.online_options)
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -154,12 +147,24 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
         return binding.gridButton.isEnabled
     }
 
-    fun isPopularSpinnerOption(): Boolean {
-        return binding.spinner.selectedItem.toString() == resources.getStringArray(R.array.spinner_options)[0]
+    fun isFirstSpinnerOption(): Boolean {
+        return binding.spinner.selectedItem.toString() == binding.spinner.getItemAtPosition(0)
     }
 
     fun resetSpinnerOption() {
         binding.spinner.setSelection(0)
+    }
+
+    fun setSpinnerOptions(@ArrayRes options: Int) {
+        ArrayAdapter.createFromResource(
+            this,
+            options,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // This layout value is standard
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spinner.adapter = adapter
+        }
     }
 
     fun getSearchBar(): MaterialSearchBar {
