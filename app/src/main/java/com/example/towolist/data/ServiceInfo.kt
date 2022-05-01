@@ -1,5 +1,6 @@
 package com.example.towolist.data
 
+// Don't forget to add package name to AndroidManifest.xml after new item is added
 enum class ServiceInfo (val packageName: String, val url: String, val isWatchNow: Boolean, val faceName: String){
     Netflix("com.netflix.mediaclient", "http://www.netflix.com/watch", true, "Netflix"),
     HBO("com.hbo.hbonow", "https://play.hbomax.com", true, "HBO"),
