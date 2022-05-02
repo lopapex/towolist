@@ -2,8 +2,7 @@ package com.example.towolist.repository
 
 import com.example.towolist.data.MovieItem
 import com.example.towolist.data.ServiceItem
-import com.example.towolist.database.entity.ToWatchMovieEntity
-import com.example.towolist.database.entity.WatchedMovieEntity
+import com.example.towolist.database.entity.*
 import com.example.towolist.webservice.response.MovieListItem
 import com.example.towolist.webservice.response.TvShowListItem
 import com.example.towolist.webservice.response.WatchProviderInfoResponse
@@ -49,10 +48,38 @@ fun WatchProviderInfoResponse.toServiceItem(): ServiceItem =
         name = this.providerName
     )
 
+fun WatchNowEntity.toServiceItem(): ServiceItem =
+    ServiceItem(
+        id = this.serviceId,
+        iconSource = this.iconSource,
+        name = this.name
+    )
+
+fun BuyRentEntity.toServiceItem(): ServiceItem =
+    ServiceItem(
+        id = this.serviceId,
+        iconSource = this.iconSource,
+        name = this.name
+    )
+
+fun ServiceItem.toWatchNowEntity(): WatchNowEntity =
+    WatchNowEntity(
+        serviceId = this.id,
+        iconSource = this.iconSource,
+        name = this.name
+    )
+
+fun ServiceItem.toBuyRentEntity(): BuyRentEntity =
+    BuyRentEntity(
+        serviceId = this.id,
+        iconSource = this.iconSource,
+        name = this.name
+    )
+
 fun MovieItem.toToWatchMovieEntity(): ToWatchMovieEntity? =
     this.releaseDate?.let {
         ToWatchMovieEntity(
-        id = this.id,
+        movieId = this.id,
         savedAt = System.currentTimeMillis(),
         imageSource = this.imageSource,
         name = this.name,
@@ -77,18 +104,18 @@ fun MovieItem.toWatchedMovieEntity(): WatchedMovieEntity? =
     )
     }
 
-fun ToWatchMovieEntity.toMovieItem(): MovieItem =
+fun ToWatchMovieWithServices.toMovieItem(): MovieItem =
     MovieItem(
-        id = this.id,
-        savedAt = this.savedAt,
-        imageSource = this.imageSource,
-        name = this.name,
-        isMovie = this.isMovie,
-        releaseDate = this.releaseDate,
-        popularity = this.popularity,
-        voteAverage = this.voteAverage,
-        watchNow = mutableListOf(),
-        buyRent = mutableListOf(),
+        id = this.movie.movieId,
+        savedAt = this.movie.savedAt,
+        imageSource = this.movie.imageSource,
+        name = this.movie.name,
+        isMovie = this.movie.isMovie,
+        releaseDate = this.movie.releaseDate,
+        popularity = this.movie.popularity,
+        voteAverage = this.movie.voteAverage,
+        watchNow = this.watchNow.map { it.toServiceItem() },
+        buyRent = this.buyRent.map { it.toServiceItem() },
         isToWatch = true,
         isWatched = false
     )

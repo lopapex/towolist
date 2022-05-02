@@ -4,9 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-class ToWatchMovieEntity(
+data class ToWatchMovieEntity(
     @PrimaryKey
-    val id: Long,
+    val movieId: Long,
     val savedAt: Long,
     val imageSource: String,
     val name: String,

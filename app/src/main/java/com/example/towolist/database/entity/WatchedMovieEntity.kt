@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-class WatchedMovieEntity(
+data class WatchedMovieEntity(
     @PrimaryKey
     val id: Long,
     val savedAt: Long,

@@ -2,6 +2,7 @@ package com.example.towolist.database.dao
 
 import androidx.room.*
 import com.example.towolist.database.entity.ToWatchMovieEntity
+import com.example.towolist.database.entity.ToWatchMovieWithServices
 
 @Dao
 interface ToWatchMovieDao {
@@ -9,12 +10,12 @@ interface ToWatchMovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveEntity(entity: ToWatchMovieEntity)
 
-    @Query("DELETE FROM ToWatchMovieEntity WHERE id = :id")
+    @Query("DELETE FROM ToWatchMovieEntity WHERE movieId = :id")
     fun deleteById(id: Long)
 
-    @Query("SELECT * FROM ToWatchMovieEntity WHERE id = :id")
-    fun getById(id: Long) : ToWatchMovieEntity
+    @Query("SELECT * FROM ToWatchMovieEntity WHERE movieId = :id")
+    fun getById(id: Long) : ToWatchMovieWithServices
 
     @Query("SELECT * FROM ToWatchMovieEntity")
-    fun getAll(): List<ToWatchMovieEntity>
+    fun getAll(): List<ToWatchMovieWithServices>
 }
