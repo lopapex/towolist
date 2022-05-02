@@ -2,7 +2,7 @@ package com.example.towolist.database.dao
 
 import androidx.room.*
 import com.example.towolist.database.entity.ToWatchMovieEntity
-import com.example.towolist.database.entity.ToWatchMovieWithServices
+import com.example.towolist.database.entity.relation.ToWatchMovieWithServices
 
 @Dao
 interface ToWatchMovieDao {

@@ -1,8 +1,9 @@
-package com.example.towolist.database.entity
+package com.example.towolist.database.entity.relation
 
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
+import com.example.towolist.database.entity.*
 
 data class ToWatchMovieWithServices(
     @Embedded

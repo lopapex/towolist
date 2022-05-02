@@ -9,6 +9,8 @@ import com.example.towolist.database.ToWoDatabase
 import com.example.towolist.database.dao.*
 import com.example.towolist.database.entity.ToWatchMovieBuyRentCrossRefEntity
 import com.example.towolist.database.entity.ToWatchMovieWatchNowCrossRefEntity
+import com.example.towolist.database.entity.WatchedMovieBuyRentCrossRefEntity
+import com.example.towolist.database.entity.WatchedMovieWatchNowCrossRefEntity
 import com.example.towolist.utils.toast
 import com.example.towolist.webservice.RetrofitUtil
 import com.example.towolist.webservice.ToWoListApi
@@ -26,6 +28,8 @@ class MovieRepository(
     private val buyRentDao: BuyRentDao = database.buyRentDao(),
     private val toWatchMovieWatchNowCrossRefDao: ToWatchMovieWatchNowCrossRefDao = database.toWatchMovieWatchNowCrossRefDao(),
     private val toWatchMovieBuyRentCrossRefDao: ToWatchMovieBuyRentCrossRefDao = database.toWatchMovieBuyRentCrossRefDao(),
+    private val watchedMovieWatchNowCrossRefDao: WatchedMovieWatchNowCrossRefDao = database.watchedMovieWatchNowCrossRefDao(),
+    private val watchedMovieBuyRentCrossRefDao: WatchedMovieBuyRentCrossRefDao = database.watchedMovieBuyRentCrossRentDao(),
     private val toWoListApi: ToWoListApi = RetrofitUtil.createAqiWebService()
 ) {
     private val apiKey = "7d983af93fb311150ed909fbc0873210"
@@ -204,7 +208,7 @@ class MovieRepository(
     fun updateToWatchMovies(item: MovieItem) {
         if (item.isToWatch) {
             toWatchMovieDao.saveEntity(item.toToWatchMovieEntity()!!)
-            saveProviders(item)
+            toWatchSaveProviders(item)
         } else {
             toWatchMovieDao.deleteById(item.id)
             toWatchMovieWatchNowCrossRefDao.deleteByMovieId(item.id)
@@ -212,28 +216,20 @@ class MovieRepository(
         }
     }
 
-    fun getWatchedMovies(): List<MovieItem> {
-        val watchedMovies = watchedMovieDao.getAll()
+    fun getWatchedMovies(): List<MovieItem> =
+        watchedMovieDao.getAll()
             .map { entity ->
                 entity.toMovieItem()
             }
 
-        watchedMovies.forEach {
-            if (it.isMovie) {
-                getWatchProvidersMovies(it, null)
-            } else {
-                getWatchProvidersShows(it, null)
-            }
-        }
-
-        return watchedMovies
-    }
-
     fun updateWatchedMovies(item: MovieItem) {
         if (item.isWatched) {
             watchedMovieDao.saveEntity(item.toWatchedMovieEntity()!!)
+            watchedSaveProviders(item)
         } else {
             watchedMovieDao.deleteById(item.id)
+            watchedMovieWatchNowCrossRefDao.deleteByMovieId(item.id)
+            watchedMovieBuyRentCrossRefDao.deleteByMovieId(item.id)
         }
     }
 
@@ -247,29 +243,7 @@ class MovieRepository(
         return movie != null
     }
 
-    fun getWatchProvidersMovies(it: MovieItem, loader: ProgressBar?) {
-        getWatchProvidersByMovieId(
-            it.id,
-            onSuccess = { providerByState ->
-                setProviders(providerByState, it)
-            },
-            onFailure = {
-                requestFailed(loader)
-            })
-    }
-
-    fun getWatchProvidersShows(it: MovieItem, loader: ProgressBar?) {
-        getWatchProvidersByTvId(
-            it.id,
-            onSuccess = { providerByState ->
-                setProviders(providerByState, it)
-            },
-            onFailure = {
-                requestFailed(loader)
-            })
-    }
-
-    private fun saveProviders(item: MovieItem) {
+    private fun toWatchSaveProviders(item: MovieItem) {
         item.watchNow.forEach {
             val watchNowEntity = watchNowDao.getById(it.id)
 
@@ -289,24 +263,23 @@ class MovieRepository(
         }
     }
 
-    private fun setProviders(
-        providerByState: WatchProviderByStateResponse?,
-        it: MovieItem,
-    ) {
-        if (providerByState != null) {
-            if (providerByState.flatrate != null)
-                it.watchNow = providerByState.flatrate
-                    .map { provider -> provider.toServiceItem() }
-                    .toMutableList()
-            if (providerByState.buy != null)
-                it.buyRent = providerByState.buy
-                    .map { provider -> provider.toServiceItem() }
-                    .toMutableList()
-        }
-    }
+    private fun watchedSaveProviders(item: MovieItem) {
+        item.watchNow.forEach {
+            val watchNowEntity = watchNowDao.getById(it.id)
 
-    fun requestFailed(loader: ProgressBar?) {
-        context.toast(context.getString(R.string.general_error))
-        loader?.visibility = View.GONE
+            if (watchNowEntity == null) {
+                watchNowDao.saveEntity(it.toWatchNowEntity())
+            }
+            watchedMovieWatchNowCrossRefDao.saveEntity(WatchedMovieWatchNowCrossRefEntity(item.id, it.id))
+        }
+
+        item.buyRent.forEach {
+            val buyRentEntity = buyRentDao.getById(it.id)
+
+            if (buyRentEntity == null) {
+                buyRentDao.saveEntity(it.toBuyRentEntity())
+            }
+            watchedMovieBuyRentCrossRefDao.saveEntity(WatchedMovieBuyRentCrossRefEntity(item.id, it.id))
+        }
     }
 }

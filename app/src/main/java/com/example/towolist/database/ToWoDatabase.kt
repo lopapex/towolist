@@ -13,8 +13,10 @@ import com.example.towolist.database.entity.*
                 WatchNowEntity::class,
                 BuyRentEntity::class,
                 ToWatchMovieWatchNowCrossRefEntity::class,
-                ToWatchMovieBuyRentCrossRefEntity::class],
-    version = 1
+                ToWatchMovieBuyRentCrossRefEntity::class,
+                WatchedMovieWatchNowCrossRefEntity::class,
+                WatchedMovieBuyRentCrossRefEntity::class],
+    version = 2
 )
 abstract class ToWoDatabase : RoomDatabase() {
 
@@ -31,7 +33,9 @@ abstract class ToWoDatabase : RoomDatabase() {
     abstract fun toWatchMovieDao(): ToWatchMovieDao
     abstract fun watchedMovieDao(): WatchedMovieDao
     abstract fun watchNowDao(): WatchNowDao
-    abstract fun buyRentDao() : BuyRentDao
+    abstract fun buyRentDao(): BuyRentDao
     abstract fun toWatchMovieWatchNowCrossRefDao(): ToWatchMovieWatchNowCrossRefDao
-    abstract fun toWatchMovieBuyRentCrossRefDao() : ToWatchMovieBuyRentCrossRefDao
+    abstract fun toWatchMovieBuyRentCrossRefDao(): ToWatchMovieBuyRentCrossRefDao
+    abstract fun watchedMovieWatchNowCrossRefDao(): WatchedMovieWatchNowCrossRefDao
+    abstract fun watchedMovieBuyRentCrossRentDao(): WatchedMovieBuyRentCrossRefDao
 }

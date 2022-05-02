@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class WatchedMovieEntity(
     @PrimaryKey
-    val id: Long,
+    val movieId: Long,
     val savedAt: Long,
     val imageSource: String,
     val name: String,
