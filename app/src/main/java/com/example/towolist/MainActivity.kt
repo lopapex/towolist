@@ -78,7 +78,9 @@ class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListen
 
     private fun initializeBottomNavigationListener(navController: NavController) {
         binding.bottomNavigation.setOnItemSelectedListener {
-            binding.searchBar.closeSearch()
+            if (binding.searchBar.isSearchOpened) {
+                binding.searchBar.closeSearch()
+            }
             navController.navigate(it.itemId)
             resetSpinnerOption()
             binding.searchBar.setPlaceHolder(it.title)
