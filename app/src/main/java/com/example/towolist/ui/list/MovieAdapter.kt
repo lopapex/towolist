@@ -74,6 +74,11 @@ class MovieAdapter(
         notifyDataSetChanged()
     }
 
+    fun updateMovie(position: Int, newItem: MovieItem) {
+        movies[position] = newItem
+        notifyItemChanged(position)
+    }
+
     fun getMovies(): List<MovieItem> {
         return movies
     }
