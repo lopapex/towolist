@@ -25,14 +25,18 @@ class ListFragment : Fragment(), IMainActivityFragment {
         MovieRepository(requireContext())
     }
 
+    companion object {
+        var popular: MutableList<MovieItem> = mutableListOf()
+        var topRated: MutableList<MovieItem> = mutableListOf()
+    }
+
     private lateinit var binding: FragmentListBinding
     private lateinit var adapter: MovieAdapter
 
     private var pagePopular: Int = 1
     private var pageTopRated: Int = 1
     private var pageSearch: Int = 1
-    private var popular: MutableList<MovieItem> = mutableListOf()
-    private var topRated: MutableList<MovieItem> = mutableListOf()
+
     private var searchText: String = ""
     private var searchNotFound: Boolean = false
     private var outsideCall: Boolean = false
@@ -85,7 +89,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
         if (mainActivity.getSearchBar().isSearchOpened) {
             if (mainActivity.isFirstSpinnerOption()) adapter.sortByPopularity() else adapter.sortByVoteAverage()
         } else {
-            loadItems(mainActivity.isFirstSpinnerOption(), false)
+            loadIfEmpty(mainActivity.isFirstSpinnerOption())
         }
         binding.recyclerView.scrollToPosition(0)
     }
