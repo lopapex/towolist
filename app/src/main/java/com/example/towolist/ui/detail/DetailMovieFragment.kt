@@ -22,9 +22,8 @@ import com.example.towolist.data.services
 import com.example.towolist.databinding.FragmentDetailMovieBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.ui.list.ListFragment
-import com.example.towolist.ui.to_watch.ToWatchFragment
-import com.example.towolist.ui.watched.WatchedFragment
 import com.example.towolist.utils.getFormattedDateString
+import com.example.towolist.utils.toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class DetailMovieFragment() : BottomSheetDialogFragment() {
@@ -34,6 +33,7 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
     }
 
     private lateinit var binding: FragmentDetailMovieBinding
+    private lateinit var item: MovieItem
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentDetailMovieBinding.inflate(layoutInflater, container, false)
@@ -43,7 +43,7 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var item = DetailMovieFragmentArgs.fromBundle(requireArguments()).item
+        item = DetailMovieFragmentArgs.fromBundle(requireArguments()).item
 
         binding.mediaName.text = item.name
 
@@ -58,8 +58,8 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
         updateImageButtonColor(binding.watchedIcon, movieRepository.getWatchedByMovieId(item.id), view)
         val fragment = parentFragmentManager.findFragmentById(R.id.nav_host_fragment)
 
-        item = toWatchOnClick(item, fragment, view)
-        item = watchedOnClick(item, fragment, view)
+        toWatchOnClick(fragment, view)
+        watchedOnClick(fragment, view)
 
         updateBasedOnServices(item)
     }
@@ -100,57 +100,56 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
     }
 
     private fun watchedOnClick(
-        item: MovieItem,
         fragment: Fragment?,
         view: View
-    ): MovieItem {
-        var itemCopy = item
+    ) {
         binding.watchedIcon.setOnClickListener {
-            setFragmentResult("updateWatched", bundleOf(Pair("item", itemCopy)))
-            itemCopy = itemCopy.copy(isWatched = !itemCopy.isWatched)
-            if (itemCopy.isWatched && itemCopy.isToWatch) {
-                setFragmentResult("updateToWatch", bundleOf(Pair("item", itemCopy)))
-                itemCopy = itemCopy.copy(isToWatch = false)
+            setFragmentResult("updateWatched", bundleOf(Pair("item", item)))
+            item = item.copy(isWatched = !item.isWatched)
+            if (item.isWatched && item.isToWatch) {
+                setFragmentResult("updateToWatch", bundleOf(Pair("item", item)))
+                item = item.copy(isToWatch = false)
 
-                movieRepository.updateToWatchMovies(itemCopy)
-                updateImageButtonColor(binding.toWatchIcon, itemCopy.isToWatch, view)
-                dismiss()
+                movieRepository.updateToWatchMovies(item)
+                updateImageButtonColor(binding.toWatchIcon, item.isToWatch, view)
+                if (fragment !is ListFragment) {
+                    dismiss()
+                }
             }
 
-            if (!itemCopy.isWatched && fragment !is ListFragment) {
+            if (!item.isWatched && fragment !is ListFragment) {
                 dismiss()
             }
-            movieRepository.updateWatchedMovies(itemCopy)
-            updateImageButtonColor(binding.watchedIcon, itemCopy.isWatched, view)
+            movieRepository.updateWatchedMovies(item)
+            updateImageButtonColor(binding.watchedIcon, item.isWatched, view)
         }
-        return itemCopy
     }
 
     private fun toWatchOnClick(
-        item: MovieItem,
         fragment: Fragment?,
         view: View
-    ): MovieItem {
-        var itemCopy = item
+    ) {
         binding.toWatchIcon.setOnClickListener {
-            setFragmentResult("updateToWatch", bundleOf(Pair("item", itemCopy)))
-            itemCopy = itemCopy.copy(isToWatch = !itemCopy.isToWatch)
-            if (itemCopy.isWatched && itemCopy.isToWatch) {
-                setFragmentResult("updateWatched", bundleOf(Pair("item", itemCopy)))
-                itemCopy = itemCopy.copy(isWatched = false)
+            setFragmentResult("updateToWatch", bundleOf(Pair("item", item)))
+            item = item.copy(isToWatch = !item.isToWatch)
+            if (item.isWatched && item.isToWatch) {
 
-                movieRepository.updateWatchedMovies(itemCopy)
-                updateImageButtonColor(binding.watchedIcon, itemCopy.isWatched, view)
-                dismiss()
+                setFragmentResult("updateWatched", bundleOf(Pair("item", item)))
+                item = item.copy(isWatched = false)
+
+                movieRepository.updateWatchedMovies(item)
+                updateImageButtonColor(binding.watchedIcon, item.isWatched, view)
+                if (fragment !is ListFragment) {
+                    dismiss()
+                }
             }
 
-            if (!itemCopy.isToWatch && fragment !is ListFragment) {
+            if (!item.isToWatch && fragment !is ListFragment) {
                 dismiss()
             }
-            movieRepository.updateToWatchMovies(itemCopy)
-            updateImageButtonColor(binding.toWatchIcon, itemCopy.isToWatch, view)
+            movieRepository.updateToWatchMovies(item)
+            updateImageButtonColor(binding.toWatchIcon, item.isToWatch, view)
         }
-        return itemCopy
     }
 
     private fun onClickOpen(items: List<ServiceItem>, list: ListView) {
