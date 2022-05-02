@@ -74,11 +74,11 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
         binding.recyclerView.adapter = adapter
         adapter.submitList(movies)
 
-        setFragmentResultListener("updateToWatch") { _, bundle ->
+        setFragmentResultListener("updateState") { _, bundle ->
             val item = bundle.get("item") as MovieItem
             val index = (adapter.getMovies().indices).firstOrNull { i: Int -> item.id == adapter.getMovies()[i].id }
 
-            if (item.isToWatch && index != null) {
+            if (!item.isToWatch && index != null) {
                 adapter.removeItem(index)
             }
             binding.emptyView.visibility = if (adapter.getMovies().isEmpty()) View.VISIBLE else View.GONE

@@ -17,6 +17,7 @@ import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.FragmentListBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.ui.IMainActivityFragment
+import com.example.towolist.utils.toast
 
 class ListFragment : Fragment(), IMainActivityFragment {
 
@@ -98,6 +99,14 @@ class ListFragment : Fragment(), IMainActivityFragment {
             findNavController()
                 .navigate(ListFragmentDirections.actionListFragmentToDetailMovieFragment(it))
         }, isList)
+
+        setFragmentResultListener("updateState") { _, bundle ->
+            val item = bundle.get("item") as MovieItem
+            val index = (adapter.getMovies().indices).firstOrNull { i: Int -> item.id == adapter.getMovies()[i].id }
+            if (index != null) {
+                adapter.updateMovie(index, item)
+            }
+        }
 
         adapter.submitList(items)
         binding.recyclerView.adapter = adapter

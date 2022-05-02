@@ -99,16 +99,13 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
         }
     }
 
-    private fun watchedOnClick(
-        fragment: Fragment?,
-        view: View
-    ) {
+    private fun watchedOnClick(fragment: Fragment?, view: View) {
         binding.watchedIcon.setOnClickListener {
-            setFragmentResult("updateWatched", bundleOf(Pair("item", item)))
             item = item.copy(isWatched = !item.isWatched)
+            setFragmentResult("updateState", bundleOf(Pair("item", item)))
             if (item.isWatched && item.isToWatch) {
-                setFragmentResult("updateToWatch", bundleOf(Pair("item", item)))
                 item = item.copy(isToWatch = false)
+                setFragmentResult("updateState", bundleOf(Pair("item", item)))
 
                 movieRepository.updateToWatchMovies(item)
                 updateImageButtonColor(binding.toWatchIcon, item.isToWatch, view)
@@ -125,17 +122,13 @@ class DetailMovieFragment() : BottomSheetDialogFragment() {
         }
     }
 
-    private fun toWatchOnClick(
-        fragment: Fragment?,
-        view: View
-    ) {
+    private fun toWatchOnClick(fragment: Fragment?, view: View) {
         binding.toWatchIcon.setOnClickListener {
-            setFragmentResult("updateToWatch", bundleOf(Pair("item", item)))
             item = item.copy(isToWatch = !item.isToWatch)
+            setFragmentResult("updateState", bundleOf(Pair("item", item)))
             if (item.isWatched && item.isToWatch) {
-
-                setFragmentResult("updateWatched", bundleOf(Pair("item", item)))
                 item = item.copy(isWatched = false)
+                setFragmentResult("updateState", bundleOf(Pair("item", item)))
 
                 movieRepository.updateWatchedMovies(item)
                 updateImageButtonColor(binding.watchedIcon, item.isWatched, view)
