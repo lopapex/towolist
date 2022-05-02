@@ -27,17 +27,14 @@ class ListFragment : Fragment(), IMainActivityFragment {
         MovieRepository(requireContext())
     }
 
-    companion object {
-        var popular: MutableList<MovieItem> = mutableListOf()
-        var topRated: MutableList<MovieItem> = mutableListOf()
-    }
-
     private lateinit var binding: FragmentListBinding
     private lateinit var adapter: MovieAdapter
 
     private var pagePopular: Int = 1
     private var pageTopRated: Int = 1
     private var pageSearch: Int = 1
+    private var popular: MutableList<MovieItem> = mutableListOf()
+    private var topRated: MutableList<MovieItem> = mutableListOf()
 
     private var searchText: String = ""
     private var searchNotFound: Boolean = false
