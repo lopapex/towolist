@@ -2,18 +2,16 @@ package com.example.towolist.ui.filter
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.example.towolist.R
 import com.example.towolist.data.MovieItem
-import com.example.towolist.data.ParentFragment
 import com.example.towolist.data.services
 import com.example.towolist.databinding.FragmentFilterBinding
-import com.example.towolist.ui.detail.DetailMovieFragmentArgs
 import com.example.towolist.utils.addChip
 import com.example.towolist.utils.toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -39,7 +37,7 @@ class FilterFragment : BottomSheetDialogFragment() {
         var moviesChecked = false
         var seriesChecked = false
         var allChecked = true
-        var parent = ParentFragment.List
+        var parent: Fragment? = null
 
         var firstOpen = true
 
@@ -59,12 +57,13 @@ class FilterFragment : BottomSheetDialogFragment() {
             firstOpen = false
         }
 
-        if (parent != FilterFragmentArgs.fromBundle(requireArguments()).parent) {
+        val currentParent = parentFragmentManager.findFragmentById(R.id.nav_host_fragment)
+        if (parent != currentParent) {
             setDefaultState()
         } else {
             restoreState()
         }
-        parent = FilterFragmentArgs.fromBundle(requireArguments()).parent
+        parent = currentParent
 
 
         chipListener(binding.chipAll, listOf(binding.chipMovies, binding.chipSeries))

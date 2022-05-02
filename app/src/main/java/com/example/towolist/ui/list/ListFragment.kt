@@ -48,8 +48,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
         mainActivity.setSpinnerOptions(R.array.online_options)
         mainActivity.initFilterBottomFragment {
             findNavController()
-                .navigate(ListFragmentDirections
-                    .actionListFragmentToFilterFragment(com.example.towolist.data.ParentFragment.List))
+                .navigate(ListFragmentDirections.actionListFragmentToFilterFragment())
         }
 
         updateLayout(mainActivity.isListLayout())

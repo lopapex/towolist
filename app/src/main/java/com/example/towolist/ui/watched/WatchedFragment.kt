@@ -45,8 +45,7 @@ class WatchedFragment : Fragment(), IMainActivityFragment {
         mainActivity.setSpinnerOptions(R.array.local_options)
         mainActivity.initFilterBottomFragment {
             findNavController()
-                .navigate(WatchedFragmentDirections
-                    .actionWatchedFragmentToFilterFragment(com.example.towolist.data.ParentFragment.Watched))
+                .navigate(WatchedFragmentDirections.actionWatchedFragmentToFilterFragment())
         }
 
         updateLayout(mainActivity.isListLayout())
