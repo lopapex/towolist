@@ -95,8 +95,10 @@ class ListFragment : Fragment(), IMainActivityFragment {
 
     override fun updateLayout(isList: Boolean) {
         var items = listOf<MovieItem>()
+        var predicate: (MovieItem) -> Boolean =  { true }
         if (::adapter.isInitialized) {
             items = adapter.getMovies()
+            predicate = adapter.getFilterFunction()
         }
         adapter = MovieAdapter(onItemClick = {
             findNavController()
@@ -111,6 +113,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
             }
         }
 
+        adapter.updateFilterFunction(predicate)
         adapter.submitList(items)
         binding.recyclerView.adapter = adapter
 

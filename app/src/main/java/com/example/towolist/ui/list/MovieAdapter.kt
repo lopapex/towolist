@@ -83,6 +83,10 @@ class MovieAdapter(
         return movies
     }
 
+    fun getFilterFunction(): (MovieItem) -> Boolean {
+        return predicate
+    }
+
     fun removeItem(position: Int) {
         movies.removeAt(position)
         notifyItemRemoved(position)

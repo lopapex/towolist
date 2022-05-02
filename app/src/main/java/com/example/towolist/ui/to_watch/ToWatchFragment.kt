@@ -27,7 +27,7 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
     private lateinit var binding: FragmentToWatchBinding
     private lateinit var adapter: MovieAdapter
 
-    private lateinit var movies: List<MovieItem>
+    private lateinit var movies: MutableList<MovieItem>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentToWatchBinding.inflate(layoutInflater, container, false)
@@ -36,7 +36,7 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        movies = movieRepository.getToWatchMovies()
+        movies = movieRepository.getToWatchMovies().toMutableList()
         if (movies.isEmpty()) {
             binding.emptyView.visibility = View.VISIBLE
         }
@@ -67,19 +67,27 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
     }
 
     override fun updateLayout(isList: Boolean) {
+        var predicate: (MovieItem) -> Boolean =  { true }
+        if (::adapter.isInitialized) {
+            predicate = adapter.getFilterFunction()
+        }
+
         adapter = MovieAdapter(onItemClick = {
             findNavController()
                 .navigate(ToWatchFragmentDirections.actionToWatchFragmentToDetailMovieFragment(it))
         }, isList)
         binding.recyclerView.adapter = adapter
+        adapter.updateFilterFunction(predicate)
         adapter.submitList(movies)
 
         setFragmentResultListener("updateState") { _, bundle ->
             val item = bundle.get("item") as MovieItem
             val index = (adapter.getMovies().indices).firstOrNull { i: Int -> item.id == adapter.getMovies()[i].id }
+            val indexLocal = (movies.indices).firstOrNull { i: Int -> item.id == movies[i].id }
 
-            if (!item.isToWatch && index != null) {
+            if (!item.isToWatch && index != null && indexLocal != null) {
                 adapter.removeItem(index)
+                movies.removeAt(indexLocal)
             }
             binding.emptyView.visibility = if (adapter.getMovies().isEmpty()) View.VISIBLE else View.GONE
         }
