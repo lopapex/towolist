@@ -16,7 +16,7 @@ import com.example.towolist.database.entity.*
                 ToWatchMovieBuyRentCrossRefEntity::class,
                 WatchedMovieWatchNowCrossRefEntity::class,
                 WatchedMovieBuyRentCrossRefEntity::class],
-    version = 2
+    version = 1
 )
 abstract class ToWoDatabase : RoomDatabase() {
 
