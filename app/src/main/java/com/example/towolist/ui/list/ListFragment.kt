@@ -148,7 +148,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                             movies.addAll(showItems.toMutableList())
                             movies.sortByDescending { movie -> movie.popularity }
                             popular.addAll(movies)
-                            adapter.submitList(popular)
+                            if (isUpdate) adapter.appendToList(movies) else adapter.submitList(popular)
                             loader.visibility = View.GONE
 
                             if (movies.isEmpty() || adapter.getMovies().size < 10) {
@@ -186,7 +186,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                             movies.addAll(showItems.toMutableList())
                             movies.sortByDescending { movie -> movie.voteAverage }
                             topRated.addAll(movies)
-                            adapter.submitList(topRated)
+                            if (isUpdate) adapter.appendToList(movies) else adapter.submitList(topRated)
 
                             loader.visibility = View.GONE
                             if (movies.isEmpty() || adapter.getMovies().size < 10) {

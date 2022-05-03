@@ -51,6 +51,7 @@ class MovieAdapter(
 
     fun appendToList(movieItems: List<MovieItem>) {
         moviesAll.addAll(movieItems.toMutableList())
+        movies.addAll(movieItems.filter(predicate).toMutableList())
         filterList()
     }
 
