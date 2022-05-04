@@ -97,7 +97,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
         var items = listOf<MovieItem>()
         var predicate: (MovieItem) -> Boolean =  { true }
         if (::adapter.isInitialized) {
-            items = adapter.getMovies()
+            items = adapter.getMoviesAll()
             predicate = adapter.getFilterFunction()
         }
         adapter = MovieAdapter(onItemClick = {
@@ -203,6 +203,9 @@ class ListFragment : Fragment(), IMainActivityFragment {
                     requestFailed(loader)
                 }
             )
+        }
+        if (adapter.getMovies().isNotEmpty()) {
+            binding.noItemsFoundView.visibility = View.GONE
         }
     }
 
@@ -346,6 +349,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
         setFragmentResultListener("filterFragment") { _, bundle ->
             adapter.updateFilterFunction(bundle.get("predicate") as (MovieItem) -> Boolean)
             adapter.filterList()
+            binding.noItemsFoundView.visibility = if (adapter.getMovies().isEmpty()) View.VISIBLE else View.GONE
             binding.recyclerView.scrollToPosition(0)
         }
     }

@@ -79,6 +79,7 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
         binding.recyclerView.adapter = adapter
         adapter.updateFilterFunction(predicate)
         adapter.submitList(movies)
+        updateSpinner()
 
         setFragmentResultListener("updateState") { _, bundle ->
             val item = bundle.get("item") as MovieItem

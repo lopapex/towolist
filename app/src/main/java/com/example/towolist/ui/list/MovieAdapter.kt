@@ -56,21 +56,25 @@ class MovieAdapter(
     }
 
     fun sortByPopularity() {
+        moviesAll.sortByDescending { movie -> movie.popularity }
         movies.sortByDescending { movie -> movie.popularity }
         notifyDataSetChanged()
     }
 
     fun sortByVoteAverage() {
+        moviesAll.sortByDescending { movie -> movie.voteAverage }
         movies.sortByDescending { movie -> movie.voteAverage }
         notifyDataSetChanged()
     }
 
     fun sortByOldest() {
+        moviesAll.sortBy { movie -> movie.savedAt }
         movies.sortBy { movie -> movie.savedAt }
         notifyDataSetChanged()
     }
 
     fun sortByYoungest() {
+        moviesAll.sortByDescending { movie -> movie.savedAt }
         movies.sortByDescending { movie -> movie.savedAt }
         notifyDataSetChanged()
     }
@@ -82,6 +86,10 @@ class MovieAdapter(
 
     fun getMovies(): List<MovieItem> {
         return movies
+    }
+
+    fun getMoviesAll(): List<MovieItem> {
+        return moviesAll
     }
 
     fun getFilterFunction(): (MovieItem) -> Boolean {
