@@ -79,8 +79,17 @@ class MovieAdapter(
     }
 
     fun updateMovie(position: Int, newItem: MovieItem) {
+        val index = (moviesAll.indices).first { i: Int -> movies[position].id == moviesAll[i].id }
+        moviesAll[index] = newItem
         movies[position] = newItem
         notifyItemChanged(position)
+    }
+
+    fun removeItem(position: Int) {
+        val index = (moviesAll.indices).first { i: Int -> movies[position].id == moviesAll[i].id }
+        moviesAll.removeAt(index)
+        movies.removeAt(position)
+        notifyItemRemoved(position)
     }
 
     fun getMovies(): List<MovieItem> {
@@ -93,11 +102,6 @@ class MovieAdapter(
 
     fun getFilterFunction(): (MovieItem) -> Boolean {
         return predicate
-    }
-
-    fun removeItem(position: Int) {
-        movies.removeAt(position)
-        notifyItemRemoved(position)
     }
 
     fun updateFilterFunction(newPredicate: (MovieItem) -> Boolean) {
