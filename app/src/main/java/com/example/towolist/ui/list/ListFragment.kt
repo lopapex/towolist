@@ -148,7 +148,8 @@ class ListFragment : Fragment(), IMainActivityFragment {
                             movies.addAll(showItems.toMutableList())
                             movies.sortByDescending { movie -> movie.popularity }
                             popular.addAll(movies)
-                            if (isUpdate) adapter.appendToList(movies) else adapter.submitList(popular)
+                            adapter.submitList(popular)
+
                             loader.visibility = View.GONE
 
                             if (movies.isEmpty() || adapter.getMovies().size < 10) {
@@ -186,7 +187,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                             movies.addAll(showItems.toMutableList())
                             movies.sortByDescending { movie -> movie.voteAverage }
                             topRated.addAll(movies)
-                            if (isUpdate) adapter.appendToList(movies) else adapter.submitList(topRated)
+                            adapter.submitList(topRated)
 
                             loader.visibility = View.GONE
                             if (movies.isEmpty() || adapter.getMovies().size < 10) {
@@ -277,6 +278,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
             it.id,
             onSuccess = { providerByState ->
                 setProviders(providerByState, it)
+                adapter.filterList()
             },
             onFailure = {
                 requestFailed(loader)
@@ -288,6 +290,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
             it.id,
             onSuccess = { providerByState ->
                 setProviders(providerByState, it)
+                adapter.filterList()
             },
             onFailure = {
                 requestFailed(loader)
