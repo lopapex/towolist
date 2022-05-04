@@ -23,7 +23,6 @@ class ServiceAdapter(context: Activity, val items: List<ServiceItem>)
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         binding = inflate(LayoutInflater.from(parent.context), parent, false)
 
-
         binding.serviceName.text = items[position].name
 
         Glide.with(parent.context)

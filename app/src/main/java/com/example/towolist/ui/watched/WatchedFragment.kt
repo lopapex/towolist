@@ -38,7 +38,7 @@ class WatchedFragment : Fragment(), IMainActivityFragment {
         super.onViewCreated(view, savedInstanceState)
         movies = movieRepository.getWatchedMovies().toMutableList()
         if (movies.isEmpty()) {
-            binding.emptyView.visibility = View.VISIBLE
+            binding.noItemsFoundView.visibility = View.VISIBLE
         }
 
         val mainActivity : MainActivity = (activity as MainActivity)
@@ -90,7 +90,7 @@ class WatchedFragment : Fragment(), IMainActivityFragment {
                 adapter.removeItem(index)
                 movies.removeAt(indexLocal)
             }
-            binding.emptyView.visibility = if (adapter.getMovies().isEmpty()) View.VISIBLE else View.GONE
+            binding.noItemsFoundView.visibility = if (adapter.getMovies().isEmpty()) View.VISIBLE else View.GONE
         }
 
         binding.recyclerView.apply {
