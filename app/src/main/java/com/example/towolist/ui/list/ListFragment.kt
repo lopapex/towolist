@@ -51,8 +51,10 @@ class ListFragment : Fragment(), IMainActivityFragment {
         val mainActivity : MainActivity = (activity as MainActivity)
         mainActivity.setSpinnerOptions(R.array.online_options)
         mainActivity.initFilterBottomFragment {
-            findNavController()
-                .navigate(ListFragmentDirections.actionListFragmentToFilterFragment())
+            if (findNavController().currentDestination?.id != R.id.filterFragment) {
+                findNavController()
+                    .navigate(ListFragmentDirections.actionListFragmentToFilterFragment())
+            }
         }
 
         updateLayout(mainActivity.isListLayout())

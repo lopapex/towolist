@@ -12,11 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.towolist.data.MovieItem
 import com.example.towolist.databinding.ActivityMainBinding
 import com.example.towolist.ui.IMainActivityFragment
-import com.example.towolist.ui.filter.FilterFragment
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mancj.materialsearchbar.MaterialSearchBar
 
 class MainActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListener {

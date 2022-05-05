@@ -16,7 +16,6 @@ import com.example.towolist.databinding.FragmentToWatchBinding
 import com.example.towolist.repository.MovieRepository
 import com.example.towolist.ui.IMainActivityFragment
 import com.example.towolist.ui.list.MovieAdapter
-import com.example.towolist.utils.toast
 
 class ToWatchFragment : Fragment(), IMainActivityFragment {
 
@@ -44,8 +43,10 @@ class ToWatchFragment : Fragment(), IMainActivityFragment {
         val mainActivity : MainActivity = (activity as MainActivity)
         mainActivity.setSpinnerOptions(R.array.local_options)
         mainActivity.initFilterBottomFragment {
-            findNavController()
-                .navigate(ToWatchFragmentDirections.actionToWatchFragmentToFilterFragment())
+            if (findNavController().currentDestination?.id != R.id.filterFragment) {
+                findNavController()
+                    .navigate(ToWatchFragmentDirections.actionToWatchFragmentToFilterFragment())
+            }
         }
 
         updateLayout(mainActivity.isListLayout())
