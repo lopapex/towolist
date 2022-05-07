@@ -152,12 +152,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                             popular.addAll(movies)
                             adapter.submitList(popular)
 
-                            loader.visibility = View.GONE
-
-                            if (movies.isEmpty() || adapter.getMovies().size < 10) {
-                                pagePopular++
-                                loadItems(isPopular, true)
-                            }
+                            reloadIfPageEmpty(movies, isPopular, loader)
                         },
                         onFailure = {
                             requestFailed(loader)
@@ -191,11 +186,7 @@ class ListFragment : Fragment(), IMainActivityFragment {
                             topRated.addAll(movies)
                             adapter.submitList(topRated)
 
-                            loader.visibility = View.GONE
-                            if (movies.isEmpty() || adapter.getMovies().size < 10) {
-                                pageTopRated++
-                                loadItems(isPopular, true)
-                            }
+                            reloadIfPageEmpty(movies, isPopular, loader)
                         },
                         onFailure = {
                             requestFailed(loader)
@@ -209,6 +200,20 @@ class ListFragment : Fragment(), IMainActivityFragment {
         }
         if (adapter.getMovies().isNotEmpty()) {
             binding.noItemsFoundView.visibility = View.GONE
+        }
+    }
+
+    private fun reloadIfPageEmpty(
+        movies: MutableList<MovieItem>,
+        isPopular: Boolean,
+        loader: ProgressBar
+    ) {
+        if (movies.isEmpty() || adapter.getMovies().size < 10) {
+            binding.progressLoad.visibility = View.GONE
+            if (isPopular) pagePopular++ else pageTopRated++
+            loadItems(isPopular, true)
+        } else {
+            loader.visibility = View.GONE
         }
     }
 
