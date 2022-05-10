@@ -7,7 +7,8 @@ enum class ServiceInfo (val packageName: String, val url: String, val isWatchNow
     Apple("", "https://support.apple.com/en-us/HT201611", false, "Apple"),
     Google("com.android.vending", "https://play.google.com/store/movies", false, "Google"),
     Amazon("com.amazon.avod.thirdpartyclient", "https://www.primevideo.com", true, "Amazon"),
-    O2("cz.o2.o2tv", "https://www.o2tv.cz/tv/porady/", true, "O2 TV")
+    O2("cz.o2.o2tv", "https://www.o2tv.cz/tv/porady/", true, "O2 TV"),
+    Crunchyroll("com.crunchyroll.crunchyroid", "https://www.crunchyroll.com/", true, "Crunchyroll")
 }
 
 var services : Map<String, ServiceInfo> = mapOf(
@@ -17,4 +18,5 @@ var services : Map<String, ServiceInfo> = mapOf(
     "Google Play Movies" to ServiceInfo.Google,
     "Amazon Prime Video" to ServiceInfo.Amazon,
     "O2 TV" to ServiceInfo.O2,
+    "Crunchyroll" to ServiceInfo.Crunchyroll
 )

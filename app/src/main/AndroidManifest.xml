@@ -10,6 +10,7 @@
         <package android:name="com.android.vending" />
         <package android:name="com.amazon.avod.thirdpartyclient" />
         <package android:name="cz.o2.o2tv" />
+        <package android:name="com.crunchyroll.crunchyroid" />
     </queries>
 
     <application
